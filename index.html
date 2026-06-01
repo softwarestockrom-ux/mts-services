@@ -1,3965 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MTS SMM Services</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-/* ============================================
-   MTS SMM SERVICES - USER FRONTEND
-   Premium Dark Theme with Glassmorphism
-   ============================================ */
-
-:root {
-  --bg-dark: #0f0f1a;
-  --bg-card: rgba(30, 30, 50, 0.6);
-  --bg-card-solid: #1e1e32;
-  --bg-sidebar: rgba(20, 20, 40, 0.85);
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --primary-dark: #4f46e5;
-  --accent: #06b6d4;
-  --accent-2: #f472b6;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border: rgba(255,255,255,0.08);
-  --glass: rgba(255,255,255,0.05);
-  --shadow: 0 8px 32px rgba(0,0,0,0.3);
-  --gradient-1: linear-gradient(135deg, #6366f1, #8b5cf6);
-  --gradient-2: linear-gradient(135deg, #06b6d4, #3b82f6);
-  --gradient-3: linear-gradient(135deg, #f472b6, #f59e0b);
-  --gradient-4: linear-gradient(135deg, #22c55e, #10b981);
-  --gradient-5: linear-gradient(135deg, #ef4444, #f97316);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg-dark);
-  color: var(--text-primary);
-  min-height: 100vh;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.08) 0%, transparent 60%);
-  z-index: -1;
-  animation: bgPulse 8s ease-in-out infinite alternate;
-}
-
-@keyframes bgPulse {
-  0% { opacity: 0.8; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.05); }
-}
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
-/* Auth Pages */
-.auth-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-}
-
-.auth-page::before {
-  content: '';
-  position: absolute;
-  width: 400px; height: 400px;
-  background: var(--gradient-1);
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.2;
-  top: -100px; left: -100px;
-  animation: float 6s ease-in-out infinite;
-}
-
-.auth-page::after {
-  content: '';
-  position: absolute;
-  width: 300px; height: 300px;
-  background: var(--gradient-2);
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.15;
-  bottom: -50px; right: -50px;
-  animation: float 8s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-30px) rotate(5deg); }
-}
-
-.auth-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 40px 32px;
-  width: 100%;
-  max-width: 440px;
-  box-shadow: var(--shadow), 0 0 60px rgba(99,102,241,0.1);
-  position: relative;
-  z-index: 1;
-  animation: slideUp 0.6s ease-out;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.auth-logo {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.auth-logo .logo-icon {
-  width: 70px; height: 70px;
-  background: var(--gradient-1);
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 25px rgba(99,102,241,0.4);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
-  50% { box-shadow: 0 8px 35px rgba(99,102,241,0.6); }
-}
-
-.auth-logo h1 {
-  font-size: 26px;
-  font-weight: 700;
-  background: var(--gradient-1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.auth-logo p {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.form-group { margin-bottom: 18px; }
-
-.form-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.input-wrapper i {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-  font-size: 14px;
-  transition: color 0.3s;
-}
-
-.input-wrapper input,
-.input-wrapper select,
-.input-wrapper textarea {
-  width: 100%;
-  padding: 13px 14px 13px 42px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s;
-}
-
-.input-wrapper textarea {
-  padding-left: 14px;
-  min-height: 100px;
-  resize: vertical;
-}
-
-.input-wrapper input:focus,
-.input-wrapper select:focus,
-.input-wrapper textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-  background: rgba(99,102,241,0.05);
-}
-
-.input-wrapper input:focus + i,
-.input-wrapper input:focus ~ i {
-  color: var(--primary);
-}
-
-.btn {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-primary {
-  background: var(--gradient-1);
-  color: white;
-  box-shadow: 0 4px 15px rgba(99,102,241,0.4);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(99,102,241,0.5);
-}
-
-.btn-primary:active { transform: translateY(0); }
-
-.btn-secondary {
-  background: var(--glass);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-}
-
-.btn-secondary:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: var(--primary);
-}
-
-.btn-success {
-  background: var(--gradient-4);
-  color: white;
-  box-shadow: 0 4px 15px rgba(34,197,94,0.4);
-}
-
-.btn-danger {
-  background: var(--gradient-5);
-  color: white;
-}
-
-.btn-sm {
-  padding: 8px 16px;
-  font-size: 13px;
-  width: auto;
-}
-
-.auth-footer {
-  text-align: center;
-  margin-top: 20px;
-  color: var(--text-secondary);
-  font-size: 13px;
-}
-
-.auth-footer a {
-  color: var(--primary-light);
-  text-decoration: none;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.auth-footer a:hover { text-decoration: underline; }
-
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 20px 0;
-  color: var(--text-muted);
-  font-size: 12px;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-.divider span { padding: 0 12px; }
-
-.password-strength {
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin-top: 6px;
-  overflow: hidden;
-}
-
-.password-strength-bar {
-  height: 100%;
-  border-radius: 2px;
-  transition: all 0.3s;
-  width: 0%;
-}
-
-/* Main App Layout */
-.app-container {
-  display: flex;
-  min-height: 100vh;
-}
-
-.sidebar {
-  width: 260px;
-  background: var(--bg-sidebar);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid var(--border);
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 100;
-  transition: transform 0.3s ease;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.sidebar.collapsed { transform: translateX(-100%); }
-
-.sidebar-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sidebar-header .logo-box {
-  width: 42px; height: 42px;
-  background: var(--gradient-1);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.sidebar-header h2 {
-  font-size: 16px;
-  font-weight: 700;
-  background: var(--gradient-1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.sidebar-header p {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.sidebar-menu {
-  padding: 12px 10px;
-  list-style: none;
-}
-
-.sidebar-menu li {
-  margin-bottom: 4px;
-}
-
-.sidebar-menu a,
-.sidebar-menu button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.sidebar-menu a:hover,
-.sidebar-menu button:hover,
-.sidebar-menu a.active,
-.sidebar-menu button.active {
-  background: rgba(99,102,241,0.15);
-  color: var(--primary-light);
-}
-
-.sidebar-menu a.active,
-.sidebar-menu button.active {
-  background: var(--gradient-1);
-  color: white;
-  box-shadow: 0 4px 15px rgba(99,102,241,0.3);
-}
-
-.sidebar-menu i {
-  width: 20px;
-  text-align: center;
-  font-size: 15px;
-}
-
-.sidebar-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 12px 16px;
-}
-
-.currency-toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between !important;
-}
-
-.currency-badge {
-  background: var(--gradient-2);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.main-content {
-  flex: 1;
-  margin-left: 260px;
-  transition: margin-left 0.3s ease;
-  min-height: 100vh;
-}
-
-.main-content.full { margin-left: 0; }
-
-.top-header {
-  background: var(--bg-sidebar);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 90;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.hamburger {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
-}
-
-.hamburger:hover {
-  background: rgba(99,102,241,0.2);
-  border-color: var(--primary);
-}
-
-.header-title {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-btn {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.3s;
-}
-
-.header-btn:hover {
-  background: rgba(99,102,241,0.2);
-  color: var(--primary-light);
-  border-color: var(--primary);
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  padding: 4px 12px 4px 4px;
-  border-radius: 12px;
-  transition: all 0.3s;
-}
-
-.user-profile:hover {
-  background: var(--glass);
-}
-
-.user-avatar {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: var(--gradient-1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  color: white;
-  border: 2px solid rgba(255,255,255,0.1);
-}
-
-.user-info { text-align: right; }
-
-.user-info .name {
-  font-size: 13px;
-  font-weight: 600;
-  display: block;
-}
-
-.user-info .role {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.page-content {
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.page-subtitle {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-.card {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow);
-  transition: all 0.3s;
-}
-
-.card:hover {
-  border-color: rgba(99,102,241,0.2);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.card-title {
-  font-size: 16px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.card-title i {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 20px 20px 0 0;
-}
-
-.stat-card.purple::before { background: var(--gradient-1); }
-.stat-card.cyan::before { background: var(--gradient-2); }
-.stat-card.pink::before { background: var(--gradient-3); }
-.stat-card.green::before { background: var(--gradient-4); }
-.stat-card.orange::before { background: var(--gradient-5); }
-
-.stat-icon {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  margin-bottom: 14px;
-}
-
-.stat-card.purple .stat-icon { background: rgba(99,102,241,0.15); color: var(--primary-light); }
-.stat-card.cyan .stat-icon { background: rgba(6,182,212,0.15); color: var(--accent); }
-.stat-card.pink .stat-icon { background: rgba(244,114,182,0.15); color: var(--accent-2); }
-.stat-card.green .stat-icon { background: rgba(34,197,94,0.15); color: var(--success); }
-.stat-card.orange .stat-icon { background: rgba(245,158,11,0.15); color: var(--warning); }
-
-.stat-value {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.wallet-card {
-  background: var(--gradient-1);
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.wallet-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; right: -30%;
-  width: 200px; height: 200px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 50%;
-}
-
-.wallet-card::after {
-  content: '';
-  position: absolute;
-  bottom: -30%; left: -20%;
-  width: 150px; height: 150px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 50%;
-}
-
-.wallet-card .stat-value,
-.wallet-card .stat-label { color: white; }
-.wallet-card .stat-icon { background: rgba(255,255,255,0.2); color: white; }
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.data-table th {
-  text-align: left;
-  padding: 12px 16px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border);
-}
-
-.data-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
-}
-
-.data-table tr:hover td {
-  background: rgba(99,102,241,0.05);
-}
-
-.data-table tr:last-child td { border-bottom: none; }
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.status-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-}
-
-.status-pending { background: rgba(245,158,11,0.15); color: var(--warning); }
-.status-pending::before { background: var(--warning); }
-
-.status-progress { background: rgba(59,130,246,0.15); color: var(--info); }
-.status-progress::before { background: var(--info); }
-
-.status-completed { background: rgba(34,197,94,0.15); color: var(--success); }
-.status-completed::before { background: var(--success); }
-
-.status-cancelled { background: rgba(239,68,68,0.15); color: var(--danger); }
-.status-cancelled::before { background: var(--danger); }
-
-.status-partial { background: rgba(139,92,246,0.15); color: #a78bfa; }
-.status-partial::before { background: #a78bfa; }
-
-.platform-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.platform-item {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.platform-item:hover,
-.platform-item.active {
-  background: rgba(99,102,241,0.15);
-  border-color: var(--primary);
-  transform: translateY(-3px);
-}
-
-.platform-item.active {
-  box-shadow: 0 4px 15px rgba(99,102,241,0.2);
-}
-
-.platform-item i {
-  font-size: 24px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.platform-item span {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  display: block;
-}
-
-.platform-item.active span { color: var(--primary-light); }
-
-.platform-tiktok i { color: #ff0050; }
-.platform-instagram i { color: #e4405f; }
-.platform-facebook i { color: #1877f2; }
-.platform-youtube i { color: #ff0000; }
-.platform-twitter i { color: #1da1f2; }
-.platform-whatsapp i { color: #25d366; }
-.platform-snapchat i { color: #fffc00; }
-.platform-telegram i { color: #0088cc; }
-.platform-linkedin i { color: #0a66c2; }
-.platform-spotify i { color: #1db954; }
-.platform-discord i { color: #5865f2; }
-.platform-twitch i { color: #9146ff; }
-.platform-google i { color: #4285f4; }
-.platform-threads i { color: #000000; }
-.platform-website i { color: var(--accent); }
-.platform-canva i { color: #00c4cc; }
-.platform-chatgpt i { color: #10a37f; }
-.platform-capcut i { color: #ff6b6b; }
-.platform-gemini i { color: var(--warning); }
-
-.search-bar {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 14px 14px 14px 48px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s;
-}
-
-.search-bar input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-}
-
-.search-bar i {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-  font-size: 16px;
-}
-
-.services-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.service-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-
-.service-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(99,102,241,0.15);
-}
-
-.service-card.selected {
-  border-color: var(--primary);
-  background: rgba(99,102,241,0.1);
-}
-
-.service-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.service-icon {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.service-info h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.service-info .service-id {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.service-meta {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.service-meta-item {
-  text-align: center;
-  padding: 8px;
-  background: var(--glass);
-  border-radius: 10px;
-}
-
-.service-meta-item .value {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--primary-light);
-}
-
-.service-meta-item .label {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.service-price {
-  position: absolute;
-  top: 16px; right: 16px;
-  background: var(--gradient-1);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.order-form {
-  display: grid;
-  gap: 16px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-}
-
-.form-group input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.total-box {
-  background: var(--gradient-1);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  margin-top: 8px;
-}
-
-.total-box .total-label {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.total-box .total-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: white;
-  margin-top: 4px;
-}
-
-.payment-methods {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.payment-method {
-  background: var(--glass);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.payment-method:hover,
-.payment-method.selected {
-  border-color: var(--primary);
-  background: rgba(99,102,241,0.1);
-}
-
-.payment-method i {
-  font-size: 36px;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.payment-method .method-name {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.payment-method .method-detail {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 4px;
-}
-
-.file-upload {
-  border: 2px dashed var(--border);
-  border-radius: 16px;
-  padding: 30px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-}
-
-.file-upload:hover,
-.file-upload.dragover {
-  border-color: var(--primary);
-  background: rgba(99,102,241,0.05);
-}
-
-.file-upload i {
-  font-size: 36px;
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-.file-upload input[type="file"] {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.file-preview {
-  max-width: 100%;
-  max-height: 200px;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-.tab-btn {
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  background: none;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.tab-btn:hover { color: var(--text-primary); }
-
-.tab-btn.active {
-  background: var(--gradient-1);
-  color: white;
-}
-
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s;
-}
-
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal {
-  background: var(--bg-card-solid);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 28px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: scale(0.9) translateY(20px);
-  transition: all 0.3s;
-}
-
-.modal-overlay.active .modal {
-  transform: scale(1) translateY(0);
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.modal-title {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.modal-close {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
-}
-
-.modal-close:hover {
-  background: var(--danger);
-  color: white;
-  border-color: var(--danger);
-}
-
-.currency-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.currency-option {
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--glass);
-  border: 2px solid var(--border);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.currency-option:hover,
-.currency-option.selected {
-  border-color: var(--primary);
-  background: rgba(99,102,241,0.1);
-}
-
-.currency-option .flag {
-  font-size: 28px;
-  margin-bottom: 6px;
-}
-
-.currency-option .code {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.currency-option .name {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.toast {
-  background: var(--bg-card-solid);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: var(--shadow);
-  animation: slideInRight 0.4s ease-out;
-  min-width: 300px;
-}
-
-.toast.success { border-left: 4px solid var(--success); }
-.toast.error { border-left: 4px solid var(--danger); }
-.toast.warning { border-left: 4px solid var(--warning); }
-.toast.info { border-left: 4px solid var(--info); }
-
-.toast i { font-size: 18px; }
-.toast.success i { color: var(--success); }
-.toast.error i { color: var(--danger); }
-.toast.warning i { color: var(--warning); }
-.toast.info i { color: var(--info); }
-
-.toast-content { flex: 1; }
-.toast-title { font-weight: 600; font-size: 14px; }
-.toast-message { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(15,15,26,0.9);
-  backdrop-filter: blur(10px);
-  z-index: 3000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.spinner {
-  width: 50px; height: 50px;
-  border: 3px solid var(--border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-text {
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.empty-state i {
-  font-size: 48px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-
-.empty-state h3 {
-  font-size: 16px;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-
-.empty-state p {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.service-detail-panel {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  margin-top: 16px;
-}
-
-.service-detail-panel h4 {
-  font-size: 14px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.detail-item {
-  background: var(--bg-card);
-  padding: 10px 14px;
-  border-radius: 10px;
-}
-
-.detail-item .label {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.detail-item .value {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary-light);
-  margin-top: 2px;
-}
-
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .main-content { margin-left: 0; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .services-list { grid-template-columns: 1fr; }
-  .platform-grid { grid-template-columns: repeat(4, 1fr); }
-  .currency-options { grid-template-columns: repeat(2, 1fr); }
-  .form-row { grid-template-columns: 1fr; }
-  .top-header { padding: 10px 16px; }
-  .page-content { padding: 16px; }
-  .header-title { font-size: 15px; }
-  .user-info { display: none; }
-  .auth-card { padding: 28px 20px; }
-}
-
-@media (max-width: 480px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .platform-grid { grid-template-columns: repeat(3, 1fr); }
-  .payment-methods { grid-template-columns: 1fr; }
-}
-
-.fade-in { animation: fadeIn 0.4s ease-out; }
-.slide-up { animation: slideUp 0.4s ease-out; }
-
-.sidebar { -ms-overflow-style: none; scrollbar-width: none; }
-.sidebar::-webkit-scrollbar { display: none; }
-
-.timeline {
-  position: relative;
-  padding-left: 30px;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 8px;
-  top: 0; bottom: 0;
-  width: 2px;
-  background: var(--gradient-1);
-  border-radius: 1px;
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 24px;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -26px;
-  top: 4px;
-  width: 14px; height: 14px;
-  background: var(--primary);
-  border-radius: 50%;
-  border: 3px solid var(--bg-dark);
-}
-
-.timeline-item.completed::before { background: var(--success); }
-.timeline-item.pending::before { background: var(--warning); }
-
-.refill-btn {
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: none;
-  background: var(--gradient-2);
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.refill-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(6,182,212,0.4);
-}
-
-.info-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-
-.info-card .label {
-  font-size: 11px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.info-card .value {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.info-card .value i {
-  color: var(--primary-light);
-}
-
-.copy-btn {
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--glass);
-  color: var(--text-secondary);
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.copy-btn:hover {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.section-title i {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  background: var(--gradient-1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: white;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.badge-primary { background: rgba(99,102,241,0.15); color: var(--primary-light); }
-.badge-success { background: rgba(34,197,94,0.15); color: var(--success); }
-.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
-
-.mobile-nav {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--bg-sidebar);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  z-index: 100;
-  padding: 8px 0;
-}
-
-.mobile-nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 6px;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 10px;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
-.mobile-nav-item i { font-size: 18px; }
-.mobile-nav-item.active { color: var(--primary-light); }
-
-@media (max-width: 768px) {
-  .mobile-nav { display: flex; }
-  .page-content { padding-bottom: 80px; }
-}
-</style>
-<base target="_blank">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MTS SMM Services - Premium Social Media Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #0b1120 0%, #111827 100%); color: #eef2ff; min-height: 100vh; }
+        .glass-card { background: rgba(15, 25, 45, 0.65); backdrop-filter: blur(12px); border-radius: 28px; border: 1px solid rgba(72, 187, 255, 0.2); padding: 24px; transition: all 0.2s ease; }
+        .glass-card:hover { border-color: rgba(0, 200, 255, 0.5); transform: translateY(-2px); }
+        button, .btn { background: linear-gradient(90deg, #2b6ef0, #1a4fc1); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; transition: 0.2s; }
+        button:hover, .btn:hover { transform: scale(1.02); }
+        .btn-success { background: linear-gradient(90deg, #10b981, #059669); }
+        .btn-danger { background: linear-gradient(90deg, #dc2626, #b91c1c); }
+        .btn-warning { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        input, select, textarea { background: rgba(0,0,0,0.4); border: 1px solid #2d3a5e; padding: 12px 16px; border-radius: 24px; color: white; width: 100%; outline: none; margin: 8px 0; }
+        input:focus, select:focus { border-color: #3b82f6; }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: rgba(8, 12, 25, 0.96); backdrop-filter: blur(20px); z-index: 1000; transition: 0.3s; padding: 20px; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; display: none; }
+        .main-content { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: rgba(0,0,0,0.3); border-radius: 60px; margin-bottom: 25px; }
+        .platform-icons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 30px; }
+        .platform-icon-item { background: rgba(30, 41, 59, 0.6); border-radius: 50px; padding: 10px 18px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .platform-icon-item:hover, .platform-icon-item.active { background: #2b6ef0; transform: translateY(-3px); }
+        .currency-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .currency-btn { background: #1e293b; border: 1px solid #334155; padding: 8px 16px; border-radius: 30px; cursor: pointer; transition: all 0.2s; }
+        .currency-btn.active { background: #2b6ef0; border-color: white; }
+        .order-summary { background: rgba(0, 200, 255, 0.1); border-radius: 20px; padding: 15px; margin-top: 20px; }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0f172ae6; backdrop-filter: blur(20px); border-radius: 32px; padding: 24px; width: 90%; max-width: 500px; z-index: 1100; display: none; border: 1px solid cyan; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; padding: 12px 20px; border-radius: 40px; z-index: 2000; border-left: 4px solid #2b6ef0; max-width: 350px; z-index: 9999; }
+        .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .form-row > * { flex: 1; }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .service-card { cursor: pointer; }
+        .service-card:hover { transform: translateY(-5px); }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 25px 0; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
+        .status-approved { background: #10b981; color: white; }
+        .status-pending { background: #f59e0b; color: black; }
+        .status-rejected { background: #dc2626; color: white; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #2d3a5e; padding-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn { background: transparent; border: none; padding: 10px 20px; cursor: pointer; color: #94a3b8; border-radius: 30px; }
+        .tab-btn.active { background: #2b6ef0; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .info-note { background: rgba(245, 158, 11, 0.2); border-left: 4px solid #f59e0b; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        @media (max-width: 768px) { .form-row { flex-direction: column; } .platform-icon-item { padding: 6px 12px; font-size: 12px; } }
+    </style>
 </head>
 <body>
-
-<!-- ============================================
-     AUTHENTICATION PAGES
-     ============================================ -->
-<div id="authPages">
-
-  <!-- Login Page -->
-  <div id="loginPage" class="auth-page">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-        <h1>MTS SMM Services</h1>
-        <p>Premium Social Media Marketing Panel</p>
-      </div>
-
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>Email or Username</label>
-          <div class="input-wrapper">
-            <input type="text" id="loginIdentifier" placeholder="Enter email or username" required>
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <div class="input-wrapper">
-            <input type="password" id="loginPassword" placeholder="Enter password" required>
-            <i class="fas fa-lock"></i>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </button>
-      </form>
-
-      <div class="auth-footer">
-        <a onclick="showForgotPassword()">Forgot Password?</a>
-      </div>
-
-      <div class="divider"><span>OR</span></div>
-
-      <button class="btn btn-secondary" onclick="showSignup()">
-        <i class="fas fa-user-plus"></i> Create New Account
-      </button>
+<div id="overlay" class="overlay"></div>
+<div id="sidebar" class="sidebar">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+        <h3><i class="fas fa-chart-line"></i> MTS SMM</h3>
+        <i class="fas fa-times" id="closeSidebar" style="cursor:pointer;"></i>
     </div>
-  </div>
-
-  <!-- Signup Page -->
-  <div id="signupPage" class="auth-page" style="display:none;">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="logo-icon"><i class="fas fa-user-plus"></i></div>
-        <h1>Create Account</h1>
-        <p>Join MTS SMM Services today</p>
-      </div>
-
-      <form id="signupForm" onsubmit="handleSignup(event)">
-        <div class="form-group">
-          <label>Full Name</label>
-          <div class="input-wrapper">
-            <input type="text" id="signupFullName" placeholder="Your full name" required>
-            <i class="fas fa-id-card"></i>
-          </div>
+    <div class="sidebar-menu" style="display: flex; flex-direction: column; gap: 15px;">
+        <a href="#" data-page="home"><i class="fas fa-home"></i> Home</a>
+        <a href="#" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#" data-page="services"><i class="fas fa-box"></i> Services</a>
+        <a href="#" data-page="addfunds"><i class="fas fa-wallet"></i> Add Funds</a>
+        <a href="#" data-page="recommendations"><i class="fas fa-star"></i> Recommendations</a>
+        <a href="#" data-page="joinus"><i class="fas fa-user-plus"></i> Join Us & Earn</a>
+        <a href="#" data-page="help"><i class="fas fa-question-circle"></i> Help</a>
+        <div class="currency-toggle" style="margin-top: 20px;">
+            <label><i class="fas fa-exchange-alt"></i> Currency:</label>
+            <div class="currency-btn-group" id="currencyGroup">
+                <button class="currency-btn" data-curr="PKR">🇵🇰 PKR</button>
+                <button class="currency-btn" data-curr="USD">🇺🇸 USD</button>
+                <button class="currency-btn" data-curr="AED">🇦🇪 AED</button>
+                <button class="currency-btn" data-curr="SAR">🇸🇦 SAR</button>
+                <button class="currency-btn" data-curr="INR">🇮🇳 INR</button>
+                <button class="currency-btn" data-curr="EUR">🇪🇺 EUR</button>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label>Username</label>
-          <div class="input-wrapper">
-            <input type="text" id="signupUsername" placeholder="Choose a username" required>
-            <i class="fas fa-at"></i>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Gmail</label>
-          <div class="input-wrapper">
-            <input type="email" id="signupEmail" placeholder="your@gmail.com" required>
-            <i class="fas fa-envelope"></i>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Phone Number</label>
-          <div class="input-wrapper">
-            <input type="tel" id="signupPhone" placeholder="+92 300 1234567" required>
-            <i class="fas fa-phone"></i>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>User Type</label>
-          <div class="input-wrapper">
-            <select id="signupUserType" required>
-              <option value="">Select Type</option>
-              <option value="Commission Based">Commission Based</option>
-              <option value="Salary Based">Salary Based</option>
-            </select>
-            <i class="fas fa-user-tag" style="top:14px;"></i>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <div class="input-wrapper">
-            <input type="password" id="signupPassword" placeholder="Create password" required minlength="6" oninput="checkPasswordStrength()">
-            <i class="fas fa-lock"></i>
-          </div>
-          <div class="password-strength"><div class="password-strength-bar" id="passwordStrengthBar"></div></div>
-        </div>
-
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <div class="input-wrapper">
-            <input type="password" id="signupConfirmPassword" placeholder="Confirm password" required>
-            <i class="fas fa-lock"></i>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-user-plus"></i> Sign Up
-        </button>
-      </form>
-
-      <div class="auth-footer">
-        Already have an account? <a onclick="showLogin()">Login</a>
-      </div>
+        <button id="logoutBtn" style="background:#dc2626; margin-top:20px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
-  </div>
-
-  <!-- Forgot Password Page -->
-  <div id="forgotPage" class="auth-page" style="display:none;">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="logo-icon"><i class="fas fa-key"></i></div>
-        <h1>Reset Password</h1>
-        <p>Enter your email to reset</p>
-      </div>
-
-      <form id="forgotForm" onsubmit="handleForgotPassword(event)">
-        <div class="form-group">
-          <label>Email Address</label>
-          <div class="input-wrapper">
-            <input type="email" id="forgotEmail" placeholder="your@gmail.com" required>
-            <i class="fas fa-envelope"></i>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-paper-plane"></i> Send Reset Link
-        </button>
-      </form>
-
-      <div class="auth-footer">
-        <a onclick="showLogin()">Back to Login</a>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- ============================================
-     MAIN APP (After Login)
-     ============================================ -->
-<div id="mainApp" style="display:none;">
-  <div class="app-container">
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="logo-box"><i class="fas fa-bolt"></i></div>
-        <div>
-          <h2>MTS SMM</h2>
-          <p>Services Panel</p>
+<div class="main-content">
+    <div class="top-bar">
+        <div class="menu-icon" id="menuBtn"><i class="fas fa-bars"></i></div>
+        <div style="font-weight:700; font-size:1.2rem;">MTS SMM Services</div>
+        <div class="user-info">
+            <i class="fas fa-sync-alt refresh-btn" id="refreshBtn" style="cursor:pointer; margin-right:15px;"></i>
+            <span id="userAvatar"><i class="fas fa-user-circle"></i></span>
+            <span id="userNameDisplay">Guest</span>
         </div>
-      </div>
-
-      <ul class="sidebar-menu">
-        <li><a href="#" class="active" data-page="home" onclick="navigateTo('home')">
-          <i class="fas fa-home"></i> Home
-        </a></li>
-        <li><a href="#" data-page="dashboard" onclick="navigateTo('dashboard')">
-          <i class="fas fa-chart-line"></i> Dashboard
-        </a></li>
-        <li><a href="#" data-page="services" onclick="navigateTo('services')">
-          <i class="fas fa-layer-group"></i> Services
-        </a></li>
-        <li><a href="#" data-page="addFunds" onclick="navigateTo('addFunds')">
-          <i class="fas fa-wallet"></i> Add Funds
-        </a></li>
-        <li><a href="#" data-page="recommendations" onclick="navigateTo('recommendations')">
-          <i class="fas fa-thumbs-up"></i> Recommendations
-        </a></li>
-
-        <div class="sidebar-divider"></div>
-
-        <li><a href="#" data-page="joinUs" onclick="navigateTo('joinUs')">
-          <i class="fas fa-briefcase"></i> Join Us & Earn
-        </a></li>
-        <li><a href="#" data-page="help" onclick="navigateTo('help')">
-          <i class="fas fa-headset"></i> Help
-        </a></li>
-        <li><a href="#" data-page="settings" onclick="navigateTo('settings')">
-          <i class="fas fa-cog"></i> Settings
-        </a></li>
-
-        <div class="sidebar-divider"></div>
-
-        <li>
-          <button class="currency-toggle-btn" onclick="showCurrencyModal()">
-            <span><i class="fas fa-coins"></i> Currency</span>
-            <span class="currency-badge" id="sidebarCurrency">PKR</span>
-          </button>
-        </li>
-
-        <div class="sidebar-divider"></div>
-
-        <li><button onclick="logout()">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button></li>
-      </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-left">
-          <button class="hamburger" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-          </button>
-          <span class="header-title" id="pageTitle">Home</span>
-        </div>
-        <div class="header-right">
-          <button class="header-btn" onclick="refreshData()" title="Refresh">
-            <i class="fas fa-sync-alt" id="refreshIcon"></i>
-          </button>
-          <div class="user-profile" onclick="showProfileModal()">
-            <div class="user-avatar" id="headerAvatar">U</div>
-            <div class="user-info">
-              <span class="name" id="headerUsername">User</span>
-              <span class="role" id="headerUserType">Member</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- Page Content -->
-      <div class="page-content" id="pageContent">
-
-        <!-- ==================== HOME / SERVICES PAGE ==================== -->
-        <div id="page-home" class="page-section">
-          <div class="stats-grid">
-            <div class="stat-card wallet-card">
-              <div class="stat-icon"><i class="fas fa-wallet"></i></div>
-              <div class="stat-value" id="homeWalletBalance">₨ 0.00</div>
-              <div class="stat-label">Available Balance</div>
-            </div>
-            <div class="stat-card purple">
-              <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
-              <div class="stat-value" id="homeTotalOrders">0</div>
-              <div class="stat-label">Total Orders</div>
-            </div>
-            <div class="stat-card cyan">
-              <div class="stat-icon"><i class="fas fa-clock"></i></div>
-              <div class="stat-value" id="homePendingOrders">0</div>
-              <div class="stat-label">Pending Orders</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-globe" style="background:var(--gradient-1);color:white;"></i> Select Platform</div>
-            </div>
-            <div class="platform-grid" id="platformGrid">
-              <div class="platform-item platform-tiktok" data-platform="TikTok" onclick="filterByPlatform('TikTok')">
-                <i class="fab fa-tiktok"></i><span>TikTok</span>
-              </div>
-              <div class="platform-item platform-instagram" data-platform="Instagram" onclick="filterByPlatform('Instagram')">
-                <i class="fab fa-instagram"></i><span>Instagram</span>
-              </div>
-              <div class="platform-item platform-facebook" data-platform="Facebook" onclick="filterByPlatform('Facebook')">
-                <i class="fab fa-facebook"></i><span>Facebook</span>
-              </div>
-              <div class="platform-item platform-youtube" data-platform="YouTube" onclick="filterByPlatform('YouTube')">
-                <i class="fab fa-youtube"></i><span>YouTube</span>
-              </div>
-              <div class="platform-item platform-twitter" data-platform="Twitter" onclick="filterByPlatform('Twitter')">
-                <i class="fab fa-twitter"></i><span>Twitter/X</span>
-              </div>
-              <div class="platform-item platform-whatsapp" data-platform="WhatsApp" onclick="filterByPlatform('WhatsApp')">
-                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
-              </div>
-              <div class="platform-item platform-snapchat" data-platform="Snapchat" onclick="filterByPlatform('Snapchat')">
-                <i class="fab fa-snapchat"></i><span>Snapchat</span>
-              </div>
-              <div class="platform-item platform-telegram" data-platform="Telegram" onclick="filterByPlatform('Telegram')">
-                <i class="fab fa-telegram"></i><span>Telegram</span>
-              </div>
-              <div class="platform-item platform-website" data-platform="Website Traffic" onclick="filterByPlatform('Website Traffic')">
-                <i class="fas fa-globe"></i><span>Website</span>
-              </div>
-              <div class="platform-item platform-linkedin" data-platform="LinkedIn" onclick="filterByPlatform('LinkedIn')">
-                <i class="fab fa-linkedin"></i><span>LinkedIn</span>
-              </div>
-              <div class="platform-item platform-threads" data-platform="Threads" onclick="filterByPlatform('Threads')">
-                <i class="fab fa-threads"></i><span>Threads</span>
-              </div>
-              <div class="platform-item platform-spotify" data-platform="Spotify" onclick="filterByPlatform('Spotify')">
-                <i class="fab fa-spotify"></i><span>Spotify</span>
-              </div>
-              <div class="platform-item platform-canva" data-platform="Canva" onclick="filterByPlatform('Canva')">
-                <i class="fas fa-palette"></i><span>Canva</span>
-              </div>
-              <div class="platform-item platform-chatgpt" data-platform="ChatGPT" onclick="filterByPlatform('ChatGPT')">
-                <i class="fas fa-robot"></i><span>ChatGPT</span>
-              </div>
-              <div class="platform-item platform-capcut" data-platform="CapCut" onclick="filterByPlatform('CapCut')">
-                <i class="fas fa-video"></i><span>CapCut</span>
-              </div>
-              <div class="platform-item platform-discord" data-platform="Discord" onclick="filterByPlatform('Discord')">
-                <i class="fab fa-discord"></i><span>Discord</span>
-              </div>
-              <div class="platform-item platform-twitch" data-platform="Twitch" onclick="filterByPlatform('Twitch')">
-                <i class="fab fa-twitch"></i><span>Twitch</span>
-              </div>
-              <div class="platform-item platform-gemini" data-platform="Gemini" onclick="filterByPlatform('Gemini')">
-                <i class="fas fa-star"></i><span>Gemini</span>
-              </div>
-              <div class="platform-item platform-google" data-platform="Google" onclick="filterByPlatform('Google')">
-                <i class="fab fa-google"></i><span>Google</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="serviceSearch" placeholder="Search by Service ID, Platform, Name, or Price..." oninput="searchServices()">
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-shopping-bag" style="background:var(--gradient-2);color:white;"></i> Place Order</div>
-            </div>
-            <form id="orderForm" onsubmit="placeOrder(event)">
-              <div class="order-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Platform</label>
-                    <select id="orderPlatform" onchange="loadServicesForPlatform()" required>
-                      <option value="">Select Platform</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Service</label>
-                    <select id="orderService" onchange="selectService()" required>
-                      <option value="">Select Service</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="number" id="orderQuantity" min="1" placeholder="Enter quantity" oninput="calculateTotal()" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Total Amount</label>
-                    <div class="total-box">
-                      <div class="total-label">Total</div>
-                      <div class="total-value" id="orderTotal">₨ 0.00</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dynamic Fields Container -->
-                <div id="dynamicFields"></div>
-
-                <!-- Service Detail Panel -->
-                <div id="serviceDetailPanel" style="display:none;">
-                  <div class="service-detail-panel">
-                    <h4><i class="fas fa-info-circle"></i> Service Details</h4>
-                    <div class="detail-grid" id="serviceDetailsGrid"></div>
-                  </div>
-                </div>
-
-                <div class="form-row" style="margin-top:8px;">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Place Order
-                  </button>
-                  <button type="button" class="btn btn-secondary" onclick="clearOrderForm()">
-                    <i class="fas fa-trash"></i> Clear Form
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <!-- Service Cards List -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-list" style="background:var(--gradient-3);color:white;"></i> Available Services</div>
-            </div>
-            <div class="services-list" id="servicesList"></div>
-            <div class="empty-state" id="servicesEmpty" style="display:none;">
-              <i class="fas fa-box-open"></i>
-              <h3>No services found</h3>
-              <p>Try adjusting your search or platform filter</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== DASHBOARD PAGE ==================== -->
-        <div id="page-dashboard" class="page-section" style="display:none;">
-          <div class="page-title">Dashboard</div>
-          <div class="page-subtitle">Overview of your account activity</div>
-
-          <div class="stats-grid">
-            <div class="stat-card purple">
-              <div class="stat-icon"><i class="fas fa-user"></i></div>
-              <div class="stat-value" id="dashUsername">-</div>
-              <div class="stat-label">Username</div>
-            </div>
-            <div class="stat-card cyan">
-              <div class="stat-icon"><i class="fas fa-envelope"></i></div>
-              <div class="stat-value" id="dashEmail" style="font-size:14px;">-</div>
-              <div class="stat-label">Email</div>
-            </div>
-            <div class="stat-card pink">
-              <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-              <div class="stat-value" id="dashTotalSpent">₨ 0.00</div>
-              <div class="stat-label">Total Spent</div>
-            </div>
-            <div class="stat-card green">
-              <div class="stat-icon"><i class="fas fa-wallet"></i></div>
-              <div class="stat-value" id="dashBalance">₨ 0.00</div>
-              <div class="stat-label">Available Balance</div>
-            </div>
-            <div class="stat-card orange">
-              <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
-              <div class="stat-value" id="dashTotalOrders">0</div>
-              <div class="stat-label">Total Orders</div>
-            </div>
-            <div class="stat-card purple">
-              <div class="stat-icon"><i class="fas fa-clock"></i></div>
-              <div class="stat-value" id="dashPendingPayments">0</div>
-              <div class="stat-label">Pending Payments</div>
-            </div>
-            <div class="stat-card cyan">
-              <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
-              <div class="stat-value" id="dashPendingOrders">0</div>
-              <div class="stat-label">Pending Orders</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-history" style="background:var(--gradient-1);color:white;"></i> Order History</div>
-            </div>
-            <div style="overflow-x:auto;">
-              <table class="data-table" id="orderHistoryTable">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Service</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="orderHistoryBody"></tbody>
-              </table>
-            </div>
-            <div class="empty-state" id="ordersEmpty" style="display:none;">
-              <i class="fas fa-inbox"></i>
-              <h3>No orders yet</h3>
-              <p>Place your first order to see it here</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== SERVICES PAGE ==================== -->
-        <div id="page-services" class="page-section" style="display:none;">
-          <div class="page-title">All Services</div>
-          <div class="page-subtitle">Browse and filter all available services</div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-filter" style="background:var(--gradient-2);color:white;"></i> Filter by Platform</div>
-            </div>
-            <div class="platform-grid" id="servicesPlatformGrid">
-              <div class="platform-item active" data-platform="All" onclick="filterServicesPage('All')">
-                <i class="fas fa-th"></i><span>All</span>
-              </div>
-              <div class="platform-item platform-tiktok" data-platform="TikTok" onclick="filterServicesPage('TikTok')">
-                <i class="fab fa-tiktok"></i><span>TikTok</span>
-              </div>
-              <div class="platform-item platform-instagram" data-platform="Instagram" onclick="filterServicesPage('Instagram')">
-                <i class="fab fa-instagram"></i><span>Instagram</span>
-              </div>
-              <div class="platform-item platform-facebook" data-platform="Facebook" onclick="filterServicesPage('Facebook')">
-                <i class="fab fa-facebook"></i><span>Facebook</span>
-              </div>
-              <div class="platform-item platform-youtube" data-platform="YouTube" onclick="filterServicesPage('YouTube')">
-                <i class="fab fa-youtube"></i><span>YouTube</span>
-              </div>
-              <div class="platform-item platform-twitter" data-platform="Twitter" onclick="filterServicesPage('Twitter')">
-                <i class="fab fa-twitter"></i><span>Twitter/X</span>
-              </div>
-              <div class="platform-item platform-whatsapp" data-platform="WhatsApp" onclick="filterServicesPage('WhatsApp')">
-                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
-              </div>
-              <div class="platform-item platform-telegram" data-platform="Telegram" onclick="filterServicesPage('Telegram')">
-                <i class="fab fa-telegram"></i><span>Telegram</span>
-              </div>
-              <div class="platform-item platform-spotify" data-platform="Spotify" onclick="filterServicesPage('Spotify')">
-                <i class="fab fa-spotify"></i><span>Spotify</span>
-              </div>
-              <div class="platform-item platform-linkedin" data-platform="LinkedIn" onclick="filterServicesPage('LinkedIn')">
-                <i class="fab fa-linkedin"></i><span>LinkedIn</span>
-              </div>
-              <div class="platform-item platform-discord" data-platform="Discord" onclick="filterServicesPage('Discord')">
-                <i class="fab fa-discord"></i><span>Discord</span>
-              </div>
-              <div class="platform-item platform-google" data-platform="Google" onclick="filterServicesPage('Google')">
-                <i class="fab fa-google"></i><span>Google</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="servicesSearchInput" placeholder="Search services by name, ID, or price..." oninput="searchServicesPage()">
-          </div>
-
-          <div class="services-list" id="servicesPageList"></div>
-          <div class="empty-state" id="servicesPageEmpty" style="display:none;">
-            <i class="fas fa-box-open"></i>
-            <h3>No services found</h3>
-            <p>Try a different search term or platform</p>
-          </div>
-        </div>
-
-        <!-- ==================== ADD FUNDS PAGE ==================== -->
-        <div id="page-addFunds" class="page-section" style="display:none;">
-          <div class="page-title">Add Funds</div>
-          <div class="page-subtitle">Top up your wallet balance</div>
-
-          <div class="stats-grid">
-            <div class="stat-card wallet-card">
-              <div class="stat-icon"><i class="fas fa-wallet"></i></div>
-              <div class="stat-value" id="fundsWalletBalance">₨ 0.00</div>
-              <div class="stat-label">Current Balance</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-credit-card" style="background:var(--gradient-1);color:white;"></i> Select Payment Method</div>
-            </div>
-            <div class="payment-methods">
-              <div class="payment-method" id="methodEasypaisa" onclick="selectPaymentMethod('Easypaisa')">
-                <i class="fas fa-mobile-alt" style="color:var(--success);"></i>
-                <div class="method-name">Easypaisa</div>
-                <div class="method-detail">Mobile Wallet</div>
-              </div>
-              <div class="payment-method" id="methodSadapay" onclick="selectPaymentMethod('Sadapay')">
-                <i class="fas fa-credit-card" style="color:var(--primary-light);"></i>
-                <div class="method-name">Sadapay</div>
-                <div class="method-detail">Digital Wallet</div>
-              </div>
-            </div>
-          </div>
-
-          <div id="paymentDetails" style="display:none;">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-info-circle" style="background:var(--gradient-2);color:white;"></i> Payment Details</div>
-              </div>
-              <div id="easypaisaDetails" style="display:none;">
-                <div class="info-card">
-                  <div class="label">Account Number</div>
-                  <div class="value">
-                    <i class="fas fa-phone"></i>
-                    <span id="epNumber">03198595421</span>
-                    <button class="copy-btn" onclick="copyToClipboard('03198595421')">Copy</button>
-                  </div>
-                </div>
-                <div class="info-card">
-                  <div class="label">Account Name</div>
-                  <div class="value">
-                    <i class="fas fa-user"></i>
-                    <span>Muhammad Ramzan Al Sami</span>
-                  </div>
-                </div>
-              </div>
-              <div id="sadapayDetails" style="display:none;">
-                <div class="info-card">
-                  <div class="label">Account Number</div>
-                  <div class="value">
-                    <i class="fas fa-phone"></i>
-                    <span id="spNumber">03198595421</span>
-                    <button class="copy-btn" onclick="copyToClipboard('03198595421')">Copy</button>
-                  </div>
-                </div>
-                <div class="info-card">
-                  <div class="label">Account Name</div>
-                  <div class="value">
-                    <i class="fas fa-user"></i>
-                    <span>Muhammad Ramzan Ul Sami</span>
-                  </div>
-                </div>
-              </div>
-              <button class="btn btn-success" onclick="showPaymentProofForm()" style="margin-top:16px;">
-                <i class="fas fa-check-circle"></i> I Have Sent
-              </button>
-            </div>
-          </div>
-
-          <div id="paymentProofForm" style="display:none;">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-receipt" style="background:var(--gradient-4);color:white;"></i> Submit Payment Proof</div>
-              </div>
-              <form onsubmit="submitPaymentProof(event)">
-                <div class="order-form">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Amount</label>
-                      <input type="number" id="paymentAmount" placeholder="Enter amount" required min="1">
-                    </div>
-                    <div class="form-group">
-                      <label>Transaction ID</label>
-                      <input type="text" id="paymentTransactionId" placeholder="Enter transaction ID" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="paymentEmail" placeholder="your@gmail.com" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Screenshot Upload</label>
-                    <div class="file-upload" id="fileUploadArea" onclick="document.getElementById('paymentScreenshot').click()">
-                      <i class="fas fa-cloud-upload-alt"></i>
-                      <div>Click or drag to upload screenshot</div>
-                      <input type="file" id="paymentScreenshot" accept="image/*" onchange="handleFileUpload(this)">
-                    </div>
-                    <img id="filePreview" class="file-preview" style="display:none;">
-                  </div>
-                  <div class="form-row">
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fas fa-paper-plane"></i> Submit Payment
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="cancelPayment()">
-                      <i class="fas fa-times"></i> Cancel
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== RECOMMENDATIONS PAGE ==================== -->
-        <div id="page-recommendations" class="page-section" style="display:none;">
-          <div class="page-title">Recommendations</div>
-          <div class="page-subtitle">Share your feedback and suggestions</div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-thumbs-up" style="background:var(--gradient-1);color:white;"></i> Submit Recommendation</div>
-            </div>
-            <form onsubmit="submitRecommendation(event)">
-              <div class="order-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="recEmail" placeholder="your@gmail.com" required>
-                  </div>
-                  <div class="form-group">
-                    <label>WhatsApp Number</label>
-                    <input type="tel" id="recWhatsApp" placeholder="+92 300 1234567">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Phone Number</label>
-                  <input type="tel" id="recPhone" placeholder="+92 300 1234567">
-                </div>
-                <div class="form-group">
-                  <label>Recommendation Text</label>
-                  <textarea id="recText" placeholder="Write your recommendation or feedback here..." rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Attachment (Optional)</label>
-                  <div class="file-upload" onclick="document.getElementById('recFile').click()">
-                    <i class="fas fa-paperclip"></i>
-                    <div>Click to upload file (optional)</div>
-                    <input type="file" id="recFile" onchange="handleRecFile(this)">
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-paper-plane"></i> Submit Recommendation
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- ==================== JOIN US & EARN PAGE ==================== -->
-        <div id="page-joinUs" class="page-section" style="display:none;">
-          <div class="page-title">Join Us & Earn</div>
-          <div class="page-subtitle">Apply to work with us and earn</div>
-
-          <div class="tabs">
-            <button class="tab-btn active" onclick="switchJoinTab('application')">Application</button>
-            <button class="tab-btn" onclick="switchJoinTab('routine')">Daily Routine</button>
-            <button class="tab-btn" onclick="switchJoinTab('jobs')">Job Details</button>
-            <button class="tab-btn" onclick="switchJoinTab('history')">History</button>
-          </div>
-
-          <!-- Application Tab -->
-          <div id="tab-application" class="tab-content active">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-file-alt" style="background:var(--gradient-1);color:white;"></i> Job Application</div>
-              </div>
-              <form onsubmit="submitJoinApplication(event)">
-                <div class="order-form">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Full Name</label>
-                      <input type="text" id="joinName" placeholder="Your full name" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Username</label>
-                      <input type="text" id="joinUsername" placeholder="Choose username" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Phone Number</label>
-                      <input type="tel" id="joinPhone" placeholder="+92 300 1234567" required>
-                    </div>
-                    <div class="form-group">
-                      <label>WhatsApp</label>
-                      <input type="tel" id="joinWhatsApp" placeholder="+92 300 1234567" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="joinEmail" placeholder="your@gmail.com" required>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Type</label>
-                      <select id="joinType" required>
-                        <option value="">Select Type</option>
-                        <option value="Salary">Salary Based</option>
-                        <option value="Commission">Commission Based</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Available Timings</label>
-                      <select id="joinTimings" required>
-                        <option value="">Select Hours</option>
-                        <option value="4hrs">4 Hours</option>
-                        <option value="5hrs">5 Hours</option>
-                        <option value="6hrs">6 Hours</option>
-                        <option value="custom">Custom</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Shift</label>
-                    <select id="joinShift" required>
-                      <option value="">Select Shift</option>
-                      <option value="Day">Day</option>
-                      <option value="Night">Night</option>
-                      <option value="Both">Both</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>About Yourself</label>
-                    <textarea id="joinAbout" placeholder="Tell us about yourself..." rows="3" required></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>Upload Photo</label>
-                    <div class="file-upload" onclick="document.getElementById('joinPhoto').click()">
-                      <i class="fas fa-camera"></i>
-                      <div>Click to upload your photo</div>
-                      <input type="file" id="joinPhoto" accept="image/*" onchange="handleJoinPhoto(this)">
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Submit Application
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Daily Routine Tab -->
-          <div id="tab-routine" class="tab-content">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-calendar-check" style="background:var(--gradient-2);color:white;"></i> Daily Attendance</div>
-              </div>
-              <form onsubmit="submitAttendance(event)">
-                <div class="order-form">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Name</label>
-                      <input type="text" id="attendName" placeholder="Your name" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input type="email" id="attendEmail" placeholder="your@gmail.com" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Login Time</label>
-                      <input type="time" id="attendLoginTime" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Working Hours</label>
-                      <input type="text" id="attendHours" placeholder="e.g. 4 hours" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Work Detail</label>
-                    <textarea id="attendDetail" placeholder="Describe your work today..." rows="3" required></textarea>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Work Type</label>
-                      <select id="attendWorkType" required>
-                        <option value="">Select Type</option>
-                        <option value="Sharing Posts">Sharing Posts</option>
-                        <option value="Designed Posts">Designed Posts</option>
-                        <option value="Both">Both</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Platforms Shared On</label>
-                      <input type="text" id="attendPlatforms" placeholder="e.g. Facebook, Instagram" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Boosted as Ad?</label>
-                      <select id="attendBoosted" required>
-                        <option value="">Select</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Client Contacts Count</label>
-                      <input type="number" id="attendContacts" placeholder="Number of clients" min="0" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Logout Time</label>
-                    <input type="time" id="attendLogoutTime" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-check-circle"></i> Submit Attendance
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Job Details Tab -->
-          <div id="tab-jobs" class="tab-content">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-briefcase" style="background:var(--gradient-3);color:white;"></i> Job Details</div>
-              </div>
-              <form onsubmit="submitJobDetails(event)">
-                <div class="order-form">
-                  <div class="form-group">
-                    <label>Job Name</label>
-                    <input type="text" id="jobName" placeholder="Job title" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Services Provided</label>
-                    <textarea id="jobServices" placeholder="List services you provided..." rows="3" required></textarea>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Platform Link</label>
-                      <input type="url" id="jobLink" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                      <label>Amount Spent</label>
-                      <input type="number" id="jobAmount" placeholder="Amount in PKR" min="0" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Order ID</label>
-                    <input type="text" id="jobOrderId" placeholder="Enter order ID" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Full Details</label>
-                    <textarea id="jobDetails" placeholder="Complete job details..." rows="4" required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Save Job Details
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- History Tab -->
-          <div id="tab-history" class="tab-content">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fas fa-history" style="background:var(--gradient-4);color:white;"></i> Your History</div>
-              </div>
-              <div id="joinHistoryContent">
-                <div class="empty-state">
-                  <i class="fas fa-clock"></i>
-                  <h3>No history yet</h3>
-                  <p>Your attendance, login, and job history will appear here</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== HELP PAGE ==================== -->
-        <div id="page-help" class="page-section" style="display:none;">
-          <div class="page-title">Help & Support</div>
-          <div class="page-subtitle">Contact us for any assistance</div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-headset" style="background:var(--gradient-1);color:white;"></i> Submit Support Ticket</div>
-            </div>
-            <form onsubmit="submitHelpTicket(event)">
-              <div class="order-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="helpEmail" placeholder="your@gmail.com" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Phone / WhatsApp</label>
-                    <input type="tel" id="helpPhone" placeholder="+92 300 1234567" required>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Message</label>
-                  <textarea id="helpMessage" placeholder="Describe your issue or question..." rows="5" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Attachment (Optional)</label>
-                  <div class="file-upload" onclick="document.getElementById('helpAttachment').click()">
-                    <i class="fas fa-paperclip"></i>
-                    <div>Click to upload attachment (optional)</div>
-                    <input type="file" id="helpAttachment" onchange="handleHelpAttachment(this)">
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-paper-plane"></i> Submit Ticket
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-info-circle" style="background:var(--gradient-2);color:white;"></i> Quick Contact</div>
-            </div>
-            <div class="detail-grid">
-              <div class="detail-item">
-                <div class="label">WhatsApp</div>
-                <div class="value">+92 319 8595421</div>
-              </div>
-              <div class="detail-item">
-                <div class="label">Email</div>
-                <div class="value">support@mtssmm.com</div>
-              </div>
-              <div class="detail-item">
-                <div class="label">Working Hours</div>
-                <div class="value">24/7 Support</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== SETTINGS PAGE ==================== -->
-        <div id="page-settings" class="page-section" style="display:none;">
-          <div class="page-title">Settings</div>
-          <div class="page-subtitle">Manage your account preferences</div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-user-cog" style="background:var(--gradient-1);color:white;"></i> Account Settings</div>
-            </div>
-            <div class="order-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Full Name</label>
-                  <input type="text" id="settingsName" placeholder="Your name">
-                </div>
-                <div class="form-group">
-                  <label>Username</label>
-                  <input type="text" id="settingsUsername" placeholder="Username" disabled>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Email</label>
-                  <input type="email" id="settingsEmail" placeholder="your@gmail.com">
-                </div>
-                <div class="form-group">
-                  <label>Phone</label>
-                  <input type="tel" id="settingsPhone" placeholder="+92 300 1234567">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Current Password</label>
-                <input type="password" id="settingsCurrentPassword" placeholder="Current password">
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>New Password</label>
-                  <input type="password" id="settingsNewPassword" placeholder="New password">
-                </div>
-                <div class="form-group">
-                  <label>Confirm New Password</label>
-                  <input type="password" id="settingsConfirmPassword" placeholder="Confirm password">
-                </div>
-              </div>
-              <button class="btn btn-primary" onclick="saveSettings()">
-                <i class="fas fa-save"></i> Save Changes
-              </button>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fas fa-palette" style="background:var(--gradient-3);color:white;"></i> Appearance</div>
-            </div>
-            <div class="order-form">
-              <div class="form-group">
-                <label>Theme</label>
-                <div class="payment-methods" style="margin-top:8px;">
-                  <div class="payment-method selected" style="padding:12px;">
-                    <i class="fas fa-moon" style="color:var(--primary-light);"></i>
-                    <div class="method-name">Dark Mode</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div> <!-- end page-content -->
-    </main> <!-- end main-content -->
-  </div> <!-- end app-container -->
-
-  <!-- Mobile Bottom Nav -->
-  <nav class="mobile-nav">
-    <button class="mobile-nav-item active" onclick="navigateTo('home')">
-      <i class="fas fa-home"></i> Home
-    </button>
-    <button class="mobile-nav-item" onclick="navigateTo('dashboard')">
-      <i class="fas fa-chart-line"></i> Dashboard
-    </button>
-    <button class="mobile-nav-item" onclick="navigateTo('services')">
-      <i class="fas fa-layer-group"></i> Services
-    </button>
-    <button class="mobile-nav-item" onclick="navigateTo('addFunds')">
-      <i class="fas fa-wallet"></i> Funds
-    </button>
-    <button class="mobile-nav-item" onclick="navigateTo('settings')">
-      <i class="fas fa-cog"></i> More
-    </button>
-  </nav>
-</div> <!-- end mainApp -->
-
-<!-- ============================================
-     MODALS
-     ============================================ -->
-
-<!-- Profile Modal -->
-<div class="modal-overlay" id="profileModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fas fa-user-circle"></i> My Profile</div>
-      <button class="modal-close" onclick="closeModal('profileModal')">
-        <i class="fas fa-times"></i>
-      </button>
     </div>
-    <div class="order-form">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="profileName" disabled>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="profileEmail" disabled>
-      </div>
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="tel" id="profilePhone" disabled>
-      </div>
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" id="profileUsername" disabled>
-      </div>
-      <div class="form-group">
-        <label>User Type</label>
-        <input type="text" id="profileType" disabled>
-      </div>
-      <div class="form-group">
-        <label>Wallet Balance</label>
-        <div class="total-box" style="padding:12px;">
-          <div class="total-value" id="profileBalance" style="font-size:20px;">₨ 0.00</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <button class="btn btn-primary" onclick="navigateTo('settings'); closeModal('profileModal');">
-          <i class="fas fa-edit"></i> Edit Profile
-        </button>
-        <button class="btn btn-secondary" onclick="closeModal('profileModal')">
-          <i class="fas fa-times"></i> Close
-        </button>
-      </div>
-    </div>
-  </div>
+    <div id="pageContent">Loading...</div>
 </div>
 
-<!-- Currency Modal -->
-<div class="modal-overlay" id="currencyModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fas fa-coins"></i> Select Currency</div>
-      <button class="modal-close" onclick="closeModal('currencyModal')">
-        <i class="fas fa-times"></i>
-      </button>
+<div id="successModal" class="modal">
+    <div style="text-align:center;">
+        <i class="fas fa-check-circle" style="font-size: 60px; color: #10b981;"></i>
+        <h2>Order Placed!</h2>
+        <p id="successMessage"></p>
+        <button onclick="closeSuccessModal()" class="btn">OK</button>
     </div>
-    <div class="currency-options">
-      <div class="currency-option" data-currency="PKR" onclick="changeCurrency('PKR')">
-        <div class="flag">🇵🇰</div>
-        <div class="code">PKR</div>
-        <div class="name">Pakistani Rupee</div>
-      </div>
-      <div class="currency-option" data-currency="USD" onclick="changeCurrency('USD')">
-        <div class="flag">🇺🇸</div>
-        <div class="code">USD</div>
-        <div class="name">US Dollar</div>
-      </div>
-      <div class="currency-option" data-currency="AED" onclick="changeCurrency('AED')">
-        <div class="flag">🇦🇪</div>
-        <div class="code">AED</div>
-        <div class="name">UAE Dirham</div>
-      </div>
-      <div class="currency-option" data-currency="SAR" onclick="changeCurrency('SAR')">
-        <div class="flag">🇸🇦</div>
-        <div class="code">SAR</div>
-        <div class="name">Saudi Riyal</div>
-      </div>
-      <div class="currency-option" data-currency="INR" onclick="changeCurrency('INR')">
-        <div class="flag">🇮🇳</div>
-        <div class="code">INR</div>
-        <div class="name">Indian Rupee</div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- Order Success Modal -->
-<div class="modal-overlay" id="orderSuccessModal">
-  <div class="modal" style="max-width:400px;text-align:center;">
-    <div style="margin-bottom:20px;">
-      <div style="width:80px;height:80px;background:var(--gradient-4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;color:white;">
-        <i class="fas fa-check"></i>
-      </div>
-      <h2 style="font-size:20px;margin-bottom:8px;">Order Placed Successfully!</h2>
-      <p style="color:var(--text-secondary);font-size:14px;">Your order has been received and is being processed.</p>
-    </div>
-    <div class="info-card" style="text-align:left;margin-bottom:16px;">
-      <div class="label">Order ID</div>
-      <div class="value" id="successOrderId" style="font-size:18px;color:var(--primary-light);">-</div>
-    </div>
-    <button class="btn btn-primary" onclick="closeModal('orderSuccessModal'); clearOrderForm();">
-      <i class="fas fa-thumbs-up"></i> Awesome!
-    </button>
-  </div>
-</div>
-
-<!-- Refill Modal -->
-<div class="modal-overlay" id="refillModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fas fa-sync-alt"></i> Request Refill</div>
-      <button class="modal-close" onclick="closeModal('refillModal')">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <form onsubmit="submitRefillRequest(event)">
-      <div class="order-form">
-        <div class="form-group">
-          <label>Order ID</label>
-          <input type="text" id="refillOrderId" readonly>
-        </div>
-        <div class="form-group">
-          <label>Service</label>
-          <input type="text" id="refillService" readonly>
-        </div>
-        <div class="form-group">
-          <label>Reason for Refill</label>
-          <textarea id="refillReason" placeholder="Explain why you need a refill..." rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-paper-plane"></i> Submit Refill Request
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- Loading Overlay -->
-<div class="loading-overlay" id="loadingOverlay" style="display:none;">
-  <div class="spinner"></div>
-  <div class="loading-text">Loading...</div>
-</div>
-
-<!-- ============================================
-     JAVASCRIPT
-     ============================================ -->
 <script>
-// ============================================
-// CONFIGURATION - Replace with your Apps Script URL
-// ============================================
-const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbzE6dKp1rtKcjrBHydmaX3mQ_L2v0CdCeF26muSNXqBiWRc2QlOIHoMfL8GyG30KDrL/exec',
-  CURRENCY_RATES: {
-    'PKR': 1,
-    'USD': 0.0036,
-    'AED': 0.013,
-    'SAR': 0.013,
-    'INR': 0.30
-  },
-  CURRENCY_SYMBOLS: {
-    'PKR': '₨',
-    'USD': '$',
-    'AED': 'د.إ',
-    'SAR': '﷼',
-    'INR': '₹'
-  },
-  CURRENCY_NAMES: {
-    'PKR': 'Pakistani Rupee',
-    'USD': 'US Dollar',
-    'AED': 'UAE Dirham',
-    'SAR': 'Saudi Riyal',
-    'INR': 'Indian Rupee'
-  }
-};
-
-let currentUser = null;
-let currentCurrency = 'PKR';
-let allServices = [];
-let userOrders = [];
-let selectedService = null;
-let selectedPaymentMethod = null;
-
-// ============================================
-// AUTH FUNCTIONS
-// ============================================
-function showLogin() {
-  document.getElementById('loginPage').style.display = 'flex';
-  document.getElementById('signupPage').style.display = 'none';
-  document.getElementById('forgotPage').style.display = 'none';
-}
-
-function showSignup() {
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('signupPage').style.display = 'flex';
-  document.getElementById('forgotPage').style.display = 'none';
-}
-
-function showForgotPassword() {
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('signupPage').style.display = 'none';
-  document.getElementById('forgotPage').style.display = 'flex';
-}
-
-function checkPasswordStrength() {
-  const password = document.getElementById('signupPassword').value;
-  const bar = document.getElementById('passwordStrengthBar');
-  let strength = 0;
-  if (password.length >= 6) strength += 25;
-  if (password.length >= 10) strength += 25;
-  if (/[A-Z]/.test(password)) strength += 25;
-  if (/[0-9!@#$%^&*]/.test(password)) strength += 25;
-  bar.style.width = strength + '%';
-  if (strength <= 25) bar.style.background = '#ef4444';
-  else if (strength <= 50) bar.style.background = '#f59e0b';
-  else if (strength <= 75) bar.style.background = '#3b82f6';
-  else bar.style.background = '#22c55e';
-}
-
-async function handleSignup(e) {
-  e.preventDefault();
-  const fullName = document.getElementById('signupFullName').value.trim();
-  const username = document.getElementById('signupUsername').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
-  const phone = document.getElementById('signupPhone').value.trim();
-  const userType = document.getElementById('signupUserType').value;
-  const password = document.getElementById('signupPassword').value;
-  const confirmPassword = document.getElementById('signupConfirmPassword').value;
-
-  if (password !== confirmPassword) { showToast('Passwords do not match!', 'error'); return; }
-  if (password.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
-
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'signup', fullName, username, email, phone, userType, password })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Account created successfully! Please login.', 'success');
-      showLogin();
-      document.getElementById('signupForm').reset();
-    } else {
-      showToast(result.message || 'Signup failed', 'error');
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8O0O0Asdqj-sKSxtRPefMO_mDR9a-x6UY40t-HeOcyN4hFvci8Mrw2pkKewA4NoTY/exec";
+    
+    let currentUser = null;
+    let activeCurrency = "PKR";
+    let exchangeRates = { PKR: 1, USD: 0.0036, AED: 0.0132, SAR: 0.0135, INR: 0.30, EUR: 0.0033 };
+    let currencySymbols = { PKR: "Rs", USD: "$", AED: "د.إ", SAR: "﷼", INR: "₹", EUR: "€" };
+    let allServices = [];
+    let selectedService = null;
+    let joinStatus = null;
+    
+    const platforms = [
+        { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F" },
+        { name: "TikTok", icon: "fab fa-tiktok", color: "#000000" },
+        { name: "Facebook", icon: "fab fa-facebook", color: "#1877F2" },
+        { name: "YouTube", icon: "fab fa-youtube", color: "#FF0000" },
+        { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2" },
+        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366" },
+        { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00" },
+        { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2" },
+        { name: "Discord", icon: "fab fa-discord", color: "#5865F2" },
+        { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954" },
+        { name: "Canva", icon: "fas fa-palette", color: "#00C4CC" },
+        { name: "CapCut", icon: "fas fa-cut", color: "#00D4FF" },
+        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F" }
+    ];
+    
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.borderLeftColor = isError ? '#dc2626' : '#10b981';
+        toast.innerHTML = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-async function handleLogin(e) {
-  e.preventDefault();
-  const identifier = document.getElementById('loginIdentifier').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'login', identifier, password })
-    });
-    const result = await response.json();
-    if (result.success && result.user) {
-      currentUser = result.user;
-      localStorage.setItem('mts_user', JSON.stringify(currentUser));
-      showToast('Welcome back, ' + result.user.fullName + '!', 'success');
-      showMainApp();
-      loadUserData();
-    } else {
-      showToast(result.message || 'Invalid credentials', 'error');
+    
+    function closeSuccessModal() { document.getElementById('successModal').style.display = 'none'; if (currentUser) navigate("home"); }
+    
+    function convertPrice(amountPKR) { return amountPKR * exchangeRates[activeCurrency]; }
+    function formatCurrency(amountPKR) { 
+        let converted = convertPrice(amountPKR);
+        let symbol = currencySymbols[activeCurrency];
+        if (activeCurrency === 'PKR') return `${symbol} ${converted.toFixed(2)} PKR`;
+        return `${symbol} ${converted.toFixed(2)}`;
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-async function handleForgotPassword(e) {
-  e.preventDefault();
-  const email = document.getElementById('forgotEmail').value.trim();
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'forgotPassword', email })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Password reset instructions sent!', 'success');
-      showLogin();
-    } else {
-      showToast(result.message || 'Failed', 'error');
+    
+    function updateCurrencyDisplay() {
+        document.querySelectorAll('.currency-btn').forEach(btn => {
+            if (btn.dataset.curr === activeCurrency) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        if (currentUser && document.getElementById("pageContent")) {
+            let currentPage = window.location.hash.replace('#', '') || "home";
+            navigate(currentPage);
+        }
     }
-  } catch (error) {
-    showToast('Network error', 'error');
-  } finally { showLoading(false); }
-}
-
-function logout() {
-  currentUser = null;
-  localStorage.removeItem('mts_user');
-  localStorage.removeItem('mts_currency');
-  showLogin();
-  showToast('Logged out successfully', 'info');
-}
-
-// ============================================
-// APP INIT
-// ============================================
-function initApp() {
-  const savedUser = localStorage.getItem('mts_user');
-  const savedCurrency = localStorage.getItem('mts_currency');
-  if (savedCurrency) { currentCurrency = savedCurrency; updateCurrencyDisplay(); }
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      showMainApp();
-      loadUserData();
-    } catch (e) { localStorage.removeItem('mts_user'); }
-  }
-}
-
-function showMainApp() {
-  document.getElementById('authPages').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'block';
-  if (currentUser) {
-    document.getElementById('headerUsername').textContent = currentUser.username || currentUser.fullName;
-    document.getElementById('headerUserType').textContent = currentUser.userType || 'Member';
-    document.getElementById('headerAvatar').textContent = (currentUser.fullName || currentUser.username || 'U').charAt(0).toUpperCase();
-  }
-  navigateTo('home');
-}
-
-// ============================================
-// NAVIGATION
-// ============================================
-function navigateTo(page) {
-  document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
-  const targetPage = document.getElementById('page-' + page);
-  if (targetPage) { targetPage.style.display = 'block'; targetPage.classList.add('fade-in'); }
-  document.querySelectorAll('.sidebar-menu a').forEach(a => {
-    a.classList.remove('active');
-    if (a.dataset.page === page) a.classList.add('active');
-  });
-  const titles = { 'home': 'Home', 'dashboard': 'Dashboard', 'services': 'Services', 'addFunds': 'Add Funds', 'recommendations': 'Recommendations', 'joinUs': 'Join Us & Earn', 'help': 'Help', 'settings': 'Settings' };
-  document.getElementById('pageTitle').textContent = titles[page] || page;
-  if (window.innerWidth <= 768) { document.getElementById('sidebar').classList.remove('open'); }
-  if (page === 'home') { loadHomeData(); loadServices(); }
-  else if (page === 'dashboard') loadDashboardData();
-  else if (page === 'services') loadServicesPageData();
-  else if (page === 'addFunds') loadFundsData();
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-// ============================================
-// CURRENCY
-// ============================================
-function showCurrencyModal() {
-  document.getElementById('currencyModal').classList.add('active');
-  document.querySelectorAll('.currency-option').forEach(opt => {
-    opt.classList.toggle('selected', opt.dataset.currency === currentCurrency);
-  });
-}
-
-function changeCurrency(currency) {
-  currentCurrency = currency;
-  localStorage.setItem('mts_currency', currency);
-  updateCurrencyDisplay();
-  closeModal('currencyModal');
-  showToast('Currency changed to ' + CONFIG.CURRENCY_NAMES[currency], 'success');
-  const activePage = document.querySelector('.page-section[style*="block"]');
-  if (activePage) {
-    const pageId = activePage.id.replace('page-', '');
-    if (pageId === 'home') loadHomeData();
-    else if (pageId === 'dashboard') loadDashboardData();
-    else if (pageId === 'addFunds') loadFundsData();
-  }
-}
-
-function updateCurrencyDisplay() {
-  document.getElementById('sidebarCurrency').textContent = currentCurrency;
-}
-
-function formatCurrency(amount) {
-  const rate = CONFIG.CURRENCY_RATES[currentCurrency];
-  const symbol = CONFIG.CURRENCY_SYMBOLS[currentCurrency];
-  return symbol + ' ' + (amount * rate).toFixed(2);
-}
-
-function convertToPKR(amount) {
-  return amount / CONFIG.CURRENCY_RATES[currentCurrency];
-}
-
-// ============================================
-// DATA LOADING
-// ============================================
-async function loadUserData() {
-  if (!currentUser) return;
-  showLoading(true);
-  try {
-    await loadServices();
-    await loadUserOrders();
-    loadHomeData();
-  } catch (error) { console.error('Error loading user data:', error); }
-  finally { showLoading(false); }
-}
-
-async function loadServices() {
-  try {
-    const response = await fetch(CONFIG.API_URL + '?action=getServices');
-    const result = await response.json();
-    if (result.success && result.services) {
-      allServices = result.services;
-      populatePlatformDropdown();
-      renderServicesList(allServices);
+    
+    async function apiCall(action, data = {}) {
+        const payload = { action, ...data, sessionToken: localStorage.getItem("mts_token") };
+        const formData = new FormData();
+        formData.append("payload", JSON.stringify(payload));
+        try {
+            const res = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+            return await res.json();
+        } catch(err) { return { success: false, error: err.message }; }
     }
-  } catch (error) {
-    console.error('Error loading services:', error);
-    loadDemoServices();
-  }
-}
-
-function loadDemoServices() {
-  allServices = [
-    { serviceId: 'TK001', platform: 'TikTok', serviceName: 'TikTok Followers', rate: 150, isAccount: false, per1k: true, minQty: 100, maxQty: 10000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '1-2 hours', description: 'Real TikTok followers, fast delivery', refill: true, refillDays: 30 },
-    { serviceId: 'TK002', platform: 'TikTok', serviceName: 'TikTok Likes', rate: 80, isAccount: false, per1k: true, minQty: 50, maxQty: 50000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '30 mins', description: 'High quality TikTok likes', refill: true, refillDays: 15 },
-    { serviceId: 'IG001', platform: 'Instagram', serviceName: 'Instagram Followers', rate: 200, isAccount: false, per1k: true, minQty: 100, maxQty: 50000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '2-4 hours', description: 'Real Instagram followers', refill: true, refillDays: 30 },
-    { serviceId: 'IG002', platform: 'Instagram', serviceName: 'Instagram Likes', rate: 100, isAccount: false, per1k: true, minQty: 50, maxQty: 100000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '15 mins', description: 'Instant Instagram likes', refill: false, refillDays: 0 },
-    { serviceId: 'IG003', platform: 'Instagram', serviceName: 'Instagram Comments', rate: 300, isAccount: false, per1k: true, minQty: 10, maxQty: 5000, customComments: true, randomComments: true, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '1-3 hours', description: 'Custom or random comments', refill: false, refillDays: 0 },
-    { serviceId: 'FB001', platform: 'Facebook', serviceName: 'Facebook Page Likes', rate: 180, isAccount: false, per1k: true, minQty: 100, maxQty: 20000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '2-6 hours', description: 'Real page likes', refill: true, refillDays: 30 },
-    { serviceId: 'YT001', platform: 'YouTube', serviceName: 'YouTube Subscribers', rate: 400, isAccount: false, per1k: true, minQty: 100, maxQty: 10000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '6-12 hours', description: 'Real YouTube subscribers', refill: true, refillDays: 60 },
-    { serviceId: 'YT002', platform: 'YouTube', serviceName: 'YouTube Views', rate: 120, isAccount: false, per1k: true, minQty: 500, maxQty: 100000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '1-2 hours', description: 'High retention views', refill: false, refillDays: 0 },
-    { serviceId: 'TW001', platform: 'Twitter', serviceName: 'Twitter Followers', rate: 250, isAccount: false, per1k: true, minQty: 100, maxQty: 50000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '2-4 hours', description: 'Real Twitter followers', refill: true, refillDays: 30 },
-    { serviceId: 'WA001', platform: 'WhatsApp', serviceName: 'WhatsApp Channel Members', rate: 500, isAccount: false, per1k: true, minQty: 50, maxQty: 5000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '3-6 hours', description: 'Channel members', refill: false, refillDays: 0 },
-    { serviceId: 'TG001', platform: 'Telegram', serviceName: 'Telegram Members', rate: 200, isAccount: false, per1k: true, minQty: 100, maxQty: 50000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '1-3 hours', description: 'Real Telegram members', refill: true, refillDays: 15 },
-    { serviceId: 'SP001', platform: 'Spotify', serviceName: 'Spotify Followers', rate: 350, isAccount: false, per1k: true, minQty: 100, maxQty: 20000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '3-6 hours', description: 'Spotify profile followers', refill: true, refillDays: 30 },
-    { serviceId: 'LI001', platform: 'LinkedIn', serviceName: 'LinkedIn Followers', rate: 500, isAccount: false, per1k: true, minQty: 100, maxQty: 10000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '6-12 hours', description: 'Professional LinkedIn followers', refill: true, refillDays: 30 },
-    { serviceId: 'GO001', platform: 'Google', serviceName: 'Google Reviews', rate: 1000, isAccount: false, per1k: false, minQty: 1, maxQty: 100, customComments: true, randomComments: true, requireEmail: false, requireLink: true, targetCountry: false, deliveryTime: '12-24 hours', description: '5-star Google reviews', refill: true, refillDays: 30 },
-    { serviceId: 'WEB001', platform: 'Website Traffic', serviceName: 'Website Visitors', rate: 50, isAccount: false, per1k: true, minQty: 1000, maxQty: 1000000, customComments: false, randomComments: false, requireEmail: false, requireLink: true, targetCountry: true, deliveryTime: '1-2 hours', description: 'Real website traffic', refill: false, refillDays: 0 }
-  ];
-  populatePlatformDropdown();
-  renderServicesList(allServices);
-}
-
-function populatePlatformDropdown() {
-  const dropdown = document.getElementById('orderPlatform');
-  const platforms = [...new Set(allServices.map(s => s.platform))];
-  dropdown.innerHTML = '<option value="">Select Platform</option>';
-  platforms.forEach(platform => {
-    dropdown.innerHTML += '<option value="' + platform + '">' + platform + '</option>';
-  });
-}
-
-function renderServicesList(services) {
-  const container = document.getElementById('servicesList');
-  const emptyState = document.getElementById('servicesEmpty');
-  if (!services || services.length === 0) {
-    container.innerHTML = '';
-    emptyState.style.display = 'block';
-    return;
-  }
-  emptyState.style.display = 'none';
-  container.innerHTML = services.map(service => {
-    const platformClass = 'platform-' + service.platform.toLowerCase().replace(/[^a-z]/g, '');
-    const price = service.per1k ? formatCurrency(service.rate) + '/1K' : formatCurrency(service.rate) + '/unit';
-    return '<div class="service-card" onclick="selectServiceFromCard('' + service.serviceId + '')">' +
-      '<div class="service-price">' + price + '</div>' +
-      '<div class="service-header">' +
-      '<div class="service-icon ' + platformClass + '"><i class="' + getPlatformIcon(service.platform) + '"></i></div>' +
-      '<div class="service-info"><h4>' + service.serviceName + '</h4><div class="service-id">ID: ' + service.serviceId + '</div></div>' +
-      '</div>' +
-      '<div class="service-meta">' +
-      '<div class="service-meta-item"><div class="value">' + service.minQty + '</div><div class="label">Min</div></div>' +
-      '<div class="service-meta-item"><div class="value">' + service.maxQty + '</div><div class="label">Max</div></div>' +
-      '<div class="service-meta-item"><div class="value">' + service.deliveryTime + '</div><div class="label">Delivery</div></div>' +
-      '</div></div>';
-  }).join('');
-}
-
-function getPlatformIcon(platform) {
-  const icons = {
-    'TikTok': 'fab fa-tiktok', 'Instagram': 'fab fa-instagram', 'Facebook': 'fab fa-facebook',
-    'YouTube': 'fab fa-youtube', 'Twitter': 'fab fa-twitter', 'WhatsApp': 'fab fa-whatsapp',
-    'Snapchat': 'fab fa-snapchat', 'Telegram': 'fab fa-telegram', 'Website Traffic': 'fas fa-globe',
-    'LinkedIn': 'fab fa-linkedin', 'Threads': 'fab fa-threads', 'Spotify': 'fab fa-spotify',
-    'Canva': 'fas fa-palette', 'ChatGPT': 'fas fa-robot', 'CapCut': 'fas fa-video',
-    'Discord': 'fab fa-discord', 'Twitch': 'fab fa-twitch', 'Gemini': 'fas fa-star',
-    'Google': 'fab fa-google'
-  };
-  return icons[platform] || 'fas fa-bolt';
-}
-
-function loadHomeData() {
-  if (!currentUser) return;
-  const balance = currentUser.balance || 0;
-  document.getElementById('homeWalletBalance').textContent = formatCurrency(balance);
-  const totalOrders = userOrders.length;
-  const pendingOrders = userOrders.filter(o => o.status === 'Pending' || o.status === 'In Progress').length;
-  document.getElementById('homeTotalOrders').textContent = totalOrders;
-  document.getElementById('homePendingOrders').textContent = pendingOrders;
-}
-
-async function loadUserOrders() {
-  if (!currentUser) return;
-  try {
-    const response = await fetch(CONFIG.API_URL + '?action=getUserOrders&userId=' + currentUser.userId);
-    const result = await response.json();
-    if (result.success && result.orders) { userOrders = result.orders; }
-  } catch (error) {
-    console.error('Error loading orders:', error);
-    userOrders = [];
-  }
-}
-
-function loadDashboardData() {
-  if (!currentUser) return;
-  document.getElementById('dashUsername').textContent = currentUser.username || '-';
-  document.getElementById('dashEmail').textContent = currentUser.email || '-';
-  const balance = currentUser.balance || 0;
-  const totalSpent = userOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
-  const totalOrders = userOrders.length;
-  const pendingPayments = 0;
-  const pendingOrders = userOrders.filter(o => o.status === 'Pending' || o.status === 'In Progress').length;
-  document.getElementById('dashBalance').textContent = formatCurrency(balance);
-  document.getElementById('dashTotalSpent').textContent = formatCurrency(totalSpent);
-  document.getElementById('dashTotalOrders').textContent = totalOrders;
-  document.getElementById('dashPendingPayments').textContent = pendingPayments;
-  document.getElementById('dashPendingOrders').textContent = pendingOrders;
-  renderOrderHistory();
-}
-
-function renderOrderHistory() {
-  const tbody = document.getElementById('orderHistoryBody');
-  const emptyState = document.getElementById('ordersEmpty');
-  const table = document.getElementById('orderHistoryTable');
-  if (!userOrders || userOrders.length === 0) {
-    tbody.innerHTML = '';
-    table.style.display = 'none';
-    emptyState.style.display = 'block';
-    return;
-  }
-  table.style.display = 'table';
-  emptyState.style.display = 'none';
-  tbody.innerHTML = userOrders.slice(0, 20).map(order => {
-    const statusClass = 'status-' + (order.status || 'pending').toLowerCase().replace(' ', '-');
-    const canRefill = order.refill === 'true' || order.refill === true;
-    return '<tr>' +
-      '<td><strong>#' + (order.orderId || order.id || '-') + '</strong></td>' +
-      '<td>' + (order.serviceName || order.service || '-') + '</td>' +
-      '<td>' + (order.quantity || '-') + '</td>' +
-      '<td>' + formatCurrency(parseFloat(order.amount) || 0) + '</td>' +
-      '<td><span class="status-badge ' + statusClass + '">' + (order.status || 'Pending') + '</span></td>' +
-      '<td>' + (order.date || '-') + '</td>' +
-      '<td>' + (canRefill ? '<button class="refill-btn" onclick="showRefillModal('' + (order.orderId || order.id) + '', '' + (order.serviceName || order.service) + '')">Refill</button>' : '-') + '</td>' +
-      '</tr>';
-  }).join('');
-}
-
-function loadServicesPageData() {
-  const container = document.getElementById('servicesPageList');
-  const emptyState = document.getElementById('servicesPageEmpty');
-  if (!allServices || allServices.length === 0) {
-    container.innerHTML = '';
-    emptyState.style.display = 'block';
-    return;
-  }
-  emptyState.style.display = 'none';
-  renderServicesPageList(allServices);
-}
-
-function renderServicesPageList(services) {
-  const container = document.getElementById('servicesPageList');
-  container.innerHTML = services.map(service => {
-    const platformClass = 'platform-' + service.platform.toLowerCase().replace(/[^a-z]/g, '');
-    const price = service.per1k ? formatCurrency(service.rate) + ' per 1K' : formatCurrency(service.rate) + ' per unit';
-    return '<div class="service-card" onclick="selectServiceFromCard('' + service.serviceId + ''); navigateTo('home');">' +
-      '<div class="service-price">' + price + '</div>' +
-      '<div class="service-header">' +
-      '<div class="service-icon ' + platformClass + '"><i class="' + getPlatformIcon(service.platform) + '"></i></div>' +
-      '<div class="service-info"><h4>' + service.serviceName + '</h4><div class="service-id">ID: ' + service.serviceId + ' | ' + service.platform + '</div></div>' +
-      '</div>' +
-      '<div class="service-detail-panel" style="margin-top:12px;">' +
-      '<div class="detail-grid">' +
-      '<div class="detail-item"><div class="label">Rate</div><div class="value">' + formatCurrency(service.rate) + '</div></div>' +
-      '<div class="detail-item"><div class="label">Min Qty</div><div class="value">' + service.minQty + '</div></div>' +
-      '<div class="detail-item"><div class="label">Max Qty</div><div class="value">' + service.maxQty + '</div></div>' +
-      '<div class="detail-item"><div class="label">Delivery</div><div class="value">' + service.deliveryTime + '</div></div>' +
-      '<div class="detail-item"><div class="label">Refill</div><div class="value">' + (service.refill ? service.refillDays + ' days' : 'No') + '</div></div>' +
-      '<div class="detail-item"><div class="label">Type</div><div class="value">' + (service.per1k ? 'Per 1K' : 'Per Unit') + '</div></div>' +
-      '</div>' +
-      '<div style="margin-top:12px;font-size:12px;color:var(--text-secondary);">' + (service.description || '') + '</div>' +
-      '</div></div>';
-  }).join('');
-}
-
-function loadFundsData() {
-  if (!currentUser) return;
-  const balance = currentUser.balance || 0;
-  document.getElementById('fundsWalletBalance').textContent = formatCurrency(balance);
-}
-
-// ============================================
-// ORDER LOGIC
-// ============================================
-function filterByPlatform(platform) {
-  document.querySelectorAll('.platform-item').forEach(item => {
-    item.classList.remove('active');
-    if (item.dataset.platform === platform) item.classList.add('active');
-  });
-  document.getElementById('orderPlatform').value = platform;
-  loadServicesForPlatform();
-  const filtered = allServices.filter(s => s.platform === platform);
-  renderServicesList(filtered);
-}
-
-function searchServices() {
-  const query = document.getElementById('serviceSearch').value.toLowerCase().trim();
-  if (!query) { renderServicesList(allServices); return; }
-  const filtered = allServices.filter(s =>
-    s.serviceId.toLowerCase().includes(query) ||
-    s.platform.toLowerCase().includes(query) ||
-    s.serviceName.toLowerCase().includes(query) ||
-    s.rate.toString().includes(query)
-  );
-  renderServicesList(filtered);
-}
-
-function loadServicesForPlatform() {
-  const platform = document.getElementById('orderPlatform').value;
-  const serviceDropdown = document.getElementById('orderService');
-  serviceDropdown.innerHTML = '<option value="">Select Service</option>';
-  if (!platform) return;
-  const platformServices = allServices.filter(s => s.platform === platform);
-  platformServices.forEach(service => {
-    serviceDropdown.innerHTML += '<option value="' + service.serviceId + '">' + service.serviceName + ' (' + formatCurrency(service.rate) + ')</option>';
-  });
-  selectedService = null;
-  document.getElementById('dynamicFields').innerHTML = '';
-  document.getElementById('serviceDetailPanel').style.display = 'none';
-  document.getElementById('orderTotal').textContent = formatCurrency(0);
-}
-
-function selectService() {
-  const serviceId = document.getElementById('orderService').value;
-  if (!serviceId) return;
-  selectedService = allServices.find(s => s.serviceId === serviceId);
-  if (!selectedService) return;
-  buildDynamicFields();
-  showServiceDetails();
-  calculateTotal();
-}
-
-function selectServiceFromCard(serviceId) {
-  const service = allServices.find(s => s.serviceId === serviceId);
-  if (!service) return;
-  document.getElementById('orderPlatform').value = service.platform;
-  loadServicesForPlatform();
-  document.getElementById('orderService').value = serviceId;
-  selectService();
-  document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function buildDynamicFields() {
-  if (!selectedService) return;
-  let html = '';
-  if (selectedService.isAccount) {
-    html += '<div class="form-group"><label>Email Address</label><input type="email" id="orderEmail" placeholder="Enter email for account" required></div>';
-  }
-  if (selectedService.requireLink) {
-    html += '<div class="form-group"><label>Link / URL</label><input type="url" id="orderLink" placeholder="Enter link (https://...)" required></div>';
-  }
-  if (selectedService.customComments) {
-    html += '<div class="form-group"><label>Custom Comments (comma separated)</label><textarea id="orderComments" placeholder="Enter comments separated by commas..." rows="3"></textarea></div>';
-  }
-  if (selectedService.targetCountry) {
-    html += '<div class="form-group"><label>Target Country</label><select id="orderCountry"><option value="">Select Country</option><option value="Pakistan">Pakistan</option><option value="India">India</option><option value="USA">USA</option><option value="UK">UK</option><option value="UAE">UAE</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Worldwide">Worldwide</option></select></div>';
-  }
-  document.getElementById('dynamicFields').innerHTML = html;
-}
-
-function showServiceDetails() {
-  if (!selectedService) return;
-  const panel = document.getElementById('serviceDetailPanel');
-  const grid = document.getElementById('serviceDetailsGrid');
-  panel.style.display = 'block';
-  const priceLabel = selectedService.per1k ? 'Per 1K' : 'Per Unit';
-  grid.innerHTML =
-    '<div class="detail-item"><div class="label">Rate</div><div class="value">' + formatCurrency(selectedService.rate) + ' (' + priceLabel + ')</div></div>' +
-    '<div class="detail-item"><div class="label">Min Quantity</div><div class="value">' + selectedService.minQty + '</div></div>' +
-    '<div class="detail-item"><div class="label">Max Quantity</div><div class="value">' + selectedService.maxQty + '</div></div>' +
-    '<div class="detail-item"><div class="label">Delivery Time</div><div class="value">' + selectedService.deliveryTime + '</div></div>' +
-    '<div class="detail-item"><div class="label">Refill</div><div class="value">' + (selectedService.refill ? selectedService.refillDays + ' days' : 'Not available') + '</div></div>' +
-    '<div class="detail-item"><div class="label">Description</div><div class="value" style="font-size:11px;">' + (selectedService.description || '-') + '</div></div>';
-}
-
-function calculateTotal() {
-  if (!selectedService) { document.getElementById('orderTotal').textContent = formatCurrency(0); return; }
-  const quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
-  const minQty = parseInt(selectedService.minQty) || 1;
-  const maxQty = parseInt(selectedService.maxQty) || 999999;
-  if (quantity > 0 && quantity < minQty) { document.getElementById('orderQuantity').style.borderColor = 'var(--danger)'; }
-  else if (quantity > maxQty) { document.getElementById('orderQuantity').style.borderColor = 'var(--danger)'; }
-  else { document.getElementById('orderQuantity').style.borderColor = ''; }
-  let total = 0;
-  if (selectedService.per1k) { total = (quantity / 1000) * selectedService.rate; }
-  else { total = quantity * selectedService.rate; }
-  document.getElementById('orderTotal').textContent = formatCurrency(total);
-  return total;
-}
-
-async function placeOrder(e) {
-  e.preventDefault();
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  if (!selectedService) { showToast('Please select a service', 'error'); return; }
-  const quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
-  const minQty = parseInt(selectedService.minQty) || 1;
-  const maxQty = parseInt(selectedService.maxQty) || 999999;
-  if (quantity < minQty) { showToast('Minimum quantity is ' + minQty, 'error'); return; }
-  if (quantity > maxQty) { showToast('Maximum quantity is ' + maxQty, 'error'); return; }
-  const total = calculateTotal();
-  const balance = currentUser.balance || 0;
-  if (total > balance) { showToast('Insufficient balance. Please add funds.', 'error'); return; }
-  const orderData = {
-    action: 'createOrder',
-    userId: currentUser.userId,
-    username: currentUser.username,
-    serviceId: selectedService.serviceId,
-    platform: selectedService.platform,
-    serviceName: selectedService.serviceName,
-    quantity: quantity,
-    rate: selectedService.rate,
-    per1k: selectedService.per1k,
-    amount: total,
-    currency: currentCurrency,
-    status: 'Pending',
-    date: new Date().toISOString()
-  };
-  if (selectedService.isAccount) { orderData.email = document.getElementById('orderEmail')?.value || ''; }
-  if (selectedService.requireLink) { orderData.link = document.getElementById('orderLink')?.value || ''; }
-  if (selectedService.customComments) { orderData.comments = document.getElementById('orderComments')?.value || ''; }
-  if (selectedService.targetCountry) { orderData.country = document.getElementById('orderCountry')?.value || ''; }
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData)
-    });
-    const result = await response.json();
-    if (result.success) {
-      currentUser.balance = (currentUser.balance || 0) - total;
-      localStorage.setItem('mts_user', JSON.stringify(currentUser));
-      document.getElementById('successOrderId').textContent = '#' + (result.orderId || 'ORDER');
-      document.getElementById('orderSuccessModal').classList.add('active');
-      await loadUserOrders();
-      loadHomeData();
-      showToast('Order placed successfully!', 'success');
-    } else {
-      showToast(result.message || 'Failed to place order', 'error');
+    
+    async function loadServices() { 
+        let res = await apiCall("getServices"); 
+        if(res.success) allServices = res.services; 
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-function clearOrderForm() {
-  document.getElementById('orderForm').reset();
-  document.getElementById('orderService').innerHTML = '<option value="">Select Service</option>';
-  document.getElementById('dynamicFields').innerHTML = '';
-  document.getElementById('serviceDetailPanel').style.display = 'none';
-  document.getElementById('orderTotal').textContent = formatCurrency(0);
-  selectedService = null;
-  document.querySelectorAll('.platform-item').forEach(item => item.classList.remove('active'));
-}
-
-// ============================================
-// SERVICES PAGE FILTERS
-// ============================================
-function filterServicesPage(platform) {
-  document.querySelectorAll('#servicesPlatformGrid .platform-item').forEach(item => {
-    item.classList.remove('active');
-    if (item.dataset.platform === platform) item.classList.add('active');
-  });
-  let filtered = allServices;
-  if (platform !== 'All') { filtered = allServices.filter(s => s.platform === platform); }
-  const searchQuery = document.getElementById('servicesSearchInput').value.toLowerCase().trim();
-  if (searchQuery) {
-    filtered = filtered.filter(s =>
-      s.serviceId.toLowerCase().includes(searchQuery) ||
-      s.serviceName.toLowerCase().includes(searchQuery) ||
-      s.rate.toString().includes(searchQuery)
-    );
-  }
-  renderServicesPageList(filtered);
-  const emptyState = document.getElementById('servicesPageEmpty');
-  if (filtered.length === 0) { emptyState.style.display = 'block'; }
-  else { emptyState.style.display = 'none'; }
-}
-
-function searchServicesPage() {
-  const activePlatform = document.querySelector('#servicesPlatformGrid .platform-item.active')?.dataset.platform || 'All';
-  filterServicesPage(activePlatform);
-}
-
-// ============================================
-// ADD FUNDS
-// ============================================
-function selectPaymentMethod(method) {
-  selectedPaymentMethod = method;
-  document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-  document.getElementById('method' + method).classList.add('selected');
-  document.getElementById('paymentDetails').style.display = 'block';
-  if (method === 'Easypaisa') {
-    document.getElementById('easypaisaDetails').style.display = 'block';
-    document.getElementById('sadapayDetails').style.display = 'none';
-  } else {
-    document.getElementById('easypaisaDetails').style.display = 'none';
-    document.getElementById('sadapayDetails').style.display = 'block';
-  }
-  document.getElementById('paymentProofForm').style.display = 'none';
-}
-
-function showPaymentProofForm() {
-  if (!selectedPaymentMethod) { showToast('Please select a payment method first', 'error'); return; }
-  document.getElementById('paymentProofForm').style.display = 'block';
-  document.getElementById('paymentDetails').style.display = 'none';
-}
-
-function cancelPayment() {
-  document.getElementById('paymentProofForm').style.display = 'none';
-  document.getElementById('paymentDetails').style.display = 'block';
-}
-
-function handleFileUpload(input) {
-  const preview = document.getElementById('filePreview');
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function(e) { preview.src = e.target.result; preview.style.display = 'block'; };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-async function submitPaymentProof(e) {
-  e.preventDefault();
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  const amount = document.getElementById('paymentAmount').value;
-  const transactionId = document.getElementById('paymentTransactionId').value.trim();
-  const email = document.getElementById('paymentEmail').value.trim();
-  const screenshot = document.getElementById('paymentScreenshot').files[0];
-  showLoading(true);
-  try {
-    let screenshotData = '';
-    if (screenshot) { screenshotData = await fileToBase64(screenshot); }
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'addFunds', userId: currentUser.userId, username: currentUser.username,
-        method: selectedPaymentMethod, amount: amount, transactionId: transactionId,
-        email: email, screenshot: screenshotData, status: 'Pending', date: new Date().toISOString()
-      })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Payment proof submitted! Waiting for admin approval.', 'success');
-      document.getElementById('paymentProofForm').style.display = 'none';
-      document.getElementById('paymentDetails').style.display = 'none';
-      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-      selectedPaymentMethod = null;
-      document.getElementById('paymentAmount').value = '';
-      document.getElementById('paymentTransactionId').value = '';
-      document.getElementById('paymentEmail').value = '';
-      document.getElementById('paymentScreenshot').value = '';
-      document.getElementById('filePreview').style.display = 'none';
-    } else {
-      showToast(result.message || 'Failed to submit payment', 'error');
+    
+    async function checkAuth() { 
+        let token = localStorage.getItem("mts_token"); 
+        if(!token) { showAuthScreen(); return false; } 
+        let res = await apiCall("verifySession", { token }); 
+        if(res.success) { 
+            currentUser = res.user; 
+            document.getElementById("userNameDisplay").innerText = currentUser.fullName?.split(" ")[0] || currentUser.username; 
+            await loadJoinApplicationStatus();
+            return true; 
+        } else { 
+            localStorage.removeItem("mts_token"); 
+            showAuthScreen(); 
+            return false; 
+        } 
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-// ============================================
-// RECOMMENDATIONS
-// ============================================
-async function submitRecommendation(e) {
-  e.preventDefault();
-  const email = document.getElementById('recEmail').value.trim();
-  const whatsApp = document.getElementById('recWhatsApp').value.trim();
-  const phone = document.getElementById('recPhone').value.trim();
-  const text = document.getElementById('recText').value.trim();
-  const file = document.getElementById('recFile').files[0];
-  showLoading(true);
-  try {
-    let fileData = '';
-    if (file) { fileData = await fileToBase64(file); }
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'submitRecommendation', email, whatsApp, phone, text, attachment: fileData, date: new Date().toISOString() })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Recommendation submitted successfully!', 'success');
-      e.target.reset();
-    } else {
-      showToast(result.message || 'Failed to submit', 'error');
+    
+    async function loadJoinApplicationStatus() {
+        let res = await apiCall("getMyJoinStatus");
+        if(res.success && res.application) joinStatus = res.application;
+        else joinStatus = null;
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-function handleRecFile(input) {
-  if (input.files && input.files[0]) { showToast('File selected: ' + input.files[0].name, 'info'); }
-}
-
-// ============================================
-// JOIN US & EARN
-// ============================================
-function switchJoinTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
-}
-
-async function submitJoinApplication(e) {
-  e.preventDefault();
-  const name = document.getElementById('joinName').value.trim();
-  const username = document.getElementById('joinUsername').value.trim();
-  const phone = document.getElementById('joinPhone').value.trim();
-  const whatsApp = document.getElementById('joinWhatsApp').value.trim();
-  const email = document.getElementById('joinEmail').value.trim();
-  const type = document.getElementById('joinType').value;
-  const timings = document.getElementById('joinTimings').value;
-  const shift = document.getElementById('joinShift').value;
-  const about = document.getElementById('joinAbout').value.trim();
-  const photo = document.getElementById('joinPhoto').files[0];
-  showLoading(true);
-  try {
-    let photoData = '';
-    if (photo) { photoData = await fileToBase64(photo); }
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'submitJoinApplication', name, username, phone, whatsApp, email, type, timings, shift, about, photo: photoData, status: 'Pending', date: new Date().toISOString() })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Application submitted! We will review and contact you.', 'success');
-      e.target.reset();
-    } else {
-      showToast(result.message || 'Failed to submit application', 'error');
+    
+    function showAuthScreen() { 
+        document.getElementById("pageContent").innerHTML = `
+            <div class="glass-card" style="max-width:450px;margin:50px auto;">
+                <h2><i class="fas fa-rocket"></i> Welcome to MTS SMM</h2>
+                <div id="loginForm">
+                    <input type="text" id="loginEmail" placeholder="Email or Username">
+                    <input type="password" id="loginPass" placeholder="Password">
+                    <button id="doLogin" class="btn" style="width:100%">Login</button>
+                    <button id="showSignupBtn" style="background:transparent; border:1px solid #2b6ef0; width:100%; margin-top:10px;">Create Account</button>
+                </div>
+                <div id="signupForm" style="display:none;">
+                    <input id="fullName" placeholder="Full Name"><input id="username" placeholder="Username">
+                    <input id="gmail" placeholder="Gmail"><input id="phoneNum" placeholder="Phone">
+                    <select id="userType"><option>Commission Based</option><option>Salary Based</option></select>
+                    <input id="pass" type="password" placeholder="Password"><input id="confirmPass" type="password" placeholder="Confirm">
+                    <button id="doSignup" class="btn" style="width:100%">Register</button>
+                    <button id="backLogin" style="background:transparent; border:1px solid #475569; width:100%; margin-top:10px;">Back</button>
+                </div>
+            </div>
+        `; 
+        attachAuthEvents(); 
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-function handleJoinPhoto(input) {
-  if (input.files && input.files[0]) { showToast('Photo selected: ' + input.files[0].name, 'info'); }
-}
-
-async function submitAttendance(e) {
-  e.preventDefault();
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  const formData = {
-    action: 'submitAttendance', userId: currentUser.userId,
-    name: document.getElementById('attendName').value.trim(),
-    email: document.getElementById('attendEmail').value.trim(),
-    loginTime: document.getElementById('attendLoginTime').value,
-    workingHours: document.getElementById('attendHours').value.trim(),
-    workDetail: document.getElementById('attendDetail').value.trim(),
-    workType: document.getElementById('attendWorkType').value,
-    platforms: document.getElementById('attendPlatforms').value.trim(),
-    boosted: document.getElementById('attendBoosted').value,
-    clientContacts: document.getElementById('attendContacts').value,
-    logoutTime: document.getElementById('attendLogoutTime').value,
-    date: new Date().toISOString()
-  };
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Attendance submitted successfully!', 'success');
-      e.target.reset();
-    } else {
-      showToast(result.message || 'Failed to submit attendance', 'error');
+    
+    function attachAuthEvents() { 
+        document.getElementById("doLogin")?.addEventListener("click", async () => {
+            let res = await apiCall("login", { email: document.getElementById("loginEmail").value, pass: document.getElementById("loginPass").value });
+            if(res.success) { localStorage.setItem("mts_token", res.token); location.reload(); }
+            else showToast(res.error, true);
+        });
+        document.getElementById("showSignupBtn")?.addEventListener("click", () => { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; });
+        document.getElementById("backLogin")?.addEventListener("click", () => { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; });
+        document.getElementById("doSignup")?.addEventListener("click", async () => {
+            let pass = document.getElementById("pass").value, confirm = document.getElementById("confirmPass").value;
+            if(pass !== confirm) { showToast("Passwords don't match", true); return; }
+            let res = await apiCall("signup", {
+                fullName: document.getElementById("fullName").value, username: document.getElementById("username").value,
+                gmail: document.getElementById("gmail").value, phone: document.getElementById("phoneNum").value,
+                userType: document.getElementById("userType").value, password: pass
+            });
+            if(res.success) { showToast("Account created! Please login."); document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
+            else showToast(res.error, true);
+        });
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-async function submitJobDetails(e) {
-  e.preventDefault();
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  const formData = {
-    action: 'submitJobDetails', userId: currentUser.userId,
-    jobName: document.getElementById('jobName').value.trim(),
-    services: document.getElementById('jobServices').value.trim(),
-    link: document.getElementById('jobLink').value.trim(),
-    amount: document.getElementById('jobAmount').value,
-    orderId: document.getElementById('jobOrderId').value.trim(),
-    details: document.getElementById('jobDetails').value.trim(),
-    date: new Date().toISOString()
-  };
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Job details saved successfully!', 'success');
-      e.target.reset();
-    } else {
-      showToast(result.message || 'Failed to save', 'error');
+    
+    // ========== HOME PAGE ==========
+    async function renderHome() { 
+        await loadServices();
+        let html = `
+            <div class="glass-card"><h3><i class="fas fa-coins"></i> Wallet Balance: ${formatCurrency(currentUser.wallet)}</h3></div>
+            <div class="glass-card">
+                <div class="platform-icons" id="homePlatformIcons">${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div>
+                <select id="platformSelect"><option value="">Select Platform</option>${platforms.map(p => `<option value="${p.name}">${p.name}</option>`).join('')}</select>
+                <select id="serviceSelect"><option value="">Select Service</option></select>
+                <input type="number" id="quantity" placeholder="Quantity">
+                <div id="dynamicFields"></div>
+                <div id="serviceDetails" class="service-detail-card" style="display:none;"></div>
+                <div class="order-summary" id="orderSummary" style="display:none;"><h4>Order Summary</h4><p>Price: <span id="servicePrice">0</span></p><p>Total: <span id="totalAmount">0</span></p></div>
+                <div style="display:flex; gap:10px;"><button id="placeOrderBtn" class="btn">Place Order</button><button id="clearFormBtn" class="btn btn-secondary">Clear</button></div>
+            </div>
+        `;
+        document.getElementById("pageContent").innerHTML = html;
+        document.querySelectorAll('#homePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { document.getElementById('platformSelect').value = el.dataset.platform; updateServiceDropdown(); }));
+        document.getElementById("platformSelect").addEventListener("change", updateServiceDropdown);
+        document.getElementById("serviceSelect").addEventListener("change", showServiceDetails);
+        document.getElementById("quantity").addEventListener("input", calculateTotal);
+        document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
+        document.getElementById("clearFormBtn").addEventListener("click", () => { selectedService = null; document.getElementById("serviceDetails").style.display = "none"; document.getElementById("orderSummary").style.display = "none"; document.getElementById("dynamicFields").innerHTML = ""; document.getElementById("quantity").value = ""; });
+        updateServiceDropdown();
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-// ============================================
-// HELP & SUPPORT
-// ============================================
-async function submitHelpTicket(e) {
-  e.preventDefault();
-  const email = document.getElementById('helpEmail').value.trim();
-  const phone = document.getElementById('helpPhone').value.trim();
-  const message = document.getElementById('helpMessage').value.trim();
-  const attachment = document.getElementById('helpAttachment').files[0];
-  showLoading(true);
-  try {
-    let attachmentData = '';
-    if (attachment) { attachmentData = await fileToBase64(attachment); }
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'submitHelpTicket', email, phone, message, attachment: attachmentData, status: 'Open', date: new Date().toISOString() })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Support ticket submitted! We will respond soon.', 'success');
-      e.target.reset();
-    } else {
-      showToast(result.message || 'Failed to submit ticket', 'error');
+    
+    function updateServiceDropdown() {
+        let platform = document.getElementById("platformSelect").value;
+        let filtered = platform ? allServices.filter(s => s.Platform === platform) : [];
+        let select = document.getElementById("serviceSelect");
+        select.innerHTML = '<option value="">Select a service</option>';
+        filtered.forEach(s => { let ratePerUnit = s.Per1k ? s.Rate/1000 : s.Rate; select.innerHTML += `<option value="${s.ServiceId}">${s.Name} - ${formatCurrency(ratePerUnit)}${s.Per1k ? '/1k' : ''}</option>`; });
+        selectedService = null;
+        document.getElementById("serviceDetails").style.display = "none";
+        document.getElementById("orderSummary").style.display = "none";
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-function handleHelpAttachment(input) {
-  if (input.files && input.files[0]) { showToast('Attachment selected: ' + input.files[0].name, 'info'); }
-}
-
-// ============================================
-// REFILL SYSTEM
-// ============================================
-function showRefillModal(orderId, serviceName) {
-  document.getElementById('refillOrderId').value = orderId;
-  document.getElementById('refillService').value = serviceName;
-  document.getElementById('refillModal').classList.add('active');
-}
-
-async function submitRefillRequest(e) {
-  e.preventDefault();
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  const orderId = document.getElementById('refillOrderId').value;
-  const serviceName = document.getElementById('refillService').value;
-  const reason = document.getElementById('refillReason').value.trim();
-  showLoading(true);
-  try {
-    const response = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'submitRefill', userId: currentUser.userId, username: currentUser.username, orderId: orderId, serviceName: serviceName, reason: reason, status: 'Pending', date: new Date().toISOString() })
-    });
-    const result = await response.json();
-    if (result.success) {
-      showToast('Refill request submitted!', 'success');
-      closeModal('refillModal');
-      document.getElementById('refillReason').value = '';
-    } else {
-      showToast(result.message || 'Failed to submit refill', 'error');
+    
+    function showServiceDetails() {
+        let serviceId = document.getElementById("serviceSelect").value;
+        if (!serviceId) return;
+        selectedService = allServices.find(s => s.ServiceId === serviceId);
+        let ratePerUnit = selectedService.Per1k ? selectedService.Rate/1000 : selectedService.Rate;
+        document.getElementById("serviceDetails").innerHTML = `<h4>${selectedService.Name}</h4><p>Rate: ${formatCurrency(ratePerUnit)} ${selectedService.Per1k ? '(per 1000)' : '(per unit)'}</p><p>Min: ${selectedService.MinQty} | Max: ${selectedService.MaxQty}</p><p>Delivery: ${selectedService.DeliveryTime || '1-2 hours'}</p><p>${selectedService.Description || ''}</p>`;
+        document.getElementById("serviceDetails").style.display = "block";
+        let dynamicHtml = '';
+        if (selectedService.IsAccount) dynamicHtml = `<input id="emailField" placeholder="Email Address">`;
+        else dynamicHtml = `<input id="linkField" placeholder="Profile/Post Link">`;
+        if (selectedService.CustomComments) dynamicHtml += `<textarea id="commentsField" placeholder="Comments (comma separated)"></textarea>`;
+        document.getElementById("dynamicFields").innerHTML = dynamicHtml;
+        calculateTotal();
     }
-  } catch (error) {
-    showToast('Network error. Please try again.', 'error');
-  } finally { showLoading(false); }
-}
-
-// ============================================
-// PROFILE MODAL
-// ============================================
-function showProfileModal() {
-  if (!currentUser) return;
-  document.getElementById('profileName').value = currentUser.fullName || '';
-  document.getElementById('profileEmail').value = currentUser.email || '';
-  document.getElementById('profilePhone').value = currentUser.phone || '';
-  document.getElementById('profileUsername').value = currentUser.username || '';
-  document.getElementById('profileType').value = currentUser.userType || '';
-  document.getElementById('profileBalance').textContent = formatCurrency(currentUser.balance || 0);
-  document.getElementById('profileModal').classList.add('active');
-}
-
-// ============================================
-// SETTINGS
-// ============================================
-function saveSettings() {
-  if (!currentUser) { showToast('Please login first', 'error'); return; }
-  const name = document.getElementById('settingsName').value.trim();
-  const email = document.getElementById('settingsEmail').value.trim();
-  const phone = document.getElementById('settingsPhone').value.trim();
-  const currentPassword = document.getElementById('settingsCurrentPassword').value;
-  const newPassword = document.getElementById('settingsNewPassword').value;
-  const confirmPassword = document.getElementById('settingsConfirmPassword').value;
-  if (newPassword && newPassword !== confirmPassword) { showToast('New passwords do not match!', 'error'); return; }
-  showLoading(true);
-  fetch(CONFIG.API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'updateProfile', userId: currentUser.userId,
-      fullName: name, email: email, phone: phone,
-      currentPassword: currentPassword, newPassword: newPassword
-    })
-  })
-  .then(response => response.json())
-  .then(result => {
-    if (result.success) {
-      currentUser.fullName = name || currentUser.fullName;
-      currentUser.email = email || currentUser.email;
-      currentUser.phone = phone || currentUser.phone;
-      localStorage.setItem('mts_user', JSON.stringify(currentUser));
-      showToast('Profile updated successfully!', 'success');
-      document.getElementById('settingsCurrentPassword').value = '';
-      document.getElementById('settingsNewPassword').value = '';
-      document.getElementById('settingsConfirmPassword').value = '';
-    } else {
-      showToast(result.message || 'Failed to update profile', 'error');
+    
+    function calculateTotal() {
+        if (!selectedService) return;
+        let qty = parseInt(document.getElementById("quantity").value) || 0;
+        if (qty < selectedService.MinQty) { document.getElementById("orderSummary").style.display = "none"; return; }
+        let totalPKR = selectedService.Per1k ? (selectedService.Rate/1000) * qty : selectedService.Rate * qty;
+        let pricePKR = selectedService.Per1k ? selectedService.Rate/1000 : selectedService.Rate;
+        document.getElementById("servicePrice").innerHTML = formatCurrency(pricePKR);
+        document.getElementById("totalAmount").innerHTML = formatCurrency(totalPKR);
+        document.getElementById("orderSummary").style.display = "block";
+        selectedService.calculatedTotal = totalPKR;
     }
-  })
-  .catch(error => {
-    showToast('Network error. Please try again.', 'error');
-  })
-  .finally(() => { showLoading(false); });
-}
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-function closeModal(modalId) {
-  document.getElementById(modalId).classList.remove('active');
-}
-
-function showLoading(show) {
-  document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
-}
-
-function showToast(message, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-  toast.innerHTML =
-    '<i class="fas ' + icons[type] + '"></i>' +
-    '<div class="toast-content">' +
-    '<div class="toast-title">' + type.charAt(0).toUpperCase() + type.slice(1) + '</div>' +
-    '<div class="toast-message">' + message + '</div>' +
-    '</div>';
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(100px)';
-    setTimeout(() => toast.remove(), 300);
-  }, 4000);
-}
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Copied to clipboard!', 'success');
-  }).catch(() => {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('Copied to clipboard!', 'success');
-  });
-}
-
-function refreshData() {
-  const icon = document.getElementById('refreshIcon');
-  icon.style.animation = 'spin 1s linear infinite';
-  loadUserData().then(() => {
-    icon.style.animation = '';
-    showToast('Data refreshed!', 'success');
-  }).catch(() => {
-    icon.style.animation = '';
-  });
-}
-
-// ============================================
-// EVENT LISTENERS & INIT
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-  initApp();
-
-  // Close sidebar when clicking outside on mobile
-  document.addEventListener('click', function(e) {
-    const sidebar = document.getElementById('sidebar');
-    const hamburger = document.querySelector('.hamburger');
-    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
-      if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
-        sidebar.classList.remove('open');
-      }
+    
+    async function placeOrder() {
+        if (!selectedService) { showToast("Select a service", true); return; }
+        let qty = parseInt(document.getElementById("quantity").value);
+        if (qty < selectedService.MinQty) { showToast(`Min quantity: ${selectedService.MinQty}`, true); return; }
+        if (currentUser.wallet < selectedService.calculatedTotal) { showToast(`Insufficient balance! Need ${formatCurrency(selectedService.calculatedTotal)}`, true); return; }
+        let extraFields = {};
+        if (document.getElementById("emailField")) extraFields.email = document.getElementById("emailField").value;
+        if (document.getElementById("linkField")) extraFields.link = document.getElementById("linkField").value;
+        if (document.getElementById("commentsField")) extraFields.comments = document.getElementById("commentsField").value;
+        let res = await apiCall("createOrder", { serviceId: selectedService.ServiceId, quantity: qty, totalAmount: selectedService.calculatedTotal, extraFields });
+        if (res.success) { document.getElementById("successMessage").innerHTML = `<strong>Order ID:</strong> ${res.orderId}<br>Amount: ${formatCurrency(selectedService.calculatedTotal)}`; document.getElementById("successModal").style.display = "block"; }
+        else showToast(res.error, true);
     }
-  });
-
-  // Close modals on overlay click
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', function(e) {
-      if (e.target === this) { this.classList.remove('active'); }
-    });
-  });
-
-  // File upload drag and drop
-  const fileUploadArea = document.getElementById('fileUploadArea');
-  if (fileUploadArea) {
-    fileUploadArea.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      this.classList.add('dragover');
-    });
-    fileUploadArea.addEventListener('dragleave', function() {
-      this.classList.remove('dragover');
-    });
-    fileUploadArea.addEventListener('drop', function(e) {
-      e.preventDefault();
-      this.classList.remove('dragover');
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        document.getElementById('paymentScreenshot').files = files;
-        handleFileUpload(document.getElementById('paymentScreenshot'));
-      }
-    });
-  }
-});
-
-// Prevent form submission on Enter for some inputs
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'submit') {
-    const form = e.target.closest('form');
-    if (form && form.id === 'orderForm') {
-      e.preventDefault();
+    
+    // ========== SERVICES PAGE ==========
+    async function renderServices() { 
+        await loadServices();
+        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatformIcons"><div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div><input id="searchInput" placeholder="Search services..."></div><div id="servicesGrid" class="service-grid"></div>`;
+        document.getElementById("pageContent").innerHTML = html;
+        document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); filterServices(); }));
+        document.getElementById("searchInput").addEventListener("input", filterServices);
+        filterServices();
     }
-  }
-});
+    
+    function filterServices() {
+        let platform = document.querySelector('#servicePlatformIcons .platform-icon-item.active')?.dataset.platform || 'all';
+        let search = document.getElementById("searchInput")?.value.toLowerCase() || "";
+        let filtered = allServices.filter(s => (platform === 'all' || s.Platform === platform) && (s.Name.toLowerCase().includes(search) || s.ServiceId.includes(search)));
+        document.getElementById("servicesGrid").innerHTML = filtered.map(s => `<div class="glass-card service-card" onclick="navigateTo('home'); setTimeout(()=>selectService('${s.Platform}', '${s.ServiceId}'), 100)"><i class="fab fa-${s.Platform.toLowerCase()}"></i> <strong>${s.Name}</strong><br>Rate: ${formatCurrency(s.Per1k ? s.Rate/1000 : s.Rate)} ${s.Per1k ? '/1k' : ''}<br>Min: ${s.MinQty}</div>`).join('');
+    }
+    
+    function selectService(platform, serviceId) {
+        let platformSelect = document.getElementById("platformSelect");
+        if(platformSelect) { platformSelect.value = platform; updateServiceDropdown(); setTimeout(() => { document.getElementById("serviceSelect").value = serviceId; showServiceDetails(); }, 100); }
+    }
+    
+    // ========== DASHBOARD ==========
+    async function renderDashboard() { 
+        let stats = await apiCall("userStats"); 
+        let orders = await apiCall("getUserOrders"); 
+        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card">💰 Balance: ${formatCurrency(currentUser.wallet)}</div><div class="glass-card">📦 Orders: ${stats.totalOrders || 0}</div><div class="glass-card">⏳ Pending: ${stats.pendingOrders || 0}</div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<table style="width:100%"><tr><th>ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td>${o.status}</td></tr>`).join('') + '</table>' : '<p>No orders</p>'}</div>`;
+    }
+    
+    // ========== ADD FUNDS ==========
+    async function renderAddFunds() { 
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Add Funds</h3><div style="background:#1e293b; border-radius:20px; padding:15px;"><i class="fas fa-mobile-alt"></i> <strong>Easypaisa:</strong> 03198595421 - Muhammad Ramzan Al Sami</div><div style="background:#1e293b; border-radius:20px; padding:15px; margin:10px 0;"><i class="fas fa-credit-card"></i> <strong>Sadapay:</strong> 03198595421 - Muhammad Ramzan Ul Sami</div><button id="sentProof" class="btn">I Have Sent Payment</button><div id="proofForm" style="display:none;"><input id="amountFund" placeholder="Amount (PKR)" type="number"><input id="transId" placeholder="Transaction ID"><input id="fundEmail" placeholder="Email"><input type="file" id="screenshot"><button id="submitProof" class="btn">Submit</button></div></div>`;
+        document.getElementById("sentProof").onclick = () => { document.getElementById("proofForm").style.display = "block"; };
+        document.getElementById("submitProof").onclick = async () => {
+            let file = document.getElementById("screenshot").files[0];
+            if(!file) { showToast("Upload screenshot", true); return; }
+            let reader = new FileReader();
+            reader.onload = async () => {
+                let res = await apiCall("addFundsRequest", { amount: document.getElementById("amountFund").value, transactionId: document.getElementById("transId").value, email: document.getElementById("fundEmail").value, screenshotBase64: reader.result });
+                showToast(res.message);
+                if(res.success) document.getElementById("proofForm").style.display = "none";
+            };
+            reader.readAsDataURL(file);
+        };
+    }
+    
+    async function renderRecommendations() { 
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Share Your Experience</h3><input id="recEmail" placeholder="Email"><input id="recWhatsapp" placeholder="WhatsApp"><input id="recPhone" placeholder="Phone"><textarea id="recText" placeholder="Recommendation"></textarea><button id="submitRec" class="btn">Submit</button></div>`;
+        document.getElementById("submitRec").onclick = async () => { let res = await apiCall("submitRecommendation", { email: document.getElementById("recEmail").value, whatsapp: document.getElementById("recWhatsapp").value, phone: document.getElementById("recPhone").value, text: document.getElementById("recText").value }); showToast(res.message); };
+    }
+    
+    // ========== JOIN US & EARN (Complete with Status, Attendance, Jobs) ==========
+    async function renderJoinUs() {
+        await loadJoinApplicationStatus();
+        
+        let statusHtml = '';
+        let applicationFormHtml = '';
+        let attendanceHtml = '';
+        let jobsHtml = '';
+        let historyHtml = '';
+        
+        if (!joinStatus || joinStatus.status === 'none') {
+            applicationFormHtml = `
+                <h3>Apply Now</h3>
+                <div class="form-row">
+                    <input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}">
+                    <input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}">
+                </div>
+                <div class="form-row">
+                    <input id="appPhone" placeholder="Phone Number">
+                    <input id="appWhatsapp" placeholder="WhatsApp Number">
+                </div>
+                <div class="form-row">
+                    <input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}">
+                    <select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select>
+                </div>
+                <div class="form-row">
+                    <select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select>
+                    <select id="appShift"><option>Day</option><option>Night</option></select>
+                </div>
+                <textarea id="appAbout" placeholder="About Yourself (Experience, Skills, etc.)" rows="3"></textarea>
+                <input type="file" id="appPhoto" accept="image/*">
+                <button id="submitApplication" class="btn">Submit Application</button>
+            `;
+        } else if (joinStatus.status === 'pending') {
+            statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin. You will be notified once approved. If you have any questions, please contact our help center.</div>`;
+        } else if (joinStatus.status === 'approved') {
+            statusHtml = `<div class="info-note" style="background:rgba(16,185,129,0.2); border-left-color:#10b981;"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinStatus.salary ? formatCurrency(joinStatus.salary) : 'To be set by admin'} per month<br>Welcome to the team! Please fill your daily attendance and job details below.</div>`;
+            
+            attendanceHtml = `
+                <h3>Daily Attendance</h3>
+                <div class="form-row">
+                    <input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}">
+                    <input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}">
+                </div>
+                <div class="form-row">
+                    <input id="attPhone" placeholder="Contact Number">
+                    <input type="time" id="attLoginTime" placeholder="Login Time">
+                </div>
+                <div class="form-row">
+                    <input type="number" id="attWorkingHours" placeholder="Working Hours">
+                    <input type="time" id="attLogoutTime" placeholder="Logout Time">
+                </div>
+                <textarea id="attWorkDetail" placeholder="Work Detail (What did you work on?)" rows="2"></textarea>
+                <button id="submitAttendance" class="btn btn-success">Mark Attendance</button>
+            `;
+            
+            jobsHtml = `
+                <h3>Job Details</h3>
+                <div class="form-row">
+                    <input id="jobName" placeholder="Job/Service Name">
+                    <input id="jobOrderId" placeholder="Order ID (if placed)">
+                </div>
+                <div class="form-row">
+                    <input id="jobPlatform" placeholder="Platform (Instagram/TikTok/etc)">
+                    <input id="jobAmount" placeholder="Amount Spent (PKR)" type="number">
+                </div>
+                <textarea id="jobDetails" placeholder="Full Details about the work done" rows="2"></textarea>
+                <button id="submitJob" class="btn btn-success">Submit Job</button>
+            `;
+            
+            historyHtml = `<h3>My History</h3><div id="historyData">Loading...</div>`;
+        } else if (joinStatus.status === 'rejected') {
+            statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest. We have reviewed your application and cannot proceed at this time. If you have any questions, please contact our help center.</div>`;
+        }
+        
+        let html = `
+            <div class="glass-card">
+                <h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>
+                ${statusHtml}
+                ${applicationFormHtml ? `<div class="glass-card" style="margin-top:20px;">${applicationFormHtml}</div>` : ''}
+                ${attendanceHtml ? `<div class="glass-card" style="margin-top:20px;" id="attendanceSection">${attendanceHtml}</div>` : ''}
+                ${jobsHtml ? `<div class="glass-card" style="margin-top:20px;" id="jobsSection">${jobsHtml}</div>` : ''}
+                ${historyHtml ? `<div class="glass-card" style="margin-top:20px;" id="historySection">${historyHtml}</div>` : ''}
+            </div>
+        `;
+        document.getElementById("pageContent").innerHTML = html;
+        
+        if (document.getElementById("submitApplication")) {
+            document.getElementById("submitApplication").onclick = async () => {
+                let file = document.getElementById("appPhoto").files[0];
+                let reader = new FileReader();
+                reader.onload = async () => {
+                    let res = await apiCall("submitJoinRequest", {
+                        name: document.getElementById("appName").value,
+                        username: document.getElementById("appUsername").value,
+                        phone: document.getElementById("appPhone").value,
+                        whatsapp: document.getElementById("appWhatsapp").value,
+                        email: document.getElementById("appEmail").value,
+                        salaryType: document.getElementById("appSalaryType").value,
+                        hours: document.getElementById("appHours").value,
+                        shift: document.getElementById("appShift").value,
+                        about: document.getElementById("appAbout").value,
+                        photo: reader.result
+                    });
+                    showToast(res.message);
+                    if(res.success) setTimeout(() => renderJoinUs(), 1500);
+                };
+                if(file) reader.readAsDataURL(file);
+                else showToast("Please upload photo", true);
+            };
+        }
+        
+        if (document.getElementById("submitAttendance")) {
+            document.getElementById("submitAttendance").onclick = async () => {
+                let res = await apiCall("submitAttendance", {
+                    name: document.getElementById("attName").value,
+                    email: document.getElementById("attEmail").value,
+                    phone: document.getElementById("attPhone").value,
+                    loginTime: document.getElementById("attLoginTime").value,
+                    workingHours: document.getElementById("attWorkingHours").value,
+                    logoutTime: document.getElementById("attLogoutTime").value,
+                    workDetail: document.getElementById("attWorkDetail").value
+                });
+                showToast(res.message);
+                if(res.success) {
+                    document.getElementById("attLoginTime").value = "";
+                    document.getElementById("attLogoutTime").value = "";
+                    document.getElementById("attWorkDetail").value = "";
+                }
+            };
+        }
+        
+        if (document.getElementById("submitJob")) {
+            document.getElementById("submitJob").onclick = async () => {
+                let res = await apiCall("submitJobDetail", {
+                    jobName: document.getElementById("jobName").value,
+                    orderId: document.getElementById("jobOrderId").value,
+                    platform: document.getElementById("jobPlatform").value,
+                    amount: document.getElementById("jobAmount").value,
+                    details: document.getElementById("jobDetails").value
+                });
+                showToast(res.message);
+                if(res.success) {
+                    document.getElementById("jobName").value = "";
+                    document.getElementById("jobOrderId").value = "";
+                    document.getElementById("jobPlatform").value = "";
+                    document.getElementById("jobAmount").value = "";
+                    document.getElementById("jobDetails").value = "";
+                }
+            };
+        }
+        
+        if (document.getElementById("historyData")) {
+            let attendanceHistory = await apiCall("getMyAttendance");
+            let jobsHistory = await apiCall("getMyJobs");
+            document.getElementById("historyData").innerHTML = `
+                <h4>Attendance History</h4>
+                ${attendanceHistory.attendance?.length ? '<table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table>' : '<p>No attendance records</p>'}
+                <h4 style="margin-top:20px;">Job History</h4>
+                ${jobsHistory.jobs?.length ? '<table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table>' : '<p>No job records</p>'}
+            `;
+        }
+    }
+    
+    async function renderHelp() { 
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Need Help?</h3><input id="helpEmail" placeholder="Email"><input id="helpPhone" placeholder="Phone/WhatsApp"><textarea id="helpMsg" placeholder="Your Message"></textarea><button id="submitHelp" class="btn">Send</button></div>`;
+        document.getElementById("submitHelp").onclick = async () => { let res = await apiCall("submitHelp", { email: document.getElementById("helpEmail").value, phone: document.getElementById("helpPhone").value, message: document.getElementById("helpMsg").value }); showToast(res.message); };
+    }
+    
+    function navigate(page) { 
+        if(page === "home") renderHome(); 
+        else if(page === "dashboard") renderDashboard(); 
+        else if(page === "services") renderServices(); 
+        else if(page === "addfunds") renderAddFunds(); 
+        else if(page === "recommendations") renderRecommendations(); 
+        else if(page === "joinus") renderJoinUs(); 
+        else if(page === "help") renderHelp(); 
+    }
+    
+    document.querySelectorAll("[data-page]").forEach(el => el.addEventListener("click", (e) => { e.preventDefault(); navigate(el.getAttribute("data-page")); document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; }));
+    document.getElementById("menuBtn").onclick = () => { document.getElementById("sidebar").classList.add("open"); document.getElementById("overlay").style.display = "block"; };
+    document.getElementById("closeSidebar").onclick = () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; };
+    document.getElementById("overlay").onclick = () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; };
+    document.getElementById("refreshBtn").onclick = () => { if(currentUser) navigate("home"); else showAuthScreen(); };
+    document.getElementById("logoutBtn").onclick = () => { localStorage.removeItem("mts_token"); location.reload(); };
+    document.getElementById("currencyGroup")?.addEventListener("click", (e) => { if(e.target.dataset.curr) { activeCurrency = e.target.dataset.curr; updateCurrencyDisplay(); } });
+    
+    window.navigateTo = navigate;
+    
+    (async function init() { if(await checkAuth()) { await loadServices(); navigate("home"); } })();
 </script>
-
 </body>
 </html>
