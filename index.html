@@ -344,7 +344,7 @@
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwd4Sh48j--YZYD4ErvlVDS9n5iy2dFdE_bUvIZhNf4vCyy4t2zWtQksX4PKVaQc_bZAA/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXvgaj06YviIbHlKvM7FmLH6y_FvYG6kcBv9TgVuelbNp6sjm187ABRnXFTlPM4e_-Jg/exec";
     
     let currentUser = null;
     let activeCurrency = "PKR";
@@ -357,8 +357,33 @@
     let selectedCategory = "All";
     let selectedPlatform = "";
     
-    const categories = ["All","Likes","Views","Followers","Comments","Saves","Shares","Subscribers","Watchtime","Retweets","Traffic","Members"];
+    // Platform-specific categories mapping
+    const platformCategories = {
+        "Instagram": ["Likes", "Views", "Followers", "Comments", "Saves", "Shares"],
+        "TikTok": ["Likes", "Views", "Followers", "Comments", "Shares"],
+        "Facebook": ["Likes", "Views", "Followers", "Comments", "Shares"],
+        "YouTube": ["Likes", "Views", "Subscribers", "Watchtime", "Comments"],
+        "Twitter": ["Likes", "Retweets", "Followers", "Views"],
+        "WhatsApp": ["Traffic", "Views", "Members"],
+        "Snapchat": ["Views", "Followers"],
+        "Telegram": ["Members", "Views"],
+        "LinkedIn": ["Likes", "Followers", "Views"],
+        "Pinterest": ["Repins", "Likes", "Followers"],
+        "Discord": ["Members"],
+        "Twitch": ["Followers", "Views"],
+        "Spotify": ["Followers", "Plays"],
+        "Google": ["Traffic", "Views"],
+        "Threads": ["Likes", "Followers", "Views"],
+        "Netflix": ["Views"],
+        "Canva": ["Designs", "Templates"],
+        "CapCut": ["Edits", "Templates"],
+        "ChatGPT": ["Prompts"],
+        "Gemini": ["Prompts"],
+        "Website Traffic": ["Traffic", "Views"],
+        "PUBG UC": ["UC", "Points"]
+    };
     
+    // All available platforms with their icons and colors
     const platforms = [
         { name:"Instagram", icon:"fab fa-instagram", color:"#E4405F" },
         { name:"TikTok", icon:"fab fa-tiktok", color:"#000000" },
@@ -498,7 +523,6 @@
         });
     }
     
-    // PROFILE PAGE - FIXED
     async function renderProfile() {
         document.getElementById("pageContent").innerHTML=`
             <div class="glass-card">
@@ -535,7 +559,7 @@
         };
     }
     
-    // HOME PAGE
+    // HOME PAGE with platform-specific categories
     async function renderHome() {
         await loadServices();
         let platformIconsHtml = platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}" style="border-color:${p.color}20"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('');
@@ -586,92 +610,103 @@
     }
     
     function updatePlatform() {
-        let platform=document.getElementById("platformSelect").value;
-        selectedPlatform=platform;
-        let categoryDiv=document.getElementById("categoryDiv");
-        let catBtns=document.getElementById("categoryBtns");
-        if(platform){
-            categoryDiv.style.display="block";
-            catBtns.innerHTML=categories.map(c=>`<div class="category-btn ${selectedCategory===c?'active':''}" data-cat="${c}">${c}</div>`).join('');
-            document.querySelectorAll('.category-btn').forEach(btn=>btn.addEventListener('click',()=>{
-                document.querySelectorAll('.category-btn').forEach(b=>b.classList.remove('active'));
+        let platform = document.getElementById("platformSelect").value;
+        selectedPlatform = platform;
+        let categoryDiv = document.getElementById("categoryDiv");
+        let catBtns = document.getElementById("categoryBtns");
+        
+        if(platform && platformCategories[platform]) {
+            categoryDiv.style.display = "block";
+            // Get platform-specific categories
+            let platformCats = ["All", ...platformCategories[platform]];
+            catBtns.innerHTML = platformCats.map(c => 
+                `<div class="category-btn ${selectedCategory === c ? 'active' : ''}" data-cat="${c}">${c}</div>`
+            ).join('');
+            
+            document.querySelectorAll('.category-btn').forEach(btn => btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                selectedCategory=btn.dataset.cat;
+                selectedCategory = btn.dataset.cat;
                 updateServiceDropdown();
             }));
-        }else{
-            categoryDiv.style.display="none";
-            selectedCategory="All";
+            
+            // Reset category to All when platform changes
+            selectedCategory = "All";
+        } else {
+            categoryDiv.style.display = "none";
+            selectedCategory = "All";
         }
         updateServiceDropdown();
     }
     
     function updateServiceDropdown() {
-        let platform=document.getElementById("platformSelect").value;
-        let filtered=platform?allServices.filter(s=>s.Platform===platform):[];
-        if(selectedCategory!=="All"){
-            filtered=filtered.filter(s=>s.Name?.toLowerCase().includes(selectedCategory.toLowerCase()));
+        let platform = document.getElementById("platformSelect").value;
+        let filtered = platform ? allServices.filter(s => s.Platform === platform) : [];
+        
+        if(selectedCategory !== "All") {
+            filtered = filtered.filter(s => s.Name && s.Name.toLowerCase().includes(selectedCategory.toLowerCase()));
         }
-        let select=document.getElementById("serviceSelect");
-        select.innerHTML='<option value="">Select a service</option>';
-        filtered.forEach(s=>{
-            let price=s.Per1k?formatPrice(s.Rate/1000):formatPrice(s.Rate);
-            select.innerHTML+=`<option value="${s.ServiceId}">${s.Name} - ${price}${s.Per1k?'/1000':'/unit'}</option>`;
+        
+        let select = document.getElementById("serviceSelect");
+        select.innerHTML = '<option value="">Select a service</option>';
+        filtered.forEach(s => {
+            let price = s.Per1k ? formatPrice(s.Rate/1000) : formatPrice(s.Rate);
+            select.innerHTML += `<option value="${s.ServiceId}">${s.Name} - ${price}${s.Per1k ? '/1000' : '/unit'}</option>`;
         });
-        selectedService=null;
-        document.getElementById("serviceDetail").style.display="none";
-        document.getElementById("summary").style.display="none";
+        selectedService = null;
+        document.getElementById("serviceDetail").style.display = "none";
+        document.getElementById("summary").style.display = "none";
     }
     
     function showServiceDetail() {
-        let id=document.getElementById("serviceSelect").value;
+        let id = document.getElementById("serviceSelect").value;
         if(!id) return;
-        selectedService=allServices.find(s=>s.ServiceId===id);
-        let price=selectedService.Per1k?formatPrice(selectedService.Rate/1000):formatPrice(selectedService.Rate);
-        document.getElementById("serviceDetail").innerHTML=`
+        selectedService = allServices.find(s => s.ServiceId === id);
+        let price = selectedService.Per1k ? formatPrice(selectedService.Rate/1000) : formatPrice(selectedService.Rate);
+        document.getElementById("serviceDetail").innerHTML = `
             <div style="background:rgba(0,0,0,0.3); border-radius:20px; padding:18px; margin:15px 0;">
                 <h4>${selectedService.Name}</h4>
-                <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${price} ${selectedService.Per1k?'(per 1000)':'(per unit)'}</p>
+                <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${price} ${selectedService.Per1k ? '(per 1000)' : '(per unit)'}</p>
                 <p><i class="fas fa-chart-line"></i> <strong>Min Order:</strong> ${selectedService.MinQty} | <strong>Max Order:</strong> ${selectedService.MaxQty}</p>
-                <p><i class="fas fa-clock"></i> <strong>Delivery:</strong> ${selectedService.DeliveryTime||'1-2 hours'}</p>
-                <p><i class="fas fa-info-circle"></i> ${selectedService.Description||'High quality service'}</p>
+                <p><i class="fas fa-clock"></i> <strong>Delivery:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
+                <p><i class="fas fa-info-circle"></i> ${selectedService.Description || 'High quality service'}</p>
             </div>
         `;
-        document.getElementById("serviceDetail").style.display="block";
-        let extra='';
-        if(selectedService.IsAccount) extra='<div><label>Email Address</label><input type="email" id="emailField" placeholder="Enter email for account"></div>';
-        else extra='<div><label>Profile/Post Link</label><input type="url" id="linkField" placeholder="Enter your profile/post link"></div>';
-        if(selectedService.CustomComments) extra+='<div><label>Custom Comments</label><textarea id="commentField" placeholder="Enter comments separated by commas"></textarea></div>';
-        document.getElementById("extraFields").innerHTML=extra;
+        document.getElementById("serviceDetail").style.display = "block";
+        let extra = '';
+        if(selectedService.IsAccount) extra = '<div><label>Email Address</label><input type="email" id="emailField" placeholder="Enter email for account"></div>';
+        else extra = '<div><label>Profile/Post Link</label><input type="url" id="linkField" placeholder="Enter your profile/post link"></div>';
+        if(selectedService.CustomComments) extra += '<div><label>Custom Comments</label><textarea id="commentField" placeholder="Enter comments separated by commas"></textarea></div>';
+        document.getElementById("extraFields").innerHTML = extra;
         calcTotal();
     }
     
     function calcTotal() {
         if(!selectedService) return;
-        let qty=parseInt(document.getElementById("quantity").value)||0;
-        if(qty<selectedService.MinQty){ document.getElementById("summary").style.display="none"; return; }
-        let totalPKR=selectedService.Per1k?(selectedService.Rate/1000)*qty:selectedService.Rate*qty;
-        let unitPKR=selectedService.Per1k?selectedService.Rate/1000:selectedService.Rate;
-        document.getElementById("priceUnit").innerHTML=formatPrice(unitPKR);
-        document.getElementById("totalAmt").innerHTML=formatPrice(totalPKR);
-        document.getElementById("summary").style.display="block";
-        selectedService.calcTotal=totalPKR;
+        let qty = parseInt(document.getElementById("quantity").value) || 0;
+        if(qty < selectedService.MinQty) { document.getElementById("summary").style.display = "none"; return; }
+        let totalPKR = selectedService.Per1k ? (selectedService.Rate/1000) * qty : selectedService.Rate * qty;
+        let unitPKR = selectedService.Per1k ? selectedService.Rate/1000 : selectedService.Rate;
+        document.getElementById("priceUnit").innerHTML = formatPrice(unitPKR);
+        document.getElementById("totalAmt").innerHTML = formatPrice(totalPKR);
+        document.getElementById("summary").style.display = "block";
+        selectedService.calcTotal = totalPKR;
     }
     
     async function placeOrder() {
         if(!selectedService){ showToast("Select a service first",true); return; }
-        let qty=parseInt(document.getElementById("quantity").value);
-        if(!qty||qty<selectedService.MinQty){ showToast(`Minimum quantity: ${selectedService.MinQty}`,true); return; }
-        if(currentUser.wallet<selectedService.calcTotal){ showToast(`Insufficient balance! Need ${formatPrice(selectedService.calcTotal)}`,true); return; }
-        let extra={};
-        if(document.getElementById("emailField")) extra.email=document.getElementById("emailField").value;
-        if(document.getElementById("linkField")) extra.link=document.getElementById("linkField").value;
-        if(document.getElementById("commentField")) extra.comments=document.getElementById("commentField").value;
-        let res=await api("createOrder",{serviceId:selectedService.ServiceId,quantity:qty,totalAmount:selectedService.calcTotal,extraFields:extra});
+        let qty = parseInt(document.getElementById("quantity").value);
+        if(!qty || qty < selectedService.MinQty){ showToast(`Minimum quantity: ${selectedService.MinQty}`,true); return; }
+        if(currentUser.wallet < selectedService.calcTotal){ showToast(`Insufficient balance! Need ${formatPrice(selectedService.calcTotal)}`,true); return; }
+        let extra = {};
+        if(document.getElementById("emailField")) extra.email = document.getElementById("emailField").value;
+        if(document.getElementById("linkField")) extra.link = document.getElementById("linkField").value;
+        if(document.getElementById("commentField")) extra.comments = document.getElementById("commentField").value;
+        let res = await api("createOrder", {serviceId: selectedService.ServiceId, quantity: qty, totalAmount: selectedService.calcTotal, extraFields: extra});
         if(res.success){
-            document.getElementById("successMessage").innerHTML=`Order ID: ${res.orderId}<br>Service: ${selectedService.Name}<br>Quantity: ${qty}<br>Amount: ${formatPrice(selectedService.calcTotal)}`;
-            document.getElementById("successModal").style.display="block";
-        }else showToast(res.error,true);
+            document.getElementById("successMessage").innerHTML = `Order ID: ${res.orderId}<br>Service: ${selectedService.Name}<br>Quantity: ${qty}<br>Amount: ${formatPrice(selectedService.calcTotal)}`;
+            document.getElementById("successModal").style.display = "block";
+        } else showToast(res.error, true);
     }
     
     async function renderServices() {
@@ -679,85 +714,85 @@
         let platformIconsHtml = `<div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>` + 
             platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}" style="border-color:${p.color}20"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('');
         
-        let html=`<div class="glass-card"><div class="platform-icons" id="servicePlatforms">${platformIconsHtml}</div><input id="searchSvc" placeholder="🔍 Search services..." style="margin-top:10px;"></div><div id="svcGrid" class="cards-grid"></div>`;
-        document.getElementById("pageContent").innerHTML=html;
-        document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(el=>el.addEventListener('click',()=>{
-            document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(i=>i.classList.remove('active'));
+        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatforms">${platformIconsHtml}</div><input id="searchSvc" placeholder="🔍 Search services..." style="margin-top:10px;"></div><div id="svcGrid" class="cards-grid"></div>`;
+        document.getElementById("pageContent").innerHTML = html;
+        document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(el => el.addEventListener('click', () => {
+            document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             filterServiceGrid();
         }));
-        document.getElementById("searchSvc").addEventListener("input",filterServiceGrid);
+        document.getElementById("searchSvc").addEventListener("input", filterServiceGrid);
         filterServiceGrid();
     }
     
     function filterServiceGrid() {
-        let platform=document.querySelector('#servicePlatforms .platform-icon-item.active')?.dataset.platform||'all';
-        let search=document.getElementById("searchSvc")?.value.toLowerCase()||"";
-        let filtered=allServices.filter(s=>(platform==='all'||s.Platform===platform)&&(s.Name.toLowerCase().includes(search)||s.ServiceId.includes(search)));
-        document.getElementById("svcGrid").innerHTML=filtered.map(s=>{
-            let price=s.Per1k?formatPrice(s.Rate/1000):formatPrice(s.Rate);
-            let platformIcon=platforms.find(p=>p.name===s.Platform)||{icon:"fab fa-globe",color:"#fff"};
+        let platform = document.querySelector('#servicePlatforms .platform-icon-item.active')?.dataset.platform || 'all';
+        let search = document.getElementById("searchSvc")?.value.toLowerCase() || "";
+        let filtered = allServices.filter(s => (platform === 'all' || s.Platform === platform) && (s.Name.toLowerCase().includes(search) || s.ServiceId.includes(search)));
+        document.getElementById("svcGrid").innerHTML = filtered.map(s => {
+            let price = s.Per1k ? formatPrice(s.Rate/1000) : formatPrice(s.Rate);
+            let platformIcon = platforms.find(p => p.name === s.Platform) || {icon: "fab fa-globe", color: "#fff"};
             return `<div class="service-card" onclick="navigateTo('home');setTimeout(()=>selectServiceByPlatform('${s.Platform}','${s.ServiceId}'),100)">
                 <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
                     <i class="${platformIcon.icon}" style="font-size:28px; color:${platformIcon.color}"></i>
                     <strong style="font-size:16px;">${s.Name}</strong>
                 </div>
                 <hr style="margin:10px 0; border-color:#1e293b;">
-                <p><i class="fas fa-tag"></i> Price: ${price} ${s.Per1k?'/1000':'/unit'}</p>
+                <p><i class="fas fa-tag"></i> Price: ${price} ${s.Per1k ? '/1000' : '/unit'}</p>
                 <p><i class="fas fa-chart-line"></i> Min: ${s.MinQty} | Max: ${s.MaxQty}</p>
                 <button class="btn" style="margin-top:12px; width:100%;" onclick="event.stopPropagation();navigateTo('home');setTimeout(()=>selectServiceByPlatform('${s.Platform}','${s.ServiceId}'),100)">Order Now</button>
             </div>`;
         }).join('');
     }
     
-    function selectServiceByPlatform(platform,serviceId){
-        let ps=document.getElementById("platformSelect");
-        if(ps){
-            ps.value=platform;
+    function selectServiceByPlatform(platform, serviceId) {
+        let ps = document.getElementById("platformSelect");
+        if(ps) {
+            ps.value = platform;
             updatePlatform();
-            setTimeout(()=>{
-                document.getElementById("serviceSelect").value=serviceId;
+            setTimeout(() => {
+                document.getElementById("serviceSelect").value = serviceId;
                 showServiceDetail();
-            },100);
+            }, 100);
         }
     }
     
     async function renderDashboard() {
-        let stats=await api("userStats");
-        let orders=await api("getUserOrders");
-        document.getElementById("pageContent").innerHTML=`
+        let stats = await api("userStats");
+        let orders = await api("getUserOrders");
+        document.getElementById("pageContent").innerHTML = `
             <div class="stats-grid">
                 <div class="stat-card"><i class="fas fa-wallet"></i><h3>${formatPrice(currentUser.wallet)}</h3><p>Wallet Balance</p></div>
                 <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>${stats.totalOrders||0}</h3><p>Total Orders</p></div>
                 <div class="stat-card"><i class="fas fa-clock"></i><h3>${stats.pendingOrders||0}</h3><p>Pending Orders</p></div>
             </div>
-            <div class="glass-card"><h3><i class="fas fa-history"></i> Order History</h3><div class="order-table">${orders.orders?.length?`<table><thead><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr></thead><tbody>${orders.orders.map(o=>`<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatPrice(o.amount)}</td><td><span class="badge">${o.status}</span></td></tr>`).join('')}</tbody></table>`:'<p>No orders yet</p>'}</div></div>`;
+            <div class="glass-card"><h3><i class="fas fa-history"></i> Order History</h3><div class="order-table">${orders.orders?.length ? `<table><thead><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr></thead><tbody>${orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatPrice(o.amount)}</td><td><span class="badge">${o.status}</span></td></tr>`).join('')}</tbody></table>` : '<p>No orders yet</p>'}</div></div>`;
     }
     
     async function renderAddFunds() {
         await loadPayments();
-        let methodsHtml=paymentMethods.map(m=>`<div class="payment-card" data-id="${m.Id}" data-name="${m.Name}" data-account="${m.Account}" data-holder="${m.Holder}"><div style="display:flex; align-items:center; gap:15px;"><i class="${m.Icon||'fas fa-credit-card'}" style="font-size:28px;"></i><div><strong>${m.Name}</strong><br>Account: ${m.Account}<br>Holder: ${m.Holder}</div></div></div>`).join('');
-        let html=`<div class="glass-card"><h3><i class="fas fa-university"></i> Add Funds</h3><div id="paymentList">${methodsHtml||'<p>No payment methods available</p>'}</div><button id="sentBtn" class="btn btn-success" style="width:100%; margin-top:15px;" disabled>I Have Sent Payment</button><div id="proofDiv" style="display:none; margin-top:20px;"><div class="form-row"><input type="number" id="amtFund" placeholder="Amount (PKR)"><input id="transId" placeholder="Transaction ID"></div><input type="file" id="screenshotFile"><div style="display:flex; gap:10px; margin-top:15px;"><button id="submitProofBtn" class="btn">Submit</button><button id="cancelProof" class="btn btn-secondary">Cancel</button></div></div></div>`;
-        document.getElementById("pageContent").innerHTML=html;
+        let methodsHtml = paymentMethods.map(m => `<div class="payment-card" data-id="${m.Id}" data-name="${m.Name}" data-account="${m.Account}" data-holder="${m.Holder}"><div style="display:flex; align-items:center; gap:15px;"><i class="${m.Icon||'fas fa-credit-card'}" style="font-size:28px;"></i><div><strong>${m.Name}</strong><br>Account: ${m.Account}<br>Holder: ${m.Holder}</div></div></div>`).join('');
+        let html = `<div class="glass-card"><h3><i class="fas fa-university"></i> Add Funds</h3><div id="paymentList">${methodsHtml||'<p>No payment methods available</p>'}</div><button id="sentBtn" class="btn btn-success" style="width:100%; margin-top:15px;" disabled>I Have Sent Payment</button><div id="proofDiv" style="display:none; margin-top:20px;"><div class="form-row"><input type="number" id="amtFund" placeholder="Amount (PKR)"><input id="transId" placeholder="Transaction ID"></div><input type="file" id="screenshotFile"><div style="display:flex; gap:10px; margin-top:15px;"><button id="submitProofBtn" class="btn">Submit</button><button id="cancelProof" class="btn btn-secondary">Cancel</button></div></div></div>`;
+        document.getElementById("pageContent").innerHTML = html;
         
-        let selected=null;
-        document.querySelectorAll('.payment-card').forEach(c=>c.addEventListener('click',()=>{
-            document.querySelectorAll('.payment-card').forEach(p=>p.style.borderColor='transparent');
-            c.style.borderColor='#10b981';
-            selected={id:c.dataset.id,name:c.dataset.name,account:c.dataset.account,holder:c.dataset.holder};
-            document.getElementById("sentBtn").disabled=false;
+        let selected = null;
+        document.querySelectorAll('.payment-card').forEach(c => c.addEventListener('click', () => {
+            document.querySelectorAll('.payment-card').forEach(p => p.style.borderColor = 'transparent');
+            c.style.borderColor = '#10b981';
+            selected = {id: c.dataset.id, name: c.dataset.name, account: c.dataset.account, holder: c.dataset.holder};
+            document.getElementById("sentBtn").disabled = false;
         }));
-        document.getElementById("sentBtn").onclick=()=>{ if(selected) document.getElementById("proofDiv").style.display="block"; else showToast("Select a payment method",true); };
-        document.getElementById("cancelProof").onclick=()=>{ document.getElementById("proofDiv").style.display="none"; document.getElementById("sentBtn").disabled=false; };
-        document.getElementById("submitProofBtn").onclick=async()=>{
-            let amt=document.getElementById("amtFund").value, tid=document.getElementById("transId").value, file=document.getElementById("screenshotFile").files[0];
-            if(!amt||!tid||!file){ showToast("Please fill all fields and upload screenshot",true); return; }
-            if(!selected){ showToast("Select a payment method",true); return; }
-            let reader=new FileReader();
-            reader.onload=async()=>{
-                let res=await api("addFundsRequest",{amount:amt,transactionId:tid,email:currentUser.gmail,screenshotBase64:reader.result,paymentMethod:selected.name});
+        document.getElementById("sentBtn").onclick = () => { if(selected) document.getElementById("proofDiv").style.display = "block"; else showToast("Select a payment method", true); };
+        document.getElementById("cancelProof").onclick = () => { document.getElementById("proofDiv").style.display = "none"; document.getElementById("sentBtn").disabled = false; };
+        document.getElementById("submitProofBtn").onclick = async () => {
+            let amt = document.getElementById("amtFund").value, tid = document.getElementById("transId").value, file = document.getElementById("screenshotFile").files[0];
+            if(!amt || !tid || !file){ showToast("Please fill all fields and upload screenshot", true); return; }
+            if(!selected){ showToast("Select a payment method", true); return; }
+            let reader = new FileReader();
+            reader.onload = async () => {
+                let res = await api("addFundsRequest", {amount: amt, transactionId: tid, email: currentUser.gmail, screenshotBase64: reader.result, paymentMethod: selected.name});
                 showToast(res.message);
-                if(res.success) document.getElementById("proofDiv").style.display="none";
+                if(res.success) document.getElementById("proofDiv").style.display = "none";
             };
             reader.readAsDataURL(file);
         };
@@ -765,132 +800,132 @@
     
     async function renderJoinUs() {
         await loadJoinStatus();
-        let status=joinApp?.status||'none';
-        let html=`<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>`;
-        if(status==='none'){
-            html+=`<div class="category-section"><h3>📝 Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName||''}"><input id="appUser" placeholder="Username" value="${currentUser?.username||''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhats" placeholder="WhatsApp Number"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail||''}"><select id="appType"><option>Commission Based</option><option>Salary Based</option></select></div><div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea><input type="file" id="appPhoto" accept="image/*"><button id="submitApp" class="btn btn-success" style="margin-top:15px;">Submit Application</button></div>`;
-        }else if(status==='pending'){
-            html+=`<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin. You will be notified once approved.</div>`;
-        }else if(status==='approved'){
-            html+=`<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${formatPrice(joinApp.salary||0)} per month<br>Welcome to the team!</div>
+        let status = joinApp?.status || 'none';
+        let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>`;
+        if(status === 'none'){
+            html += `<div class="category-section"><h3>📝 Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName||''}"><input id="appUser" placeholder="Username" value="${currentUser?.username||''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhats" placeholder="WhatsApp Number"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail||''}"><select id="appType"><option>Commission Based</option><option>Salary Based</option></select></div><div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea><input type="file" id="appPhoto" accept="image/*"><button id="submitApp" class="btn btn-success" style="margin-top:15px;">Submit Application</button></div>`;
+        } else if(status === 'pending'){
+            html += `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin. You will be notified once approved.</div>`;
+        } else if(status === 'approved'){
+            html += `<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${formatPrice(joinApp.salary||0)} per month<br>Welcome to the team!</div>
             <div class="join-tabs"><button class="join-tab-btn active" data-tab="att">📋 Daily Attendance</button><button class="join-tab-btn" data-tab="job">💼 Job Details</button><button class="join-tab-btn" data-tab="hist">📜 History</button></div>
             <div id="attTab" class="join-tab-content active"><div class="category-section"><h3>Mark Attendance</h3><div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser.fullName}"><input id="attEmail" placeholder="Email" value="${currentUser.gmail}"></div><div class="form-row"><input id="attPhone" placeholder="Phone Number"><input type="time" id="attLogin" placeholder="Login Time"></div><div class="form-row"><input type="number" id="attHours" placeholder="Working Hours"><input type="time" id="attLogout" placeholder="Logout Time"></div><textarea id="attWork" placeholder="Work Detail (What did you work on today?)" rows="3"></textarea><button id="submitAtt" class="btn btn-success">✅ Mark Attendance</button></div></div>
             <div id="jobTab" class="join-tab-content"><div class="category-section"><h3>Submit Job Details</h3><div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrder" placeholder="Order ID (if placed)"></div><div class="form-row"><input id="jobPlatform" placeholder="Platform"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div><textarea id="jobDetail" placeholder="Full Details about the work done" rows="3"></textarea><button id="submitJob" class="btn btn-success">📌 Submit Job</button></div></div>
             <div id="histTab" class="join-tab-content"><div id="historyData" class="category-section">Loading...</div></div>`;
-        }else if(status==='rejected'){
-            html+=`<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest.</div>`;
+        } else if(status === 'rejected'){
+            html += `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest.</div>`;
         }
-        html+=`</div>`;
-        document.getElementById("pageContent").innerHTML=html;
+        html += `</div>`;
+        document.getElementById("pageContent").innerHTML = html;
         
         if(document.getElementById("submitApp")){
-            document.getElementById("submitApp").onclick=async()=>{
-                let file=document.getElementById("appPhoto").files[0];
-                let reader=new FileReader();
-                reader.onload=async()=>{
-                    let res=await api("submitJoinRequest",{
-                        name:document.getElementById("appName").value,
-                        username:document.getElementById("appUser").value,
-                        phone:document.getElementById("appPhone").value,
-                        whatsapp:document.getElementById("appWhats").value,
-                        email:document.getElementById("appEmail").value,
-                        salaryType:document.getElementById("appType").value,
-                        hours:document.getElementById("appHours").value,
-                        shift:document.getElementById("appShift").value,
-                        about:document.getElementById("appAbout").value,
-                        photo:reader.result
+            document.getElementById("submitApp").onclick = async () => {
+                let file = document.getElementById("appPhoto").files[0];
+                let reader = new FileReader();
+                reader.onload = async () => {
+                    let res = await api("submitJoinRequest", {
+                        name: document.getElementById("appName").value,
+                        username: document.getElementById("appUser").value,
+                        phone: document.getElementById("appPhone").value,
+                        whatsapp: document.getElementById("appWhats").value,
+                        email: document.getElementById("appEmail").value,
+                        salaryType: document.getElementById("appType").value,
+                        hours: document.getElementById("appHours").value,
+                        shift: document.getElementById("appShift").value,
+                        about: document.getElementById("appAbout").value,
+                        photo: reader.result
                     });
                     showToast(res.message);
-                    if(res.success) setTimeout(()=>renderJoinUs(),1500);
+                    if(res.success) setTimeout(() => renderJoinUs(), 1500);
                 };
                 if(file) reader.readAsDataURL(file);
-                else showToast("Please upload a photo",true);
+                else showToast("Please upload a photo", true);
             };
         }
         if(document.getElementById("submitAtt")){
-            document.getElementById("submitAtt").onclick=async()=>{
-                let res=await api("submitAttendance",{
-                    name:document.getElementById("attName").value,
-                    email:document.getElementById("attEmail").value,
-                    phone:document.getElementById("attPhone").value,
-                    loginTime:document.getElementById("attLogin").value,
-                    workingHours:document.getElementById("attHours").value,
-                    logoutTime:document.getElementById("attLogout").value,
-                    workDetail:document.getElementById("attWork").value
+            document.getElementById("submitAtt").onclick = async () => {
+                let res = await api("submitAttendance", {
+                    name: document.getElementById("attName").value,
+                    email: document.getElementById("attEmail").value,
+                    phone: document.getElementById("attPhone").value,
+                    loginTime: document.getElementById("attLogin").value,
+                    workingHours: document.getElementById("attHours").value,
+                    logoutTime: document.getElementById("attLogout").value,
+                    workDetail: document.getElementById("attWork").value
                 });
                 showToast(res.message);
             };
         }
         if(document.getElementById("submitJob")){
-            document.getElementById("submitJob").onclick=async()=>{
-                let res=await api("submitJobDetail",{
-                    jobName:document.getElementById("jobName").value,
-                    orderId:document.getElementById("jobOrder").value,
-                    platform:document.getElementById("jobPlatform").value,
-                    amount:document.getElementById("jobAmount").value,
-                    details:document.getElementById("jobDetail").value
+            document.getElementById("submitJob").onclick = async () => {
+                let res = await api("submitJobDetail", {
+                    jobName: document.getElementById("jobName").value,
+                    orderId: document.getElementById("jobOrder").value,
+                    platform: document.getElementById("jobPlatform").value,
+                    amount: document.getElementById("jobAmount").value,
+                    details: document.getElementById("jobDetail").value
                 });
                 showToast(res.message);
             };
         }
-        if(document.getElementById("historyData") && status==='approved'){
-            let att=await api("getMyAttendance");
-            let jobs=await api("getMyJobs");
-            document.getElementById("historyData").innerHTML=`
+        if(document.getElementById("historyData") && status === 'approved'){
+            let att = await api("getMyAttendance");
+            let jobs = await api("getMyJobs");
+            document.getElementById("historyData").innerHTML = `
                 <h4>📊 Attendance Records</h4>
-                ${att.attendance?.length?`<div class="order-table"><table><thead><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr></thead><tbody>${att.attendance.map(a=>`<tr><td>${a.date}</td><td>${a.loginTime}</td><td>${a.logoutTime}</td><td>${a.workingHours}</td></tr>`).join('')}</tbody></table></div>`:'<p>No attendance records</p>'}
+                ${att.attendance?.length ? `<div class="order-table"><table><thead><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr></thead><tbody>${att.attendance.map(a => `<tr><td>${a.date}</td><td>${a.loginTime}</td><td>${a.logoutTime}</td><td>${a.workingHours}</td></tr>`).join('')}</tbody></table></div>` : '<p>No attendance records</p>'}
                 <h4 style="margin-top:20px;">📌 Job Records</h4>
-                ${jobs.jobs?.length?`<div class="order-table"><table><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr></thead><tbody>${jobs.jobs.map(j=>`<tr><td>${j.date}</td><td>${j.jobName}</td><td>${j.orderId||'-'}</td><td>₨ ${j.amount}</td></tr>`).join('')}</tbody></table></div>`:'<p>No job records</p>'}
+                ${jobs.jobs?.length ? `<div class="order-table"><table><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr></thead><tbody>${jobs.jobs.map(j => `<tr><td>${j.date}</td><td>${j.jobName}</td><td>${j.orderId || '-'}</td><td>₨ ${j.amount}</td></tr>`).join('')}</tbody></table></div>` : '<p>No job records</p>'}
             `;
         }
-        document.querySelectorAll('.join-tab-btn').forEach(btn=>btn.addEventListener('click',()=>{
-            document.querySelectorAll('.join-tab-btn').forEach(b=>b.classList.remove('active'));
-            document.querySelectorAll('.join-tab-content').forEach(c=>c.classList.remove('active'));
+        document.querySelectorAll('.join-tab-btn').forEach(btn => btn.addEventListener('click', () => {
+            document.querySelectorAll('.join-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.join-tab-content').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById(btn.dataset.tab+'Tab').classList.add('active');
+            document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
         }));
     }
     
     async function renderHelp() {
-        document.getElementById("pageContent").innerHTML=`
+        document.getElementById("pageContent").innerHTML = `
             <div class="glass-card"><h3><i class="fas fa-headset"></i> Help Center</h3><input id="helpEmail" placeholder="Email" value="${currentUser.gmail}"><input id="helpPhone" placeholder="Phone/WhatsApp"><textarea id="helpMsg" placeholder="Your Message" rows="4"></textarea><button id="sendHelp" class="btn">Send Message</button></div>`;
-        document.getElementById("sendHelp").onclick=async()=>{
-            let res=await api("submitHelp",{email:document.getElementById("helpEmail").value,phone:document.getElementById("helpPhone").value,message:document.getElementById("helpMsg").value});
+        document.getElementById("sendHelp").onclick = async () => {
+            let res = await api("submitHelp", {email: document.getElementById("helpEmail").value, phone: document.getElementById("helpPhone").value, message: document.getElementById("helpMsg").value});
             showToast(res.message);
         };
     }
     
     function navigate(page){
-        if(page==="home") renderHome();
-        else if(page==="dashboard") renderDashboard();
-        else if(page==="services") renderServices();
-        else if(page==="addfunds") renderAddFunds();
-        else if(page==="profile") renderProfile();
-        else if(page==="joinus") renderJoinUs();
-        else if(page==="help") renderHelp();
+        if(page === "home") renderHome();
+        else if(page === "dashboard") renderDashboard();
+        else if(page === "services") renderServices();
+        else if(page === "addfunds") renderAddFunds();
+        else if(page === "profile") renderProfile();
+        else if(page === "joinus") renderJoinUs();
+        else if(page === "help") renderHelp();
     }
     
-    document.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",(e)=>{
+    document.querySelectorAll("[data-page]").forEach(el => el.addEventListener("click", (e) => {
         e.preventDefault();
         navigate(el.getAttribute("data-page"));
         document.getElementById("sidebar").classList.remove("open");
-        document.getElementById("overlay").style.display="none";
+        document.getElementById("overlay").style.display = "none";
     }));
-    document.getElementById("menuBtn").onclick=()=>{ document.getElementById("sidebar").classList.add("open"); document.getElementById("overlay").style.display="block"; };
-    document.getElementById("closeSidebar").onclick=()=>{ document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display="none"; };
-    document.getElementById("overlay").onclick=()=>{ document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display="none"; };
-    document.getElementById("refreshBtn").onclick=()=>{ if(currentUser) navigate("home"); else showAuth(); };
-    document.getElementById("logoutBtn").onclick=()=>{ localStorage.removeItem("mts_token"); location.reload(); };
-    document.getElementById("currencyGroup")?.addEventListener("click",(e)=>{
+    document.getElementById("menuBtn").onclick = () => { document.getElementById("sidebar").classList.add("open"); document.getElementById("overlay").style.display = "block"; };
+    document.getElementById("closeSidebar").onclick = () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; };
+    document.getElementById("overlay").onclick = () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; };
+    document.getElementById("refreshBtn").onclick = () => { if(currentUser) navigate("home"); else showAuth(); };
+    document.getElementById("logoutBtn").onclick = () => { localStorage.removeItem("mts_token"); location.reload(); };
+    document.getElementById("currencyGroup")?.addEventListener("click", (e) => {
         if(e.target.dataset.curr){
-            activeCurrency=e.target.dataset.curr;
-            document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.dataset.curr===activeCurrency));
+            activeCurrency = e.target.dataset.curr;
+            document.querySelectorAll('.currency-btn').forEach(b => b.classList.toggle('active', b.dataset.curr === activeCurrency));
             if(currentUser) navigate("home");
         }
     });
     
-    window.navigateTo=navigate;
-    window.selectServiceByPlatform=selectServiceByPlatform;
+    window.navigateTo = navigate;
+    window.selectServiceByPlatform = selectServiceByPlatform;
     
     (async function init(){ if(await checkAuth()){ await loadServices(); navigate("home"); } })();
 </script>
