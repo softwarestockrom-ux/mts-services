@@ -13,9 +13,9 @@
         .glass-card:hover { border-color: rgba(0, 200, 255, 0.5); transform: translateY(-2px); }
         button, .btn { background: linear-gradient(90deg, #2b6ef0, #1a4fc1); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; transition: 0.2s; }
         button:hover, .btn:hover { transform: scale(1.02); }
+        .btn-secondary { background: linear-gradient(90deg, #475569, #334155); }
         .btn-success { background: linear-gradient(90deg, #10b981, #059669); }
         .btn-danger { background: linear-gradient(90deg, #dc2626, #b91c1c); }
-        .btn-warning { background: linear-gradient(90deg, #f59e0b, #d97706); }
         input, select, textarea { background: rgba(0,0,0,0.4); border: 1px solid #2d3a5e; padding: 12px 16px; border-radius: 24px; color: white; width: 100%; outline: none; margin: 8px 0; }
         input:focus, select:focus { border-color: #3b82f6; }
         .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: rgba(8, 12, 25, 0.96); backdrop-filter: blur(20px); z-index: 1000; transition: 0.3s; padding: 20px; overflow-y: auto; }
@@ -34,20 +34,17 @@
         .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; padding: 12px 20px; border-radius: 40px; z-index: 2000; border-left: 4px solid #2b6ef0; max-width: 350px; z-index: 9999; }
         .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
         .form-row > * { flex: 1; }
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .service-card { cursor: pointer; }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .service-card { cursor: pointer; transition: all 0.2s; }
         .service-card:hover { transform: translateY(-5px); }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 25px 0; }
         .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
         .status-approved { background: #10b981; color: white; }
         .status-pending { background: #f59e0b; color: black; }
         .status-rejected { background: #dc2626; color: white; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #2d3a5e; padding-bottom: 10px; flex-wrap: wrap; }
-        .tab-btn { background: transparent; border: none; padding: 10px 20px; cursor: pointer; color: #94a3b8; border-radius: 30px; }
-        .tab-btn.active { background: #2b6ef0; color: white; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
         .info-note { background: rgba(245, 158, 11, 0.2); border-left: 4px solid #f59e0b; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 40px; }
+        .user-profile:hover { background: rgba(255,255,255,0.2); }
         @media (max-width: 768px) { .form-row { flex-direction: column; } .platform-icon-item { padding: 6px 12px; font-size: 12px; } }
     </style>
 </head>
@@ -85,13 +82,23 @@
     <div class="top-bar">
         <div class="menu-icon" id="menuBtn"><i class="fas fa-bars"></i></div>
         <div style="font-weight:700; font-size:1.2rem;">MTS SMM Services</div>
-        <div class="user-info">
-            <i class="fas fa-sync-alt refresh-btn" id="refreshBtn" style="cursor:pointer; margin-right:15px;"></i>
-            <span id="userAvatar"><i class="fas fa-user-circle"></i></span>
+        <div class="user-profile" id="profileBtn">
+            <i class="fas fa-user-circle" style="font-size:24px;"></i>
             <span id="userNameDisplay">Guest</span>
+            <i class="fas fa-chevron-down" style="font-size:12px;"></i>
         </div>
     </div>
     <div id="pageContent">Loading...</div>
+</div>
+
+<div id="profileModal" class="modal">
+    <div style="text-align:center;">
+        <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+        <div id="profileForm"></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button id="closeProfileModal" class="btn btn-secondary">Close</button>
+        </div>
+    </div>
 </div>
 
 <div id="successModal" class="modal">
@@ -113,6 +120,7 @@
     let allServices = [];
     let selectedService = null;
     let joinStatus = null;
+    let currentJoinApplication = null;
     
     const platforms = [
         { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F" },
@@ -122,12 +130,21 @@
         { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2" },
         { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366" },
         { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00" },
+        { name: "Telegram", icon: "fab fa-telegram", color: "#26A5E4" },
         { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2" },
+        { name: "Pinterest", icon: "fab fa-pinterest", color: "#BD081C" },
         { name: "Discord", icon: "fab fa-discord", color: "#5865F2" },
+        { name: "Twitch", icon: "fab fa-twitch", color: "#9146FF" },
         { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954" },
+        { name: "Google", icon: "fab fa-google", color: "#4285F4" },
+        { name: "Threads", icon: "fab fa-threads", color: "#000000" },
+        { name: "Netflix", icon: "fas fa-film", color: "#E50914" },
         { name: "Canva", icon: "fas fa-palette", color: "#00C4CC" },
         { name: "CapCut", icon: "fas fa-cut", color: "#00D4FF" },
-        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F" }
+        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F" },
+        { name: "Gemini", icon: "fas fa-brain", color: "#4285F4" },
+        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6" },
+        { name: "PUBG UC", icon: "fas fa-gamepad", color: "#FFA500" }
     ];
     
     function showToast(message, isError = false) {
@@ -155,8 +172,8 @@
             else btn.classList.remove('active');
         });
         if (currentUser && document.getElementById("pageContent")) {
-            let currentPage = window.location.hash.replace('#', '') || "home";
-            navigate(currentPage);
+            let currentNav = document.querySelector('[data-page].active-nav')?.getAttribute('data-page') || "home";
+            navigate(currentNav);
         }
     }
     
@@ -193,8 +210,56 @@
     
     async function loadJoinApplicationStatus() {
         let res = await apiCall("getMyJoinStatus");
-        if(res.success && res.application) joinStatus = res.application;
-        else joinStatus = null;
+        if(res.success && res.application) {
+            joinStatus = res.application;
+            currentJoinApplication = res.application;
+        } else {
+            joinStatus = null;
+            currentJoinApplication = null;
+        }
+    }
+    
+    function showProfileModal() {
+        document.getElementById("profileForm").innerHTML = `
+            <input id="editFullName" placeholder="Full Name" value="${currentUser?.fullName || ''}">
+            <input id="editUsername" placeholder="Username" value="${currentUser?.username || ''}">
+            <input id="editEmail" placeholder="Email" value="${currentUser?.gmail || ''}">
+            <input id="editPhone" placeholder="Phone" value="${currentUser?.phone || ''}">
+            <input type="password" id="editNewPassword" placeholder="New Password (leave blank to keep current)">
+            <input type="password" id="editConfirmPassword" placeholder="Confirm New Password">
+            <div class="glass-card" style="margin-top:15px; text-align:center;">
+                <p><strong>Wallet Balance:</strong> ${formatCurrency(currentUser?.wallet || 0)}</p>
+            </div>
+            <button id="saveProfileBtn" class="btn" style="margin-top:15px;">Save Changes</button>
+        `;
+        document.getElementById("profileModal").style.display = "block";
+        
+        document.getElementById("saveProfileBtn").onclick = async () => {
+            let newPass = document.getElementById("editNewPassword").value;
+            let confirmPass = document.getElementById("editConfirmPassword").value;
+            if(newPass && newPass !== confirmPass) {
+                showToast("Passwords do not match", true);
+                return;
+            }
+            let updateData = {
+                fullName: document.getElementById("editFullName").value,
+                username: document.getElementById("editUsername").value,
+                email: document.getElementById("editEmail").value,
+                phone: document.getElementById("editPhone").value
+            };
+            if(newPass) updateData.newPassword = newPass;
+            let res = await apiCall("updateUserProfile", updateData);
+            if(res.success) {
+                showToast("Profile updated successfully");
+                currentUser.fullName = updateData.fullName;
+                currentUser.username = updateData.username;
+                currentUser.gmail = updateData.email;
+                document.getElementById("userNameDisplay").innerText = updateData.fullName.split(" ")[0];
+                document.getElementById("profileModal").style.display = "none";
+            } else {
+                showToast(res.error || "Update failed", true);
+            }
+        };
     }
     
     function showAuthScreen() { 
@@ -241,19 +306,18 @@
         });
     }
     
-    // ========== HOME PAGE ==========
     async function renderHome() { 
         await loadServices();
         let html = `
             <div class="glass-card"><h3><i class="fas fa-coins"></i> Wallet Balance: ${formatCurrency(currentUser.wallet)}</h3></div>
             <div class="glass-card">
-                <div class="platform-icons" id="homePlatformIcons">${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div>
+                <div class="platform-icons" id="homePlatformIcons">${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('')}</div>
                 <select id="platformSelect"><option value="">Select Platform</option>${platforms.map(p => `<option value="${p.name}">${p.name}</option>`).join('')}</select>
                 <select id="serviceSelect"><option value="">Select Service</option></select>
                 <input type="number" id="quantity" placeholder="Quantity">
                 <div id="dynamicFields"></div>
                 <div id="serviceDetails" class="service-detail-card" style="display:none;"></div>
-                <div class="order-summary" id="orderSummary" style="display:none;"><h4>Order Summary</h4><p>Price: <span id="servicePrice">0</span></p><p>Total: <span id="totalAmount">0</span></p></div>
+                <div class="order-summary" id="orderSummary" style="display:none;"><h4>Order Summary</h4><p>Price per unit: <span id="servicePrice">0</span></p><p>Total Amount: <span id="totalAmount">0</span></p></div>
                 <div style="display:flex; gap:10px;"><button id="placeOrderBtn" class="btn">Place Order</button><button id="clearFormBtn" class="btn btn-secondary">Clear</button></div>
             </div>
         `;
@@ -272,7 +336,11 @@
         let filtered = platform ? allServices.filter(s => s.Platform === platform) : [];
         let select = document.getElementById("serviceSelect");
         select.innerHTML = '<option value="">Select a service</option>';
-        filtered.forEach(s => { let ratePerUnit = s.Per1k ? s.Rate/1000 : s.Rate; select.innerHTML += `<option value="${s.ServiceId}">${s.Name} - ${formatCurrency(ratePerUnit)}${s.Per1k ? '/1k' : ''}</option>`; });
+        filtered.forEach(s => { 
+            let ratePerUnit = s.Per1k ? s.Rate/1000 : s.Rate;
+            let priceDisplay = s.Per1k ? `${formatCurrency(ratePerUnit)} per 1000` : `${formatCurrency(ratePerUnit)} per unit`;
+            select.innerHTML += `<option value="${s.ServiceId}">${s.Name} - ${priceDisplay}</option>`;
+        });
         selectedService = null;
         document.getElementById("serviceDetails").style.display = "none";
         document.getElementById("orderSummary").style.display = "none";
@@ -283,7 +351,8 @@
         if (!serviceId) return;
         selectedService = allServices.find(s => s.ServiceId === serviceId);
         let ratePerUnit = selectedService.Per1k ? selectedService.Rate/1000 : selectedService.Rate;
-        document.getElementById("serviceDetails").innerHTML = `<h4>${selectedService.Name}</h4><p>Rate: ${formatCurrency(ratePerUnit)} ${selectedService.Per1k ? '(per 1000)' : '(per unit)'}</p><p>Min: ${selectedService.MinQty} | Max: ${selectedService.MaxQty}</p><p>Delivery: ${selectedService.DeliveryTime || '1-2 hours'}</p><p>${selectedService.Description || ''}</p>`;
+        let priceText = selectedService.Per1k ? `${formatCurrency(ratePerUnit)} per 1000 followers/likes` : `${formatCurrency(ratePerUnit)} per unit`;
+        document.getElementById("serviceDetails").innerHTML = `<h4>${selectedService.Name}</h4><p><i class="fas fa-tag"></i> Price: ${priceText}</p><p><i class="fas fa-chart-line"></i> Min: ${selectedService.MinQty} | Max: ${selectedService.MaxQty}</p><p><i class="fas fa-clock"></i> Delivery: ${selectedService.DeliveryTime || '1-2 hours'}</p><p>${selectedService.Description || ''}</p>`;
         document.getElementById("serviceDetails").style.display = "block";
         let dynamicHtml = '';
         if (selectedService.IsAccount) dynamicHtml = `<input id="emailField" placeholder="Email Address">`;
@@ -319,10 +388,9 @@
         else showToast(res.error, true);
     }
     
-    // ========== SERVICES PAGE ==========
     async function renderServices() { 
         await loadServices();
-        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatformIcons"><div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div><input id="searchInput" placeholder="Search services..."></div><div id="servicesGrid" class="service-grid"></div>`;
+        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatformIcons"><div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('')}</div><input id="searchInput" placeholder="🔍 Search services..."></div><div id="servicesGrid" class="service-grid"></div>`;
         document.getElementById("pageContent").innerHTML = html;
         document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); filterServices(); }));
         document.getElementById("searchInput").addEventListener("input", filterServices);
@@ -333,7 +401,12 @@
         let platform = document.querySelector('#servicePlatformIcons .platform-icon-item.active')?.dataset.platform || 'all';
         let search = document.getElementById("searchInput")?.value.toLowerCase() || "";
         let filtered = allServices.filter(s => (platform === 'all' || s.Platform === platform) && (s.Name.toLowerCase().includes(search) || s.ServiceId.includes(search)));
-        document.getElementById("servicesGrid").innerHTML = filtered.map(s => `<div class="glass-card service-card" onclick="navigateTo('home'); setTimeout(()=>selectService('${s.Platform}', '${s.ServiceId}'), 100)"><i class="fab fa-${s.Platform.toLowerCase()}"></i> <strong>${s.Name}</strong><br>Rate: ${formatCurrency(s.Per1k ? s.Rate/1000 : s.Rate)} ${s.Per1k ? '/1k' : ''}<br>Min: ${s.MinQty}</div>`).join('');
+        document.getElementById("servicesGrid").innerHTML = filtered.map(s => {
+            let ratePerUnit = s.Per1k ? s.Rate/1000 : s.Rate;
+            let priceDisplay = s.Per1k ? `${formatCurrency(ratePerUnit)} / 1000` : `${formatCurrency(ratePerUnit)} / unit`;
+            let platformIcon = platforms.find(p => p.name === s.Platform) || { icon: "fas fa-globe", color: "#fff" };
+            return `<div class="glass-card service-card" onclick="navigateTo('home'); setTimeout(()=>selectService('${s.Platform}', '${s.ServiceId}'), 100)"><i class="${platformIcon.icon}" style="font-size:28px; color:${platformIcon.color}"></i><div><strong>${s.Name}</strong><br>Platform: ${s.Platform}<br>Price: ${priceDisplay}<br>Min: ${s.MinQty} | Max: ${s.MaxQty}</div></div>`;
+        }).join('');
     }
     
     function selectService(platform, serviceId) {
@@ -341,16 +414,14 @@
         if(platformSelect) { platformSelect.value = platform; updateServiceDropdown(); setTimeout(() => { document.getElementById("serviceSelect").value = serviceId; showServiceDetails(); }, 100); }
     }
     
-    // ========== DASHBOARD ==========
     async function renderDashboard() { 
         let stats = await apiCall("userStats"); 
         let orders = await apiCall("getUserOrders"); 
-        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card">💰 Balance: ${formatCurrency(currentUser.wallet)}</div><div class="glass-card">📦 Orders: ${stats.totalOrders || 0}</div><div class="glass-card">⏳ Pending: ${stats.pendingOrders || 0}</div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<table style="width:100%"><tr><th>ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td>${o.status}</td></tr>`).join('') + '</table>' : '<p>No orders</p>'}</div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet"></i><br><h3>${formatCurrency(currentUser.wallet)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-shopping-cart"></i><br><h3>${stats.totalOrders || 0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock"></i><br><h3>${stats.pendingOrders || 0}</h3><p>Pending Orders</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td><span class="status-badge status-pending">${o.status}</span></td></tr>`).join('') + '</table></div>' : '<p>No orders yet</p>'}</div>`;
     }
     
-    // ========== ADD FUNDS ==========
     async function renderAddFunds() { 
-        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Add Funds</h3><div style="background:#1e293b; border-radius:20px; padding:15px;"><i class="fas fa-mobile-alt"></i> <strong>Easypaisa:</strong> 03198595421 - Muhammad Ramzan Al Sami</div><div style="background:#1e293b; border-radius:20px; padding:15px; margin:10px 0;"><i class="fas fa-credit-card"></i> <strong>Sadapay:</strong> 03198595421 - Muhammad Ramzan Ul Sami</div><button id="sentProof" class="btn">I Have Sent Payment</button><div id="proofForm" style="display:none;"><input id="amountFund" placeholder="Amount (PKR)" type="number"><input id="transId" placeholder="Transaction ID"><input id="fundEmail" placeholder="Email"><input type="file" id="screenshot"><button id="submitProof" class="btn">Submit</button></div></div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Add Funds to Wallet</h3><div style="background:#1e293b; border-radius:20px; padding:15px;"><i class="fas fa-mobile-alt"></i> <strong>Easypaisa:</strong> 03198595421 - Muhammad Ramzan Al Sami</div><div style="background:#1e293b; border-radius:20px; padding:15px; margin:10px 0;"><i class="fas fa-credit-card"></i> <strong>Sadapay:</strong> 03198595421 - Muhammad Ramzan Ul Sami</div><button id="sentProof" class="btn">I Have Sent Payment</button><div id="proofForm" style="display:none; margin-top:20px;"><input id="amountFund" placeholder="Amount (PKR)" type="number"><input id="transId" placeholder="Transaction ID"><input id="fundEmail" placeholder="Email"><input type="file" id="screenshot" accept="image/*"><button id="submitProof" class="btn" style="margin-top:10px;">Submit Proof</button></div></div>`;
         document.getElementById("sentProof").onclick = () => { document.getElementById("proofForm").style.display = "block"; };
         document.getElementById("submitProof").onclick = async () => {
             let file = document.getElementById("screenshot").files[0];
@@ -366,11 +437,10 @@
     }
     
     async function renderRecommendations() { 
-        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Share Your Experience</h3><input id="recEmail" placeholder="Email"><input id="recWhatsapp" placeholder="WhatsApp"><input id="recPhone" placeholder="Phone"><textarea id="recText" placeholder="Recommendation"></textarea><button id="submitRec" class="btn">Submit</button></div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Share Your Experience</h3><input id="recEmail" placeholder="Email"><input id="recWhatsapp" placeholder="WhatsApp"><input id="recPhone" placeholder="Phone"><textarea id="recText" placeholder="Your Recommendation" rows="4"></textarea><button id="submitRec" class="btn">Submit Recommendation</button></div>`;
         document.getElementById("submitRec").onclick = async () => { let res = await apiCall("submitRecommendation", { email: document.getElementById("recEmail").value, whatsapp: document.getElementById("recWhatsapp").value, phone: document.getElementById("recPhone").value, text: document.getElementById("recText").value }); showToast(res.message); };
     }
     
-    // ========== JOIN US & EARN (Complete with Status, Attendance, Jobs) ==========
     async function renderJoinUs() {
         await loadJoinApplicationStatus();
         
@@ -382,24 +452,12 @@
         
         if (!joinStatus || joinStatus.status === 'none') {
             applicationFormHtml = `
-                <h3>Apply Now</h3>
-                <div class="form-row">
-                    <input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}">
-                    <input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}">
-                </div>
-                <div class="form-row">
-                    <input id="appPhone" placeholder="Phone Number">
-                    <input id="appWhatsapp" placeholder="WhatsApp Number">
-                </div>
-                <div class="form-row">
-                    <input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}">
-                    <select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select>
-                </div>
-                <div class="form-row">
-                    <select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select>
-                    <select id="appShift"><option>Day</option><option>Night</option></select>
-                </div>
-                <textarea id="appAbout" placeholder="About Yourself (Experience, Skills, etc.)" rows="3"></textarea>
+                <h3>📝 Application Form</h3>
+                <div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}"></div>
+                <div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhatsapp" placeholder="WhatsApp Number"></div>
+                <div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}"><select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select></div>
+                <div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div>
+                <textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea>
                 <input type="file" id="appPhoto" accept="image/*">
                 <button id="submitApplication" class="btn">Submit Application</button>
             `;
@@ -409,52 +467,31 @@
             statusHtml = `<div class="info-note" style="background:rgba(16,185,129,0.2); border-left-color:#10b981;"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinStatus.salary ? formatCurrency(joinStatus.salary) : 'To be set by admin'} per month<br>Welcome to the team! Please fill your daily attendance and job details below.</div>`;
             
             attendanceHtml = `
-                <h3>Daily Attendance</h3>
-                <div class="form-row">
-                    <input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}">
-                    <input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}">
-                </div>
-                <div class="form-row">
-                    <input id="attPhone" placeholder="Contact Number">
-                    <input type="time" id="attLoginTime" placeholder="Login Time">
-                </div>
-                <div class="form-row">
-                    <input type="number" id="attWorkingHours" placeholder="Working Hours">
-                    <input type="time" id="attLogoutTime" placeholder="Logout Time">
-                </div>
-                <textarea id="attWorkDetail" placeholder="Work Detail (What did you work on?)" rows="2"></textarea>
-                <button id="submitAttendance" class="btn btn-success">Mark Attendance</button>
+                <h3>📋 Daily Attendance</h3>
+                <div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}"></div>
+                <div class="form-row"><input id="attPhone" placeholder="Contact Number"><input type="time" id="attLoginTime" placeholder="Login Time"></div>
+                <div class="form-row"><input type="number" id="attWorkingHours" placeholder="Working Hours"><input type="time" id="attLogoutTime" placeholder="Logout Time"></div>
+                <div class="form-row"><select id="attWorkType"><option>Sharing Posts</option><option>Designed Posts</option><option>Platform Management</option><option>Client Support</option></select><input id="attClientCount" placeholder="Client Contacts Count" type="number"></div>
+                <div class="form-row"><select id="attBoosted"><option>No</option><option>Yes</option></select><select id="attSharedPlatforms"><option>Instagram</option><option>Facebook</option><option>Twitter</option><option>All Platforms</option></select></div>
+                <textarea id="attWorkDetail" placeholder="Work Detail (What did you work on today?)" rows="3"></textarea>
+                <button id="submitAttendance" class="btn btn-success">✅ Mark Attendance</button>
             `;
             
             jobsHtml = `
-                <h3>Job Details</h3>
-                <div class="form-row">
-                    <input id="jobName" placeholder="Job/Service Name">
-                    <input id="jobOrderId" placeholder="Order ID (if placed)">
-                </div>
-                <div class="form-row">
-                    <input id="jobPlatform" placeholder="Platform (Instagram/TikTok/etc)">
-                    <input id="jobAmount" placeholder="Amount Spent (PKR)" type="number">
-                </div>
-                <textarea id="jobDetails" placeholder="Full Details about the work done" rows="2"></textarea>
-                <button id="submitJob" class="btn btn-success">Submit Job</button>
+                <h3>💼 Job Details</h3>
+                <div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrderId" placeholder="Order ID (if placed)"></div>
+                <div class="form-row"><input id="jobPlatform" placeholder="Platform (Instagram/TikTok/etc)"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div>
+                <div class="form-row"><input id="jobLink" placeholder="Platform Link / Order Link"></div>
+                <textarea id="jobFullDetails" placeholder="Full Details about the work done" rows="3"></textarea>
+                <button id="submitJob" class="btn btn-success">📌 Submit Job</button>
             `;
             
-            historyHtml = `<h3>My History</h3><div id="historyData">Loading...</div>`;
+            historyHtml = `<h3>📜 My History</h3><div id="historyData" class="glass-card">Loading...</div>`;
         } else if (joinStatus.status === 'rejected') {
             statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest. We have reviewed your application and cannot proceed at this time. If you have any questions, please contact our help center.</div>`;
         }
         
-        let html = `
-            <div class="glass-card">
-                <h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>
-                ${statusHtml}
-                ${applicationFormHtml ? `<div class="glass-card" style="margin-top:20px;">${applicationFormHtml}</div>` : ''}
-                ${attendanceHtml ? `<div class="glass-card" style="margin-top:20px;" id="attendanceSection">${attendanceHtml}</div>` : ''}
-                ${jobsHtml ? `<div class="glass-card" style="margin-top:20px;" id="jobsSection">${jobsHtml}</div>` : ''}
-                ${historyHtml ? `<div class="glass-card" style="margin-top:20px;" id="historySection">${historyHtml}</div>` : ''}
-            </div>
-        `;
+        let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>${statusHtml}${applicationFormHtml ? `<div class="glass-card" style="margin-top:20px;">${applicationFormHtml}</div>` : ''}${attendanceHtml ? `<div class="glass-card" style="margin-top:20px;">${attendanceHtml}</div>` : ''}${jobsHtml ? `<div class="glass-card" style="margin-top:20px;">${jobsHtml}</div>` : ''}${historyHtml ? `<div class="glass-card" style="margin-top:20px;">${historyHtml}</div>` : ''}</div>`;
         document.getElementById("pageContent").innerHTML = html;
         
         if (document.getElementById("submitApplication")) {
@@ -463,16 +500,11 @@
                 let reader = new FileReader();
                 reader.onload = async () => {
                     let res = await apiCall("submitJoinRequest", {
-                        name: document.getElementById("appName").value,
-                        username: document.getElementById("appUsername").value,
-                        phone: document.getElementById("appPhone").value,
-                        whatsapp: document.getElementById("appWhatsapp").value,
-                        email: document.getElementById("appEmail").value,
-                        salaryType: document.getElementById("appSalaryType").value,
-                        hours: document.getElementById("appHours").value,
-                        shift: document.getElementById("appShift").value,
-                        about: document.getElementById("appAbout").value,
-                        photo: reader.result
+                        name: document.getElementById("appName").value, username: document.getElementById("appUsername").value,
+                        phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhatsapp").value,
+                        email: document.getElementById("appEmail").value, salaryType: document.getElementById("appSalaryType").value,
+                        hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value,
+                        about: document.getElementById("appAbout").value, photo: reader.result
                     });
                     showToast(res.message);
                     if(res.success) setTimeout(() => renderJoinUs(), 1500);
@@ -485,40 +517,27 @@
         if (document.getElementById("submitAttendance")) {
             document.getElementById("submitAttendance").onclick = async () => {
                 let res = await apiCall("submitAttendance", {
-                    name: document.getElementById("attName").value,
-                    email: document.getElementById("attEmail").value,
-                    phone: document.getElementById("attPhone").value,
-                    loginTime: document.getElementById("attLoginTime").value,
-                    workingHours: document.getElementById("attWorkingHours").value,
-                    logoutTime: document.getElementById("attLogoutTime").value,
+                    name: document.getElementById("attName").value, email: document.getElementById("attEmail").value,
+                    phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLoginTime").value,
+                    workingHours: document.getElementById("attWorkingHours").value, logoutTime: document.getElementById("attLogoutTime").value,
+                    workType: document.getElementById("attWorkType").value, clientCount: document.getElementById("attClientCount").value,
+                    boosted: document.getElementById("attBoosted").value, sharedPlatforms: document.getElementById("attSharedPlatforms").value,
                     workDetail: document.getElementById("attWorkDetail").value
                 });
                 showToast(res.message);
-                if(res.success) {
-                    document.getElementById("attLoginTime").value = "";
-                    document.getElementById("attLogoutTime").value = "";
-                    document.getElementById("attWorkDetail").value = "";
-                }
+                if(res.success) { document.getElementById("attLoginTime").value = ""; document.getElementById("attLogoutTime").value = ""; document.getElementById("attWorkDetail").value = ""; }
             };
         }
         
         if (document.getElementById("submitJob")) {
             document.getElementById("submitJob").onclick = async () => {
                 let res = await apiCall("submitJobDetail", {
-                    jobName: document.getElementById("jobName").value,
-                    orderId: document.getElementById("jobOrderId").value,
-                    platform: document.getElementById("jobPlatform").value,
-                    amount: document.getElementById("jobAmount").value,
-                    details: document.getElementById("jobDetails").value
+                    jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrderId").value,
+                    platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value,
+                    link: document.getElementById("jobLink").value, details: document.getElementById("jobFullDetails").value
                 });
                 showToast(res.message);
-                if(res.success) {
-                    document.getElementById("jobName").value = "";
-                    document.getElementById("jobOrderId").value = "";
-                    document.getElementById("jobPlatform").value = "";
-                    document.getElementById("jobAmount").value = "";
-                    document.getElementById("jobDetails").value = "";
-                }
+                if(res.success) { document.getElementById("jobName").value = ""; document.getElementById("jobOrderId").value = ""; document.getElementById("jobAmount").value = ""; document.getElementById("jobLink").value = ""; document.getElementById("jobFullDetails").value = ""; }
             };
         }
         
@@ -526,16 +545,14 @@
             let attendanceHistory = await apiCall("getMyAttendance");
             let jobsHistory = await apiCall("getMyJobs");
             document.getElementById("historyData").innerHTML = `
-                <h4>Attendance History</h4>
-                ${attendanceHistory.attendance?.length ? '<table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table>' : '<p>No attendance records</p>'}
-                <h4 style="margin-top:20px;">Job History</h4>
-                ${jobsHistory.jobs?.length ? '<table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table>' : '<p>No job records</p>'}
+                <h4>Attendance Records</h4>${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th><th>Work Type</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td><td>${a.workType || a.WorkType || '-'}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}
+                <h4 style="margin-top:20px;">Job History</h4>${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th><th>Platform</th></tr>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td><td>${j.platform || j.Platform || '-'}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}
             `;
         }
     }
     
     async function renderHelp() { 
-        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Need Help?</h3><input id="helpEmail" placeholder="Email"><input id="helpPhone" placeholder="Phone/WhatsApp"><textarea id="helpMsg" placeholder="Your Message"></textarea><button id="submitHelp" class="btn">Send</button></div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Need Help?</h3><input id="helpEmail" placeholder="Email"><input id="helpPhone" placeholder="Phone/WhatsApp"><textarea id="helpMsg" placeholder="Your Message" rows="4"></textarea><button id="submitHelp" class="btn">Send Message</button></div>`;
         document.getElementById("submitHelp").onclick = async () => { let res = await apiCall("submitHelp", { email: document.getElementById("helpEmail").value, phone: document.getElementById("helpPhone").value, message: document.getElementById("helpMsg").value }); showToast(res.message); };
     }
     
@@ -555,6 +572,8 @@
     document.getElementById("overlay").onclick = () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").style.display = "none"; };
     document.getElementById("refreshBtn").onclick = () => { if(currentUser) navigate("home"); else showAuthScreen(); };
     document.getElementById("logoutBtn").onclick = () => { localStorage.removeItem("mts_token"); location.reload(); };
+    document.getElementById("profileBtn").onclick = () => { if(currentUser) showProfileModal(); };
+    document.getElementById("closeProfileModal")?.addEventListener("click", () => { document.getElementById("profileModal").style.display = "none"; });
     document.getElementById("currencyGroup")?.addEventListener("click", (e) => { if(e.target.dataset.curr) { activeCurrency = e.target.dataset.curr; updateCurrencyDisplay(); } });
     
     window.navigateTo = navigate;
