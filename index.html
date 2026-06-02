@@ -41,13 +41,16 @@
         .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
         .status-approved { background: #10b981; color: white; }
         .status-pending { background: #f59e0b; color: black; }
-        .status-rejected { background: #dc2626; color: white; }
         .join-tabs { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; border-bottom: 1px solid #2d3a5e; padding-bottom: 10px; }
         .join-tab-btn { background: #1e293b; padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: all 0.2s; }
         .join-tab-btn.active { background: #2b6ef0; }
         .join-tab-content { display: none; }
         .join-tab-content.active { display: block; }
         .info-note { background: rgba(245, 158, 11, 0.2); border-left: 4px solid #f59e0b; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .category-selector { background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 15px; margin: 15px 0; }
+        .category-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .category-btn { background: #1e293b; padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+        .category-btn:hover, .category-btn.active { background: #2b6ef0; }
         @media (max-width: 768px) { .form-row { flex-direction: column; } .platform-icon-item { padding: 6px 12px; font-size: 12px; } }
     </style>
 </head>
@@ -114,30 +117,29 @@
     let allServices = [];
     let selectedService = null;
     let joinStatus = null;
+    let selectedCategory = "all";
     
-     const platforms = [
-        { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F" },
-        { name: "TikTok", icon: "fab fa-tiktok", color: "#000000" },
-        { name: "Facebook", icon: "fab fa-facebook", color: "#1877F2" },
-        { name: "YouTube", icon: "fab fa-youtube", color: "#FF0000" },
-        { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2" },
-        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366" },
-        { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00" },
-        { name: "Telegram", icon: "fab fa-telegram", color: "#26A5E4" },
-        { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2" },
-        { name: "Pinterest", icon: "fab fa-pinterest", color: "#BD081C" },
-        { name: "Discord", icon: "fab fa-discord", color: "#5865F2" },
-        { name: "Twitch", icon: "fab fa-twitch", color: "#9146FF" },
-        { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954" },
-        { name: "Google", icon: "fab fa-google", color: "#4285F4" },
-        { name: "Threads", icon: "fab fa-threads", color: "#000000" },
-        { name: "Netflix", icon: "fas fa-film", color: "#E50914" },
-        { name: "Canva", icon: "fas fa-palette", color: "#00C4CC" },
-        { name: "CapCut", icon: "fas fa-cut", color: "#00D4FF" },
-        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F" },
-        { name: "Gemini", icon: "fas fa-brain", color: "#4285F4" },
-        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6" },
-        { name: "PUBG UC", icon: "fas fa-gamepad", color: "#FFA500" }
+    // Service Categories
+    const serviceCategories = [
+        "Likes", "Views", "Followers", "Comments", "Saves", 
+        "Shares", "Subscribers", "Watchtime", "Repins", "Retweets", "Traffic"
+    ];
+    
+    const platforms = [
+        { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F", categories: ["Likes", "Views", "Followers", "Comments", "Saves", "Shares"] },
+        { name: "TikTok", icon: "fab fa-tiktok", color: "#000000", categories: ["Likes", "Views", "Followers", "Comments", "Shares"] },
+        { name: "Facebook", icon: "fab fa-facebook", color: "#1877F2", categories: ["Likes", "Views", "Followers", "Comments", "Shares"] },
+        { name: "YouTube", icon: "fab fa-youtube", color: "#FF0000", categories: ["Likes", "Views", "Subscribers", "Watchtime", "Comments"] },
+        { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2", categories: ["Likes", "Retweets", "Followers", "Views"] },
+        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366", categories: ["Traffic", "Views"] },
+        { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00", categories: ["Views", "Followers"] },
+        { name: "Telegram", icon: "fab fa-telegram", color: "#26A5E4", categories: ["Members", "Views"] },
+        { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2", categories: ["Likes", "Followers", "Views"] },
+        { name: "Pinterest", icon: "fab fa-pinterest", color: "#BD081C", categories: ["Repins", "Likes", "Followers"] },
+        { name: "Discord", icon: "fab fa-discord", color: "#5865F2", categories: ["Members"] },
+        { name: "Twitch", icon: "fab fa-twitch", color: "#9146FF", categories: ["Followers", "Views"] },
+        { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954", categories: ["Followers", "Plays"] },
+        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6", categories: ["Traffic", "Views"] }
     ];
     
     function showToast(message, isError = false) {
@@ -159,14 +161,13 @@
         return `${symbol} ${converted.toFixed(2)}`;
     }
     
-    // Format rate display correctly - show full rate like "560 PKR per 1000"
     function formatRateDisplay(service) {
         if (service.Per1k === true || service.Per1k === "TRUE") {
             let ratePer1000 = service.Rate;
             let converted = convertPrice(ratePer1000);
             let symbol = currencySymbols[activeCurrency];
             let currencyText = activeCurrency === 'PKR' ? `${symbol} ${converted.toFixed(2)} PKR` : `${symbol} ${converted.toFixed(2)}`;
-            return `${currencyText} per 1000 (${(converted/1000).toFixed(2)} per unit)`;
+            return `${currencyText} per 1000`;
         } else {
             let converted = convertPrice(service.Rate);
             let symbol = currencySymbols[activeCurrency];
@@ -292,13 +293,18 @@
         };
     }
     
+    // HOME PAGE WITH CATEGORY SELECTION
     async function renderHome() { 
         await loadServices();
         let html = `
             <div class="glass-card"><h3><i class="fas fa-coins"></i> Wallet Balance: ${formatCurrency(currentUser.wallet)}</h3></div>
             <div class="glass-card">
-                <div class="platform-icons" id="homePlatformIcons">${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div>
+                <div class="platform-icons" id="homePlatformIcons">${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('')}</div>
                 <select id="platformSelect"><option value="">Select Platform</option>${platforms.map(p => `<option value="${p.name}">${p.name}</option>`).join('')}</select>
+                <div id="categoryContainer" style="display:none;" class="category-selector">
+                    <label><i class="fas fa-tags"></i> Select Category:</label>
+                    <div class="category-buttons" id="categoryButtons"></div>
+                </div>
                 <select id="serviceSelect"><option value="">Select Service</option></select>
                 <input type="number" id="quantity" placeholder="Quantity" min="1">
                 <div id="dynamicFields"></div>
@@ -308,18 +314,58 @@
             </div>
         `;
         document.getElementById("pageContent").innerHTML = html;
-        document.querySelectorAll('#homePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { document.getElementById('platformSelect').value = el.dataset.platform; updateServiceDropdown(); }));
-        document.getElementById("platformSelect").addEventListener("change", updateServiceDropdown);
+        
+        document.querySelectorAll('#homePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { 
+            document.getElementById('platformSelect').value = el.dataset.platform; 
+            updateCategorySelector();
+            updateServiceDropdown(); 
+        }));
+        document.getElementById("platformSelect").addEventListener("change", updateCategorySelector);
         document.getElementById("serviceSelect").addEventListener("change", showServiceDetails);
         document.getElementById("quantity").addEventListener("input", calculateTotal);
         document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
-        document.getElementById("clearFormBtn").addEventListener("click", () => { selectedService = null; document.getElementById("serviceDetails").style.display = "none"; document.getElementById("orderSummary").style.display = "none"; document.getElementById("dynamicFields").innerHTML = ""; document.getElementById("quantity").value = ""; });
+        document.getElementById("clearFormBtn").addEventListener("click", () => { selectedService = null; document.getElementById("serviceDetails").style.display = "none"; document.getElementById("orderSummary").style.display = "none"; document.getElementById("dynamicFields").innerHTML = ""; document.getElementById("quantity").value = ""; selectedCategory = "all"; });
+        updateCategorySelector();
         updateServiceDropdown();
+    }
+    
+    function updateCategorySelector() {
+        let platform = document.getElementById("platformSelect").value;
+        let platformData = platforms.find(p => p.name === platform);
+        let categoryContainer = document.getElementById("categoryContainer");
+        let categoryButtonsDiv = document.getElementById("categoryButtons");
+        
+        if (platform && platformData && platformData.categories) {
+            categoryContainer.style.display = "block";
+            let categories = ["all", ...platformData.categories];
+            categoryButtonsDiv.innerHTML = categories.map(cat => 
+                `<div class="category-btn ${selectedCategory === cat ? 'active' : ''}" data-category="${cat}">${cat === 'all' ? 'All Services' : cat}</div>`
+            ).join('');
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedCategory = btn.dataset.category;
+                    updateServiceDropdown();
+                });
+            });
+        } else {
+            categoryContainer.style.display = "none";
+            selectedCategory = "all";
+            updateServiceDropdown();
+        }
     }
     
     function updateServiceDropdown() {
         let platform = document.getElementById("platformSelect").value;
         let filtered = platform ? allServices.filter(s => s.Platform === platform) : [];
+        
+        // Filter by category if selected
+        if (selectedCategory !== "all") {
+            filtered = filtered.filter(s => s.Name && s.Name.toLowerCase().includes(selectedCategory.toLowerCase()));
+        }
+        
         let select = document.getElementById("serviceSelect");
         select.innerHTML = '<option value="">Select a service</option>';
         filtered.forEach(s => { 
@@ -338,7 +384,7 @@
         
         let rateDisplay = formatRateDisplay(selectedService);
         let detailsHtml = `
-            <div class="service-detail-card">
+            <div class="service-detail-card" style="background:rgba(0,0,0,0.3); border-radius:20px; padding:15px; margin:15px 0;">
                 <h4>${selectedService.Name}</h4>
                 <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${rateDisplay}</p>
                 <p><i class="fas fa-chart-line"></i> <strong>Min Order:</strong> ${selectedService.MinQty} | <strong>Max Order:</strong> ${selectedService.MaxQty}</p>
@@ -383,7 +429,6 @@
             return;
         }
         
-        // Calculate total: For Per1k services, divide rate by 1000 then multiply by quantity
         let totalPKR;
         let pricePerUnitPKR;
         if (selectedService.Per1k === true || selectedService.Per1k === "TRUE") {
@@ -420,7 +465,7 @@
     
     async function renderServices() { 
         await loadServices();
-        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatformIcons"><div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i><span>${p.name}</span></div>`).join('')}</div><input id="searchInput" placeholder="🔍 Search services..."></div><div id="servicesGrid" class="service-grid"></div>`;
+        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatformIcons"><div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>${platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('')}</div><input id="searchInput" placeholder="🔍 Search services..."></div><div id="servicesGrid" class="service-grid"></div>`;
         document.getElementById("pageContent").innerHTML = html;
         document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(el => el.addEventListener('click', () => { document.querySelectorAll('#servicePlatformIcons .platform-icon-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); filterServices(); }));
         document.getElementById("searchInput").addEventListener("input", filterServices);
@@ -440,7 +485,15 @@
     
     function selectService(platform, serviceId) {
         let platformSelect = document.getElementById("platformSelect");
-        if(platformSelect) { platformSelect.value = platform; updateServiceDropdown(); setTimeout(() => { document.getElementById("serviceSelect").value = serviceId; showServiceDetails(); }, 100); }
+        if(platformSelect) { 
+            platformSelect.value = platform; 
+            updateCategorySelector();
+            updateServiceDropdown(); 
+            setTimeout(() => { 
+                document.getElementById("serviceSelect").value = serviceId; 
+                showServiceDetails(); 
+            }, 100); 
+        }
     }
     
     async function renderDashboard() { 
@@ -475,64 +528,26 @@
         let statusHtml = '', applicationFormHtml = '', attendanceHtml = '', jobsHtml = '', historyHtml = '';
         
         if (!joinStatus || joinStatus.status === 'none') {
-            applicationFormHtml = `
-                <h3>📝 Application Form</h3>
-                <div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}"></div>
-                <div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhatsapp" placeholder="WhatsApp Number"></div>
-                <div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}"><select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select></div>
-                <div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div>
-                <textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea>
-                <input type="file" id="appPhoto" accept="image/*">
-                <button id="submitApplication" class="btn">Submit Application</button>
-            `;
+            applicationFormHtml = `<h3>📝 Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhatsapp" placeholder="WhatsApp Number"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}"><select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select></div><div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea><input type="file" id="appPhoto" accept="image/*"><button id="submitApplication" class="btn">Submit Application</button>`;
         } else if (joinStatus.status === 'pending') {
-            statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin. You will be notified once approved. If you have any questions, please contact our help center.</div>`;
+            statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin.</div>`;
         } else if (joinStatus.status === 'approved') {
-            statusHtml = `<div class="info-note" style="background:rgba(16,185,129,0.2); border-left-color:#10b981;"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinStatus.salary ? formatCurrency(joinStatus.salary) : 'To be set by admin'} per month<br>Welcome to the team! Please fill your daily attendance and job details below.</div>`;
-            
-            attendanceHtml = `
-                <h3>📋 Daily Attendance</h3>
-                <div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}"></div>
-                <div class="form-row"><input id="attPhone" placeholder="Contact Number"><input type="time" id="attLoginTime" placeholder="Login Time"></div>
-                <div class="form-row"><input type="number" id="attWorkingHours" placeholder="Working Hours"><input type="time" id="attLogoutTime" placeholder="Logout Time"></div>
-                <div class="form-row"><select id="attWorkType"><option>Sharing Posts</option><option>Designed Posts</option><option>Platform Management</option><option>Client Support</option></select><input id="attClientCount" placeholder="Client Contacts Count" type="number"></div>
-                <div class="form-row"><select id="attBoosted"><option>No</option><option>Yes</option></select><select id="attSharedPlatforms"><option>Instagram</option><option>Facebook</option><option>Twitter</option><option>All Platforms</option></select></div>
-                <textarea id="attWorkDetail" placeholder="Work Detail (What did you work on today?)" rows="3"></textarea>
-                <button id="submitAttendance" class="btn btn-success">✅ Mark Attendance</button>
-            `;
-            
-            jobsHtml = `
-                <h3>💼 Job Details</h3>
-                <div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrderId" placeholder="Order ID (if placed)"></div>
-                <div class="form-row"><input id="jobPlatform" placeholder="Platform (Instagram/TikTok/etc)"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div>
-                <div class="form-row"><input id="jobLink" placeholder="Platform Link / Order Link"></div>
-                <textarea id="jobFullDetails" placeholder="Full Details about the work done" rows="3"></textarea>
-                <button id="submitJob" class="btn btn-success">📌 Submit Job</button>
-            `;
-            
+            statusHtml = `<div class="info-note" style="background:rgba(16,185,129,0.2); border-left-color:#10b981;"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinStatus.salary ? formatCurrency(joinStatus.salary) : 'To be set by admin'} per month<br>Welcome to the team!</div>`;
+            attendanceHtml = `<h3>📋 Daily Attendance</h3><div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}"></div><div class="form-row"><input id="attPhone" placeholder="Contact Number"><input type="time" id="attLoginTime" placeholder="Login Time"></div><div class="form-row"><input type="number" id="attWorkingHours" placeholder="Working Hours"><input type="time" id="attLogoutTime" placeholder="Logout Time"></div><textarea id="attWorkDetail" placeholder="Work Detail" rows="3"></textarea><button id="submitAttendance" class="btn btn-success">✅ Mark Attendance</button>`;
+            jobsHtml = `<h3>💼 Job Details</h3><div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrderId" placeholder="Order ID"></div><div class="form-row"><input id="jobPlatform" placeholder="Platform"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div><textarea id="jobFullDetails" placeholder="Full Details" rows="3"></textarea><button id="submitJob" class="btn btn-success">📌 Submit Job</button>`;
             historyHtml = `<h3>📜 My History</h3><div id="historyData" class="glass-card">Loading...</div>`;
         } else if (joinStatus.status === 'rejected') {
-            statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest. We have reviewed your application and cannot proceed at this time.</div>`;
+            statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest.</div>`;
         }
         
         let tabsHtml = '';
         if (joinStatus && joinStatus.status === 'approved') {
-            tabsHtml = `
-                <div class="join-tabs">
-                    <div class="join-tab-btn active" data-tab="attendance">📋 Attendance</div>
-                    <div class="join-tab-btn" data-tab="jobs">💼 Jobs</div>
-                    <div class="join-tab-btn" data-tab="history">📜 History</div>
-                </div>
-                <div id="attendanceTab" class="join-tab-content active">${attendanceHtml}</div>
-                <div id="jobsTab" class="join-tab-content">${jobsHtml}</div>
-                <div id="historyTab" class="join-tab-content">${historyHtml}</div>
-            `;
+            tabsHtml = `<div class="join-tabs"><div class="join-tab-btn active" data-tab="attendance">📋 Attendance</div><div class="join-tab-btn" data-tab="jobs">💼 Jobs</div><div class="join-tab-btn" data-tab="history">📜 History</div></div><div id="attendanceTab" class="join-tab-content active">${attendanceHtml}</div><div id="jobsTab" class="join-tab-content">${jobsHtml}</div><div id="historyTab" class="join-tab-content">${historyHtml}</div>`;
         }
         
         let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>${statusHtml}${applicationFormHtml ? `<div class="glass-card" style="margin-top:20px;">${applicationFormHtml}</div>` : ''}${tabsHtml}</div>`;
         document.getElementById("pageContent").innerHTML = html;
         
-        // Tab switching
         document.querySelectorAll('.join-tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.join-tab-btn').forEach(b => b.classList.remove('active'));
@@ -547,57 +562,33 @@
                 let file = document.getElementById("appPhoto").files[0];
                 let reader = new FileReader();
                 reader.onload = async () => {
-                    let res = await apiCall("submitJoinRequest", {
-                        name: document.getElementById("appName").value, username: document.getElementById("appUsername").value,
-                        phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhatsapp").value,
-                        email: document.getElementById("appEmail").value, salaryType: document.getElementById("appSalaryType").value,
-                        hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value,
-                        about: document.getElementById("appAbout").value, photo: reader.result
-                    });
+                    let res = await apiCall("submitJoinRequest", { name: document.getElementById("appName").value, username: document.getElementById("appUsername").value, phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhatsapp").value, email: document.getElementById("appEmail").value, salaryType: document.getElementById("appSalaryType").value, hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value, about: document.getElementById("appAbout").value, photo: reader.result });
                     showToast(res.message);
                     if(res.success) setTimeout(() => renderJoinUs(), 1500);
                 };
                 if(file) reader.readAsDataURL(file);
-                else showToast("Please upload photo", true);
+                else showToast("Upload photo", true);
             };
         }
         
         if (document.getElementById("submitAttendance")) {
             document.getElementById("submitAttendance").onclick = async () => {
-                let res = await apiCall("submitAttendance", {
-                    name: document.getElementById("attName").value, email: document.getElementById("attEmail").value,
-                    phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLoginTime").value,
-                    workingHours: document.getElementById("attWorkingHours").value, logoutTime: document.getElementById("attLogoutTime").value,
-                    workType: document.getElementById("attWorkType").value, clientCount: document.getElementById("attClientCount").value,
-                    boosted: document.getElementById("attBoosted").value, sharedPlatforms: document.getElementById("attSharedPlatforms").value,
-                    workDetail: document.getElementById("attWorkDetail").value
-                });
+                let res = await apiCall("submitAttendance", { name: document.getElementById("attName").value, email: document.getElementById("attEmail").value, phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLoginTime").value, workingHours: document.getElementById("attWorkingHours").value, logoutTime: document.getElementById("attLogoutTime").value, workDetail: document.getElementById("attWorkDetail").value });
                 showToast(res.message);
-                if(res.success) { document.getElementById("attLoginTime").value = ""; document.getElementById("attLogoutTime").value = ""; document.getElementById("attWorkDetail").value = ""; }
             };
         }
         
         if (document.getElementById("submitJob")) {
             document.getElementById("submitJob").onclick = async () => {
-                let res = await apiCall("submitJobDetail", {
-                    jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrderId").value,
-                    platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value,
-                    link: document.getElementById("jobLink").value, details: document.getElementById("jobFullDetails").value
-                });
+                let res = await apiCall("submitJobDetail", { jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrderId").value, platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value, details: document.getElementById("jobFullDetails").value });
                 showToast(res.message);
-                if(res.success) { document.getElementById("jobName").value = ""; document.getElementById("jobOrderId").value = ""; document.getElementById("jobAmount").value = ""; document.getElementById("jobLink").value = ""; document.getElementById("jobFullDetails").value = ""; }
             };
         }
         
         if (document.getElementById("historyData")) {
             let attendanceHistory = await apiCall("getMyAttendance");
             let jobsHistory = await apiCall("getMyJobs");
-            document.getElementById("historyData").innerHTML = `
-                <h4>Attendance Records</h4>
-                ${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th><th>Work Type</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td><td>${a.workType || a.WorkType || '-'}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}
-                <h4 style="margin-top:20px;">Job History</h4>
-                ${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th><th>Platform</th></tr>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td><td>${j.platform || j.Platform || '-'}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}
-            `;
+            document.getElementById("historyData").innerHTML = `<h4>Attendance Records</h4>${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}<h4 style="margin-top:20px;">Job History</h4>${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></table>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}`;
         }
     }
     
