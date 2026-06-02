@@ -115,7 +115,7 @@
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5r5FZVdx6cb-PW-1zBiljQTwpusmTz8AAvIFWuoUpWMPHXKxs5vvSuRlfRcUntyZP2Q/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1UsBwkjf8QC3RuBT2BkflQKC6EVPgvgbTjvbAWSo-ngUhxHDJP5TlLv7qoYRMYbP9Ow/exec";
     
     let currentUser = null;
     let activeCurrency = "PKR";
@@ -231,14 +231,24 @@
     
     async function loadJoinApplication() {
         try {
+            // First check by email
             let res = await apiCall("getMyJoinStatus");
-            console.log("Join Status Response:", res);
+            console.log("Join Status API Response:", JSON.stringify(res));
+            
             if(res.success && res.application) {
                 joinApplication = res.application;
                 console.log("Application loaded:", joinApplication);
+                console.log("Status:", joinApplication.status);
             } else {
-                joinApplication = null;
-                console.log("No application found");
+                // Try alternative method - direct fetch from JoinUs sheet
+                console.log("No application found via API, trying direct check...");
+                let directRes = await apiCall("checkJoinStatus");
+                if(directRes.success && directRes.application) {
+                    joinApplication = directRes.application;
+                    console.log("Application loaded via direct check:", joinApplication);
+                } else {
+                    joinApplication = null;
+                }
             }
         } catch(e) {
             console.error("Error loading join status:", e);
@@ -541,7 +551,7 @@
         document.getElementById("submitRec").onclick = async () => { let res = await apiCall("submitRecommendation", { email: document.getElementById("recEmail").value, whatsapp: document.getElementById("recWhatsapp").value, phone: document.getElementById("recPhone").value, text: document.getElementById("recText").value }); showToast(res.message); };
     }
     
-    // JOIN US & EARN PAGE - Fixed to properly check application status from Google Sheet
+    // JOIN US & EARN PAGE - Fixed to properly read approved status
     async function renderJoinUs() {
         showToast("Loading application status...");
         await loadJoinApplication();
@@ -552,15 +562,19 @@
         let jobsFormHtml = '';
         let historyHtml = '';
         
-        // Get status from loaded application
+        // Get status from loaded application - handle both lowercase and capitalized status
         const hasApplied = joinApplication && joinApplication.requestId;
-        const applicationStatus = joinApplication?.status || 'none';
+        let applicationStatus = joinApplication?.status || 'none';
+        
+        // Normalize status for comparison
+        const normalizedStatus = applicationStatus.toLowerCase();
         
         console.log("Application Status:", applicationStatus);
+        console.log("Normalized Status:", normalizedStatus);
         console.log("Has Applied:", hasApplied);
-        console.log("Join Application Object:", joinApplication);
+        console.log("Full Application Object:", joinApplication);
         
-        if (!hasApplied || applicationStatus === 'none') {
+        if (!hasApplied || normalizedStatus === 'none') {
             // Show application form for new users
             applicationFormHtml = `
                 <h3>📝 Application Form</h3>
@@ -572,9 +586,9 @@
                 <input type="file" id="appPhoto" accept="image/*">
                 <button id="submitApplication" class="btn btn-success">Submit Application</button>
             `;
-        } else if (applicationStatus === 'Pending' || applicationStatus === 'pending') {
+        } else if (normalizedStatus === 'pending') {
             statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application has been submitted and is being reviewed by admin. You will be notified once approved. If you have any questions, please contact our help center.<br><br><strong>✅ Already Applied:</strong> You cannot submit another application.</div>`;
-        } else if (applicationStatus === 'Approved' || applicationStatus === 'approved') {
+        } else if (normalizedStatus === 'approved') {
             statusHtml = `<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinApplication.salary ? formatCurrency(parseFloat(joinApplication.salary)) : 'To be set by admin'} per month<br>Welcome to the team! Please fill your daily attendance and job details below.<br><br><strong>✅ Your application has been approved. You can now submit daily attendance and job details.</strong></div>`;
             
             attendanceFormHtml = `
@@ -598,13 +612,13 @@
             `;
             
             historyHtml = `<h3>📜 My History</h3><div id="historyData" class="glass-card">Loading...</div>`;
-        } else if (applicationStatus === 'Rejected' || applicationStatus === 'rejected') {
+        } else if (normalizedStatus === 'rejected') {
             statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest. We have reviewed your application and cannot proceed at this time. If you have any questions, please contact our help center.</div>`;
         }
         
         // Determine which tab should be active
         let defaultTab = 'application';
-        if (applicationStatus === 'Approved' || applicationStatus === 'approved') {
+        if (normalizedStatus === 'approved') {
             defaultTab = 'attendance';
         }
         
@@ -708,7 +722,7 @@
         }
         
         // Load history data for approved users
-        if (document.getElementById("historyData") && (applicationStatus === 'Approved' || applicationStatus === 'approved')) {
+        if (document.getElementById("historyData") && normalizedStatus === 'approved') {
             let attendanceHistory = await apiCall("getMyAttendance");
             let jobsHistory = await apiCall("getMyJobs");
             document.getElementById("historyData").innerHTML = `
@@ -718,7 +732,7 @@
                 </div>
                 <div class="history-table" style="margin-top: 25px;">
                     <h4>📌 Job Records</h4>
-                    ${jobsHistory.jobs?.length ? '<table><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Platform</th><th>Amount</th><th>Details</th></tr></thead><tbody>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.platform || j.Platform || '-'}</td><td>${j.amount || j.Amount} PKR</td><td>${(j.details || '').substring(0, 40)}</td></tr>`).join('') + '</tbody></table>' : '<p>No job records found</p>'}
+                    ${jobsHistory.jobs?.length ? '<td><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Platform</th><th>Amount</th><th>Details</th></tr></thead><tbody>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.platform || j.Platform || '-'}</td><td>${j.amount || j.Amount} PKR</td><td>${(j.details || '').substring(0, 40)}</td></tr>`).join('') + '</tbody>得到' : '<p>No job records found</p>'}
                 </div>
             `;
         }
