@@ -23,7 +23,7 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; display: none; }
         .main-content { padding: 20px; max-width: 1400px; margin: 0 auto; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: rgba(0,0,0,0.3); border-radius: 60px; margin-bottom: 25px; }
-        .platform-icons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 30px; }
+        .platform-icons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 30px; max-height: 200px; overflow-y: auto; padding: 10px; }
         .platform-icon-item { background: rgba(30, 41, 59, 0.6); border-radius: 50px; padding: 10px 18px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; border: 1px solid transparent; }
         .platform-icon-item:hover, .platform-icon-item.active { background: #2b6ef0; transform: translateY(-3px); }
         .currency-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -122,16 +122,17 @@
     // Service Categories
     const serviceCategories = [
         "Likes", "Views", "Followers", "Comments", "Saves", 
-        "Shares", "Subscribers", "Watchtime", "Repins", "Retweets", "Traffic"
+        "Shares", "Subscribers", "Watchtime", "Repins", "Retweets", "Traffic", "Members"
     ];
     
+    // ALL 22 PLATFORMS
     const platforms = [
         { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F", categories: ["Likes", "Views", "Followers", "Comments", "Saves", "Shares"] },
         { name: "TikTok", icon: "fab fa-tiktok", color: "#000000", categories: ["Likes", "Views", "Followers", "Comments", "Shares"] },
         { name: "Facebook", icon: "fab fa-facebook", color: "#1877F2", categories: ["Likes", "Views", "Followers", "Comments", "Shares"] },
         { name: "YouTube", icon: "fab fa-youtube", color: "#FF0000", categories: ["Likes", "Views", "Subscribers", "Watchtime", "Comments"] },
         { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2", categories: ["Likes", "Retweets", "Followers", "Views"] },
-        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366", categories: ["Traffic", "Views"] },
+        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366", categories: ["Traffic", "Views", "Members"] },
         { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00", categories: ["Views", "Followers"] },
         { name: "Telegram", icon: "fab fa-telegram", color: "#26A5E4", categories: ["Members", "Views"] },
         { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2", categories: ["Likes", "Followers", "Views"] },
@@ -139,7 +140,15 @@
         { name: "Discord", icon: "fab fa-discord", color: "#5865F2", categories: ["Members"] },
         { name: "Twitch", icon: "fab fa-twitch", color: "#9146FF", categories: ["Followers", "Views"] },
         { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954", categories: ["Followers", "Plays"] },
-        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6", categories: ["Traffic", "Views"] }
+        { name: "Google", icon: "fab fa-google", color: "#4285F4", categories: ["Traffic", "Views"] },
+        { name: "Threads", icon: "fab fa-threads", color: "#000000", categories: ["Likes", "Followers", "Views"] },
+        { name: "Netflix", icon: "fas fa-film", color: "#E50914", categories: ["Views"] },
+        { name: "Canva", icon: "fas fa-palette", color: "#00C4CC", categories: ["Designs", "Templates"] },
+        { name: "CapCut", icon: "fas fa-cut", color: "#00D4FF", categories: ["Edits", "Templates"] },
+        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F", categories: ["Prompts"] },
+        { name: "Gemini", icon: "fas fa-brain", color: "#4285F4", categories: ["Prompts"] },
+        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6", categories: ["Traffic", "Views"] },
+        { name: "PUBG UC", icon: "fas fa-gamepad", color: "#FFA500", categories: ["UC", "Points"] }
     ];
     
     function showToast(message, isError = false) {
@@ -499,7 +508,7 @@
     async function renderDashboard() { 
         let stats = await apiCall("userStats"); 
         let orders = await apiCall("getUserOrders"); 
-        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet fa-2x"></i><br><h3>${formatCurrency(currentUser.wallet)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-shopping-cart fa-2x"></i><br><h3>${stats.totalOrders || 0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock fa-2x"></i><br><h3>${stats.pendingOrders || 0}</h3><p>Pending Orders</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td><span class="status-badge status-pending">${o.status}</span></td></tr>`).join('') + '</table></div>' : '<p>No orders yet</p>'}</div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet fa-2x"></i><br><h3>${formatCurrency(currentUser.wallet)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-shopping-cart fa-2x"></i><br><h3>${stats.totalOrders || 0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock fa-2x"></i><br><h3>${stats.pendingOrders || 0}</h3><p>Pending Orders</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td><span class="status-badge status-pending">${o.status}</span></td><tr>`).join('') + '</table></div>' : '<p>No orders yet</p>'}</div>`;
     }
     
     async function renderAddFunds() { 
@@ -588,7 +597,7 @@
         if (document.getElementById("historyData")) {
             let attendanceHistory = await apiCall("getMyAttendance");
             let jobsHistory = await apiCall("getMyJobs");
-            document.getElementById("historyData").innerHTML = `<h4>Attendance Records</h4>${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}<h4 style="margin-top:20px;">Job History</h4>${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></table>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}`;
+            document.getElementById("historyData").innerHTML = `<h4>Attendance Records</h4>${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}<h4 style="margin-top:20px;">Job History</h4>${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}`;
         }
     }
     
