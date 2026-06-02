@@ -146,105 +146,50 @@
             transform: translateY(-2px);
         }
         
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .service-card {
-            background: rgba(13, 20, 37, 0.9);
+        .service-detail-box {
+            background: rgba(0,0,0,0.3);
             border-radius: 20px;
-            border: 1px solid rgba(43,110,240,0.2);
             padding: 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .service-card:hover {
-            border-color: #2b6ef0;
-            transform: translateY(-3px);
+            margin: 15px 0;
         }
         
-        .payment-card {
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 20px;
-            padding: 18px;
-            margin: 12px 0;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-        .payment-card:hover {
-            background: rgba(30, 41, 59, 0.8);
-            transform: translateX(5px);
-        }
-        .payment-card.selected {
-            border-color: #10b981;
+        .order-summary {
             background: rgba(16, 185, 129, 0.1);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, rgba(43,110,240,0.1), rgba(16,185,129,0.05));
             border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(43,110,240,0.3);
+            padding: 18px;
+            margin: 20px 0;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
-        .stat-card i { font-size: 32px; color: #2b6ef0; margin-bottom: 10px; }
-        .stat-card h3 { font-size: 28px; margin: 10px 0; }
         
-        .currency-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        .currency-btn {
-            background: #1e293b;
-            padding: 8px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .currency-btn.active {
-            background: #2b6ef0;
-            transform: scale(1.05);
-        }
-        .currency-flag { font-size: 18px; }
-        
-        .order-table { overflow-x: auto; }
-        .order-table table { width: 100%; border-collapse: collapse; }
-        .order-table th, .order-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #1e293b;
-        }
-        .order-table th { background: rgba(43,110,240,0.2); }
-        
-        .join-tabs {
+        .currency-btn-group {
             display: flex;
             gap: 10px;
-            margin: 20px 0;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
-        .join-tab-btn {
+        .currency-btn {
             background: #1e293b;
-            padding: 10px 24px;
+            border: 1px solid #334155;
+            padding: 10px 18px;
             border-radius: 40px;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .join-tab-btn.active {
+        .currency-btn:hover {
             background: #2b6ef0;
-            transform: scale(1.02);
+            transform: translateY(-2px);
         }
-        .join-tab-content { display: none; }
-        .join-tab-content.active { display: block; }
+        .currency-btn.active {
+            background: #2b6ef0;
+            border-color: white;
+            box-shadow: 0 0 10px rgba(43,110,240,0.5);
+        }
+        .currency-flag { font-size: 22px; }
         
         .toast {
             position: fixed;
@@ -266,32 +211,24 @@
             border-radius: 28px;
             padding: 30px;
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             z-index: 1100;
             display: none;
             border: 1px solid #2b6ef0;
         }
         .form-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .form-row > * { flex: 1; }
-        .info-note {
-            background: rgba(245, 158, 11, 0.2);
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-        }
-        .success-note {
-            background: rgba(16, 185, 129, 0.2);
-            border-left: 4px solid #10b981;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
+        
+        .required:after {
+            content: " *";
+            color: #ef4444;
         }
         
         @media (max-width: 768px) {
-            .cards-grid { grid-template-columns: 1fr; }
             .platform-icon-item { padding: 6px 12px; font-size: 12px; }
             .form-row { flex-direction: column; }
+            .currency-btn { padding: 6px 12px; font-size: 12px; }
+            .currency-flag { font-size: 16px; }
         }
     </style>
 </head>
@@ -303,14 +240,16 @@
         <i class="fas fa-times" id="closeSidebar" style="cursor:pointer;"></i>
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
-        <a href="#" data-page="home" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-home"></i> Home</a>
-        <a href="#" data-page="dashboard" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="#" data-page="services" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-box"></i> Services</a>
-        <a href="#" data-page="addfunds" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-wallet"></i> Add Funds</a>
-        <a href="#" data-page="profile" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-user-edit"></i> Profile</a>
-        <a href="#" data-page="joinus" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-user-plus"></i> Join Us</a>
-        <a href="#" data-page="help" style="color:white; text-decoration:none; padding:10px; border-radius:12px; transition:0.2s;"><i class="fas fa-question-circle"></i> Help</a>
+        <a href="#" data-page="home" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-home"></i> Home</a>
+        <a href="#" data-page="dashboard" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#" data-page="services" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-box"></i> Services</a>
+        <a href="#" data-page="addfunds" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-wallet"></i> Add Funds</a>
+        <a href="#" data-page="profile" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-user-edit"></i> Profile</a>
+        <a href="#" data-page="joinus" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-user-plus"></i> Join Us</a>
+        <a href="#" data-page="help" style="color:white; text-decoration:none; padding:10px; border-radius:12px;"><i class="fas fa-question-circle"></i> Help</a>
+        
         <div style="margin-top: 20px;">
+            <label style="display: block; margin-bottom: 10px; font-size: 13px; color: #94a3b8;"><i class="fas fa-exchange-alt"></i> Select Currency:</label>
             <div class="currency-btn-group" id="currencyGroup">
                 <button class="currency-btn" data-curr="PKR"><span class="currency-flag">🇵🇰</span> PKR</button>
                 <button class="currency-btn" data-curr="USD"><span class="currency-flag">🇺🇸</span> USD</button>
@@ -334,12 +273,12 @@
     <div id="pageContent"><div style="text-align:center;padding:50px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
 </div>
 
-<div id="successModal" class="modal">
+<div id="orderSuccessModal" class="modal">
     <div style="text-align:center;">
         <i class="fas fa-check-circle" style="font-size:60px; color:#10b981;"></i>
-        <h2>Success!</h2>
-        <p id="successMessage"></p>
-        <button onclick="closeSuccessModal()" class="btn" style="margin-top:20px;">OK</button>
+        <h2>Order Placed Successfully!</h2>
+        <div id="orderDetails" style="text-align:left; margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-radius:16px;"></div>
+        <button onclick="closeOrderModal()" class="btn" style="margin-top:20px;">OK</button>
     </div>
 </div>
 
@@ -356,6 +295,13 @@
     let paymentMethods = [];
     let selectedCategory = "All";
     let selectedPlatform = "";
+    
+    // Country list for dropdown
+    const countries = [
+        "USA", "UK", "Canada", "Australia", "India", "Pakistan", "UAE", "Saudi Arabia",
+        "Germany", "France", "Italy", "Spain", "Brazil", "Mexico", "Japan", "South Korea",
+        "Singapore", "Malaysia", "Indonesia", "Turkey", "Egypt", "South Africa", "Nigeria"
+    ];
     
     // Platform-specific categories mapping
     const platformCategories = {
@@ -383,7 +329,6 @@
         "PUBG UC": ["UC", "Points"]
     };
     
-    // All available platforms with their icons and colors
     const platforms = [
         { name:"Instagram", icon:"fab fa-instagram", color:"#E4405F" },
         { name:"TikTok", icon:"fab fa-tiktok", color:"#000000" },
@@ -418,13 +363,17 @@
         setTimeout(()=>t.remove(),3000);
     }
     
-    function closeSuccessModal() { document.getElementById('successModal').style.display='none'; if(currentUser) navigate("home"); }
+    function closeOrderModal() { document.getElementById('orderSuccessModal').style.display='none'; if(currentUser) navigate("home"); }
     
     function formatPrice(pkr) {
-        let converted=pkr*rates[activeCurrency];
-        let sym=symbols[activeCurrency];
-        let flag = {PKR:"🇵🇰",USD:"🇺🇸",AED:"🇦🇪",SAR:"🇸🇦",INR:"🇮🇳",EUR:"🇪🇺",GBP:"🇬🇧"}[activeCurrency] || "";
-        return `${flag} ${sym} ${converted.toFixed(2)}`;
+        let converted = pkr * rates[activeCurrency];
+        let sym = symbols[activeCurrency];
+        return `${sym} ${converted.toFixed(2)}`;
+    }
+    
+    function getCurrencyFlag() {
+        const flags = {PKR:"🇵🇰",USD:"🇺🇸",AED:"🇦🇪",SAR:"🇸🇦",INR:"🇮🇳",EUR:"🇪🇺",GBP:"🇬🇧"};
+        return flags[activeCurrency] || "💰";
     }
     
     async function api(action, data={}) {
@@ -433,23 +382,15 @@
         fd.append("payload",JSON.stringify(payload));
         try{
             let res=await fetch(APPS_SCRIPT_URL,{method:"POST",body:fd});
-            let result=await res.json();
-            console.log(`API ${action} response:`, result);
-            return result;
+            return await res.json();
         }catch(e){ 
-            console.error("API Error:", e);
             return {success:false,error:e.message}; 
         }
     }
     
     async function loadServices() { 
         let r=await api("getServices"); 
-        if(r.success && r.services) {
-            allServices = r.services;
-            console.log(`Loaded ${allServices.length} services`);
-        } else {
-            console.log("Failed to load services:", r);
-        }
+        if(r.success && r.services) allServices = r.services; 
     }
     
     async function loadPayments() { 
@@ -483,7 +424,7 @@
     function showAuth() {
         document.getElementById("pageContent").innerHTML=`
             <div class="glass-card" style="max-width:420px;margin:80px auto;">
-                <h2 style="text-align:center; margin-bottom:20px;"><i class="fas fa-rocket"></i> Welcome</h2>
+                <h2 style="text-align:center;">Welcome</h2>
                 <div id="loginForm">
                     <input type="text" id="loginEmail" placeholder="Email or Username">
                     <input type="password" id="loginPass" placeholder="Password">
@@ -496,7 +437,7 @@
                     <select id="userType"><option>Commission Based</option><option>Salary Based</option></select>
                     <div class="form-row"><input id="pass" type="password" placeholder="Password"><input id="confirmPass" type="password" placeholder="Confirm"></div>
                     <button id="doSignup" class="btn" style="width:100%">Register</button>
-                    <button id="backLogin" class="btn btn-secondary" style="width:100%; margin-top:12px;">Back to Login</button>
+                    <button id="backLogin" class="btn btn-secondary" style="width:100%; margin-top:12px;">Back</button>
                 </div>
             </div>
         `;
@@ -511,12 +452,9 @@
             let p=document.getElementById("pass").value, c=document.getElementById("confirmPass").value;
             if(p!==c){ showToast("Passwords don't match",true); return; }
             let r=await api("signup",{
-                fullName:document.getElementById("fullName").value,
-                username:document.getElementById("username").value,
-                gmail:document.getElementById("gmail").value,
-                phone:document.getElementById("phoneNum").value,
-                userType:document.getElementById("userType").value,
-                password:p
+                fullName:document.getElementById("fullName").value, username:document.getElementById("username").value,
+                gmail:document.getElementById("gmail").value, phone:document.getElementById("phoneNum").value,
+                userType:document.getElementById("userType").value, password:p
             });
             if(r.success){ showToast("Account created! Please login."); document.getElementById("loginForm").style.display="block"; document.getElementById("signupForm").style.display="none"; }
             else showToast(r.error,true);
@@ -530,61 +468,63 @@
                 <div class="form-row"><input id="pFullName" placeholder="Full Name" value="${currentUser.fullName || ''}"></div>
                 <div class="form-row"><input id="pUsername" placeholder="Username" value="${currentUser.username || ''}"></div>
                 <div class="form-row"><input id="pEmail" placeholder="Email" value="${currentUser.gmail || ''}"></div>
-                <div class="form-row"><input id="pPhone" placeholder="Phone Number" value="${currentUser.phone || ''}"></div>
-                <div class="form-row"><input type="password" id="pNewPass" placeholder="New Password (leave blank to keep unchanged)"></div>
+                <div class="form-row"><input id="pPhone" placeholder="Phone" value="${currentUser.phone || ''}"></div>
+                <div class="form-row"><input type="password" id="pNewPass" placeholder="New Password (optional)"></div>
                 <button id="updateProfileBtn" class="btn btn-success">Update Profile</button>
             </div>
         `;
         document.getElementById("updateProfileBtn").onclick = async () => {
-            let updateData = {
+            let res = await api("updateProfile", {
                 fullName: document.getElementById("pFullName").value,
                 username: document.getElementById("pUsername").value,
                 email: document.getElementById("pEmail").value,
                 phone: document.getElementById("pPhone").value,
                 newPassword: document.getElementById("pNewPass").value
-            };
-            showToast("Updating profile...");
-            let res = await api("updateProfile", updateData);
-            if(res.success) {
-                showToast("Profile updated successfully!");
-                currentUser.fullName = updateData.fullName;
-                currentUser.username = updateData.username;
-                currentUser.gmail = updateData.email;
-                currentUser.phone = updateData.phone;
-                document.getElementById("userNameDisplay").innerText = updateData.fullName.split(" ")[0] || updateData.username;
-                location.reload();
-            } else {
-                showToast(res.error || "Update failed", true);
-            }
+            });
+            showToast(res.message);
+            if(res.success) location.reload();
         };
     }
     
-    // HOME PAGE with platform-specific categories
+    // MAIN HOME PAGE WITH COMPLETE ORDER FORM
     async function renderHome() {
         await loadServices();
         let platformIconsHtml = platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}" style="border-color:${p.color}20"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('');
         
         let html=`
-            <div class="glass-card"><h3><i class="fas fa-coins"></i> Wallet Balance: ${formatPrice(currentUser.wallet)}</h3></div>
+            <div class="glass-card"><h3><i class="fas fa-coins"></i> Wallet Balance: ${getCurrencyFlag()} ${formatPrice(currentUser.wallet)}</h3></div>
             <div class="glass-card">
+                <h2><i class="fas fa-shopping-cart"></i> Place Order</h2>
                 <div class="platform-icons" id="homePlatforms">${platformIconsHtml}</div>
-                <select id="platformSelect"><option value="">Select Platform</option>${platforms.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select>
+                <label class="required">Select Platform</label>
+                <select id="platformSelect"><option value="">-- Select Platform --</option>${platforms.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select>
+                
                 <div id="categoryDiv" style="display:none;" class="category-section">
-                    <label><i class="fas fa-tags"></i> Filter by Category:</label>
+                    <label>Filter by Category:</label>
                     <div class="category-buttons" id="categoryBtns"></div>
                 </div>
-                <select id="serviceSelect"><option value="">Select Service</option></select>
+                
+                <label class="required">Select Service</label>
+                <select id="serviceSelect"><option value="">-- Select Service --</option></select>
+                
+                <div id="serviceDescriptionBox" style="display:none;" class="service-detail-box"></div>
+                
+                <label class="required">Quantity</label>
                 <input type="number" id="quantity" placeholder="Enter Quantity" min="1">
-                <div id="extraFields"></div>
-                <div id="serviceDetail" style="display:none;"></div>
-                <div id="summary" style="display:none; background:rgba(16,185,129,0.1); border-radius:20px; padding:18px; margin:20px 0;">
+                <div id="quantityWarning" style="color:#f59e0b; font-size:12px; display:none;"></div>
+                
+                <div id="conditionalFields"></div>
+                
+                <div id="orderSummary" style="display:none;" class="order-summary">
                     <h4>Order Summary</h4>
-                    <p><strong>Price per unit:</strong> <span id="priceUnit">0</span></p>
-                    <p><strong>Total Amount:</strong> <span id="totalAmt">0</span></p>
+                    <p><strong>Price per unit:</strong> <span id="pricePerUnit">0</span></p>
+                    <p><strong>Total Amount:</strong> <span id="totalAmount">0</span></p>
+                    <p><strong>Delivery Time:</strong> <span id="deliveryTime">-</span></p>
                 </div>
-                <div style="display:flex; gap:12px;">
-                    <button id="orderBtn" class="btn"><i class="fas fa-shopping-cart"></i> Place Order</button>
-                    <button id="clearBtn" class="btn btn-secondary"><i class="fas fa-eraser"></i> Clear</button>
+                
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button id="orderBtn" class="btn btn-success"><i class="fas fa-shopping-cart"></i> Place Order</button>
+                    <button id="clearBtn" class="btn btn-secondary"><i class="fas fa-eraser"></i> Clear Form</button>
                 </div>
             </div>
         `;
@@ -594,18 +534,11 @@
             document.getElementById('platformSelect').value=el.dataset.platform;
             updatePlatform();
         }));
-        document.getElementById("platformSelect").addEventListener("change",updatePlatform);
-        document.getElementById("serviceSelect").addEventListener("change",showServiceDetail);
-        document.getElementById("quantity").addEventListener("input",calcTotal);
-        document.getElementById("orderBtn").addEventListener("click",placeOrder);
-        document.getElementById("clearBtn").addEventListener("click",()=>{
-            selectedService=null;
-            document.getElementById("serviceDetail").style.display="none";
-            document.getElementById("summary").style.display="none";
-            document.getElementById("extraFields").innerHTML="";
-            document.getElementById("quantity").value="";
-            document.getElementById("serviceSelect").value="";
-        });
+        document.getElementById("platformSelect").addEventListener("change", updatePlatform);
+        document.getElementById("serviceSelect").addEventListener("change", showServiceDetails);
+        document.getElementById("quantity").addEventListener("input", calculateTotal);
+        document.getElementById("orderBtn").addEventListener("click", placeOrder);
+        document.getElementById("clearBtn").addEventListener("click", clearForm);
         updatePlatform();
     }
     
@@ -617,7 +550,6 @@
         
         if(platform && platformCategories[platform]) {
             categoryDiv.style.display = "block";
-            // Get platform-specific categories
             let platformCats = ["All", ...platformCategories[platform]];
             catBtns.innerHTML = platformCats.map(c => 
                 `<div class="category-btn ${selectedCategory === c ? 'active' : ''}" data-cat="${c}">${c}</div>`
@@ -629,8 +561,6 @@
                 selectedCategory = btn.dataset.cat;
                 updateServiceDropdown();
             }));
-            
-            // Reset category to All when platform changes
             selectedCategory = "All";
         } else {
             categoryDiv.style.display = "none";
@@ -648,65 +578,173 @@
         }
         
         let select = document.getElementById("serviceSelect");
-        select.innerHTML = '<option value="">Select a service</option>';
+        select.innerHTML = '<option value="">-- Select Service --</option>';
         filtered.forEach(s => {
-            let price = s.Per1k ? formatPrice(s.Rate/1000) : formatPrice(s.Rate);
-            select.innerHTML += `<option value="${s.ServiceId}">${s.Name} - ${price}${s.Per1k ? '/1000' : '/unit'}</option>`;
+            select.innerHTML += `<option value="${s.ServiceId}">${s.Name}</option>`;
         });
         selectedService = null;
-        document.getElementById("serviceDetail").style.display = "none";
-        document.getElementById("summary").style.display = "none";
+        document.getElementById("serviceDescriptionBox").style.display = "none";
+        document.getElementById("orderSummary").style.display = "none";
+        document.getElementById("conditionalFields").innerHTML = "";
     }
     
-    function showServiceDetail() {
-        let id = document.getElementById("serviceSelect").value;
-        if(!id) return;
-        selectedService = allServices.find(s => s.ServiceId === id);
-        let price = selectedService.Per1k ? formatPrice(selectedService.Rate/1000) : formatPrice(selectedService.Rate);
-        document.getElementById("serviceDetail").innerHTML = `
-            <div style="background:rgba(0,0,0,0.3); border-radius:20px; padding:18px; margin:15px 0;">
-                <h4>${selectedService.Name}</h4>
-                <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${price} ${selectedService.Per1k ? '(per 1000)' : '(per unit)'}</p>
-                <p><i class="fas fa-chart-line"></i> <strong>Min Order:</strong> ${selectedService.MinQty} | <strong>Max Order:</strong> ${selectedService.MaxQty}</p>
-                <p><i class="fas fa-clock"></i> <strong>Delivery:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
-                <p><i class="fas fa-info-circle"></i> ${selectedService.Description || 'High quality service'}</p>
-            </div>
+    function showServiceDetails() {
+        let serviceId = document.getElementById("serviceSelect").value;
+        if(!serviceId) return;
+        selectedService = allServices.find(s => s.ServiceId === serviceId);
+        if(!selectedService) return;
+        
+        let rateDisplay = selectedService.Per1k ? 
+            `${formatPrice(selectedService.Rate)} per 1000 (${formatPrice(selectedService.Rate/1000)} per unit)` : 
+            `${formatPrice(selectedService.Rate)} per unit`;
+        
+        document.getElementById("serviceDescriptionBox").innerHTML = `
+            <h4>${selectedService.Name}</h4>
+            <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${rateDisplay}</p>
+            <p><i class="fas fa-chart-line"></i> <strong>Min Order:</strong> ${selectedService.MinQty} | <strong>Max Order:</strong> ${selectedService.MaxQty}</p>
+            <p><i class="fas fa-clock"></i> <strong>Delivery Time:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
+            <p><i class="fas fa-info-circle"></i> ${selectedService.Description || 'High quality service'}</p>
         `;
-        document.getElementById("serviceDetail").style.display = "block";
-        let extra = '';
-        if(selectedService.IsAccount) extra = '<div><label>Email Address</label><input type="email" id="emailField" placeholder="Enter email for account"></div>';
-        else extra = '<div><label>Profile/Post Link</label><input type="url" id="linkField" placeholder="Enter your profile/post link"></div>';
-        if(selectedService.CustomComments) extra += '<div><label>Custom Comments</label><textarea id="commentField" placeholder="Enter comments separated by commas"></textarea></div>';
-        document.getElementById("extraFields").innerHTML = extra;
-        calcTotal();
+        document.getElementById("serviceDescriptionBox").style.display = "block";
+        document.getElementById("deliveryTime").innerHTML = selectedService.DeliveryTime || '1-2 hours';
+        
+        // Build conditional fields
+        let conditionalHtml = "";
+        
+        if(selectedService.IsAccount === true || selectedService.IsAccount === "TRUE") {
+            conditionalHtml += `<div class="form-row"><div><label class="required">Email Address</label><input type="email" id="emailField" placeholder="Enter email for account"></div></div>`;
+        } else if(selectedService.RequireLink === true || selectedService.RequireLink === "TRUE") {
+            conditionalHtml += `<div class="form-row"><div><label class="required">Profile/Post Link</label><input type="url" id="linkField" placeholder="Enter your profile/post link"></div></div>`;
+        }
+        
+        if(selectedService.TargetCountry === true || selectedService.TargetCountry === "TRUE") {
+            conditionalHtml += `<div class="form-row"><div><label class="required">Target Country</label><select id="countrySelect">${countries.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div></div>`;
+        }
+        
+        if(selectedService.CustomComments === true || selectedService.CustomComments === "TRUE") {
+            conditionalHtml += `<div class="form-row"><div><label class="required">Custom Comments</label><textarea id="commentsField" placeholder="Enter comments separated by commas (e.g., Great!, Awesome, Love it)" rows="3"></textarea></div></div>`;
+        }
+        
+        document.getElementById("conditionalFields").innerHTML = conditionalHtml;
+        calculateTotal();
     }
     
-    function calcTotal() {
+    function calculateTotal() {
         if(!selectedService) return;
         let qty = parseInt(document.getElementById("quantity").value) || 0;
-        if(qty < selectedService.MinQty) { document.getElementById("summary").style.display = "none"; return; }
-        let totalPKR = selectedService.Per1k ? (selectedService.Rate/1000) * qty : selectedService.Rate * qty;
-        let unitPKR = selectedService.Per1k ? selectedService.Rate/1000 : selectedService.Rate;
-        document.getElementById("priceUnit").innerHTML = formatPrice(unitPKR);
-        document.getElementById("totalAmt").innerHTML = formatPrice(totalPKR);
-        document.getElementById("summary").style.display = "block";
-        selectedService.calcTotal = totalPKR;
+        let minQty = parseInt(selectedService.MinQty) || 1;
+        let maxQty = parseInt(selectedService.MaxQty) || 10000;
+        let warningDiv = document.getElementById("quantityWarning");
+        
+        if(qty > 0 && qty < minQty) {
+            warningDiv.innerHTML = `⚠️ Minimum quantity is ${minQty}`;
+            warningDiv.style.display = "block";
+            document.getElementById("orderSummary").style.display = "none";
+            return;
+        } else if(qty > maxQty) {
+            warningDiv.innerHTML = `⚠️ Maximum quantity is ${maxQty}`;
+            warningDiv.style.display = "block";
+            document.getElementById("orderSummary").style.display = "none";
+            return;
+        } else {
+            warningDiv.style.display = "none";
+        }
+        
+        if(qty === 0) {
+            document.getElementById("orderSummary").style.display = "none";
+            return;
+        }
+        
+        let totalPKR, pricePerUnitPKR;
+        if(selectedService.Per1k === true || selectedService.Per1k === "TRUE") {
+            pricePerUnitPKR = selectedService.Rate / 1000;
+            totalPKR = pricePerUnitPKR * qty;
+        } else {
+            pricePerUnitPKR = selectedService.Rate;
+            totalPKR = selectedService.Rate * qty;
+        }
+        
+        document.getElementById("pricePerUnit").innerHTML = formatPrice(pricePerUnitPKR);
+        document.getElementById("totalAmount").innerHTML = formatPrice(totalPKR);
+        document.getElementById("orderSummary").style.display = "block";
+        selectedService.calculatedTotal = totalPKR;
     }
     
     async function placeOrder() {
-        if(!selectedService){ showToast("Select a service first",true); return; }
+        if(!selectedService) { showToast("Please select a service first", true); return; }
+        
         let qty = parseInt(document.getElementById("quantity").value);
-        if(!qty || qty < selectedService.MinQty){ showToast(`Minimum quantity: ${selectedService.MinQty}`,true); return; }
-        if(currentUser.wallet < selectedService.calcTotal){ showToast(`Insufficient balance! Need ${formatPrice(selectedService.calcTotal)}`,true); return; }
-        let extra = {};
-        if(document.getElementById("emailField")) extra.email = document.getElementById("emailField").value;
-        if(document.getElementById("linkField")) extra.link = document.getElementById("linkField").value;
-        if(document.getElementById("commentField")) extra.comments = document.getElementById("commentField").value;
-        let res = await api("createOrder", {serviceId: selectedService.ServiceId, quantity: qty, totalAmount: selectedService.calcTotal, extraFields: extra});
-        if(res.success){
-            document.getElementById("successMessage").innerHTML = `Order ID: ${res.orderId}<br>Service: ${selectedService.Name}<br>Quantity: ${qty}<br>Amount: ${formatPrice(selectedService.calcTotal)}`;
-            document.getElementById("successModal").style.display = "block";
-        } else showToast(res.error, true);
+        let minQty = parseInt(selectedService.MinQty) || 1;
+        let maxQty = parseInt(selectedService.MaxQty) || 10000;
+        
+        if(!qty || qty < minQty) { showToast(`Minimum quantity is ${minQty}`, true); return; }
+        if(qty > maxQty) { showToast(`Maximum quantity is ${maxQty}`, true); return; }
+        
+        // Validate conditional fields
+        if((selectedService.IsAccount === true || selectedService.IsAccount === "TRUE") && !document.getElementById("emailField")?.value) {
+            showToast("Please enter email address", true); return;
+        }
+        if((selectedService.RequireLink === true || selectedService.RequireLink === "TRUE") && !document.getElementById("linkField")?.value) {
+            showToast("Please enter profile/post link", true); return;
+        }
+        if((selectedService.CustomComments === true || selectedService.CustomComments === "TRUE") && !document.getElementById("commentsField")?.value) {
+            showToast("Please enter custom comments", true); return;
+        }
+        
+        if(currentUser.wallet < selectedService.calculatedTotal) {
+            showToast(`Insufficient balance! Need ${formatPrice(selectedService.calculatedTotal)}`, true);
+            return;
+        }
+        
+        let extraFields = {};
+        if(document.getElementById("emailField")) extraFields.email = document.getElementById("emailField").value;
+        if(document.getElementById("linkField")) extraFields.link = document.getElementById("linkField").value;
+        if(document.getElementById("commentsField")) extraFields.comments = document.getElementById("commentsField").value;
+        if(document.getElementById("countrySelect")) extraFields.country = document.getElementById("countrySelect").value;
+        
+        showToast("Processing order...");
+        let res = await api("createOrder", {
+            serviceId: selectedService.ServiceId,
+            quantity: qty,
+            totalAmount: selectedService.calculatedTotal,
+            extraFields: extraFields
+        });
+        
+        if(res.success) {
+            // Show success modal with full order details
+            let orderDate = new Date().toLocaleString();
+            document.getElementById("orderDetails").innerHTML = `
+                <p><strong>🆔 Order ID:</strong> ${res.orderId}</p>
+                <p><strong>📱 Platform:</strong> ${selectedService.Platform}</p>
+                <p><strong>🔢 Service ID:</strong> ${selectedService.ServiceId}</p>
+                <p><strong>📌 Service Name:</strong> ${selectedService.Name}</p>
+                <p><strong>📝 Description:</strong> ${selectedService.Description || 'N/A'}</p>
+                <p><strong>📦 Quantity:</strong> ${qty}</p>
+                <p><strong>💰 Amount:</strong> ${formatPrice(selectedService.calculatedTotal)}</p>
+                <p><strong>📧 Email/Link:</strong> ${extraFields.email || extraFields.link || 'N/A'}</p>
+                <p><strong>📅 Date & Time:</strong> ${orderDate}</p>
+                <p><strong>⏱️ Delivery Time:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
+                <p><strong>📊 Status:</strong> Pending</p>
+            `;
+            document.getElementById("orderSuccessModal").style.display = "block";
+        } else {
+            showToast(res.error || "Order failed", true);
+        }
+    }
+    
+    function clearForm() {
+        document.getElementById("platformSelect").value = "";
+        document.getElementById("serviceSelect").innerHTML = '<option value="">-- Select Service --</option>';
+        document.getElementById("quantity").value = "";
+        document.getElementById("serviceDescriptionBox").style.display = "none";
+        document.getElementById("orderSummary").style.display = "none";
+        document.getElementById("conditionalFields").innerHTML = "";
+        document.getElementById("categoryDiv").style.display = "none";
+        document.getElementById("quantityWarning").style.display = "none";
+        selectedService = null;
+        selectedCategory = "All";
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        showToast("Form cleared");
     }
     
     async function renderServices() {
@@ -714,7 +752,7 @@
         let platformIconsHtml = `<div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>` + 
             platforms.map(p => `<div class="platform-icon-item" data-platform="${p.name}" style="border-color:${p.color}20"><i class="${p.icon}" style="color:${p.color}"></i><span>${p.name}</span></div>`).join('');
         
-        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatforms">${platformIconsHtml}</div><input id="searchSvc" placeholder="🔍 Search services..." style="margin-top:10px;"></div><div id="svcGrid" class="cards-grid"></div>`;
+        let html = `<div class="glass-card"><div class="platform-icons" id="servicePlatforms">${platformIconsHtml}</div><input id="searchSvc" placeholder="🔍 Search services..."></div><div id="svcGrid" class="cards-grid"></div>`;
         document.getElementById("pageContent").innerHTML = html;
         document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(el => el.addEventListener('click', () => {
             document.querySelectorAll('#servicePlatforms .platform-icon-item').forEach(i => i.classList.remove('active'));
@@ -733,13 +771,8 @@
             let price = s.Per1k ? formatPrice(s.Rate/1000) : formatPrice(s.Rate);
             let platformIcon = platforms.find(p => p.name === s.Platform) || {icon: "fab fa-globe", color: "#fff"};
             return `<div class="service-card" onclick="navigateTo('home');setTimeout(()=>selectServiceByPlatform('${s.Platform}','${s.ServiceId}'),100)">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                    <i class="${platformIcon.icon}" style="font-size:28px; color:${platformIcon.color}"></i>
-                    <strong style="font-size:16px;">${s.Name}</strong>
-                </div>
-                <hr style="margin:10px 0; border-color:#1e293b;">
-                <p><i class="fas fa-tag"></i> Price: ${price} ${s.Per1k ? '/1000' : '/unit'}</p>
-                <p><i class="fas fa-chart-line"></i> Min: ${s.MinQty} | Max: ${s.MaxQty}</p>
+                <div style="display:flex; align-items:center; gap:12px;"><i class="${platformIcon.icon}" style="font-size:28px; color:${platformIcon.color}"></i><strong>${s.Name}</strong></div>
+                <hr><p>Price: ${price} ${s.Per1k ? '/1000' : '/unit'}</p><p>Min: ${s.MinQty}</p>
                 <button class="btn" style="margin-top:12px; width:100%;" onclick="event.stopPropagation();navigateTo('home');setTimeout(()=>selectServiceByPlatform('${s.Platform}','${s.ServiceId}'),100)">Order Now</button>
             </div>`;
         }).join('');
@@ -752,7 +785,7 @@
             updatePlatform();
             setTimeout(() => {
                 document.getElementById("serviceSelect").value = serviceId;
-                showServiceDetail();
+                showServiceDetails();
             }, 100);
         }
     }
@@ -761,33 +794,33 @@
         let stats = await api("userStats");
         let orders = await api("getUserOrders");
         document.getElementById("pageContent").innerHTML = `
-            <div class="stats-grid">
-                <div class="stat-card"><i class="fas fa-wallet"></i><h3>${formatPrice(currentUser.wallet)}</h3><p>Wallet Balance</p></div>
-                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>${stats.totalOrders||0}</h3><p>Total Orders</p></div>
-                <div class="stat-card"><i class="fas fa-clock"></i><h3>${stats.pendingOrders||0}</h3><p>Pending Orders</p></div>
+            <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px;">
+                <div class="glass-card"><i class="fas fa-wallet"></i><h3>${getCurrencyFlag()} ${formatPrice(currentUser.wallet)}</h3><p>Balance</p></div>
+                <div class="glass-card"><i class="fas fa-shopping-cart"></i><h3>${stats.totalOrders||0}</h3><p>Orders</p></div>
+                <div class="glass-card"><i class="fas fa-clock"></i><h3>${stats.pendingOrders||0}</h3><p>Pending</p></div>
             </div>
-            <div class="glass-card"><h3><i class="fas fa-history"></i> Order History</h3><div class="order-table">${orders.orders?.length ? `<table><thead><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr></thead><tbody>${orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatPrice(o.amount)}</td><td><span class="badge">${o.status}</span></td></tr>`).join('')}</tbody></table>` : '<p>No orders yet</p>'}</div></div>`;
+            <div class="glass-card"><h3>Order History</h3><div class="order-table">${orders.orders?.length ? `<table><th>ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th>${orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatPrice(o.amount)}</td><td>${o.status}</td></tr>`).join('')}</table>` : '<p>No orders</p>'}</div></div>`;
     }
     
     async function renderAddFunds() {
         await loadPayments();
-        let methodsHtml = paymentMethods.map(m => `<div class="payment-card" data-id="${m.Id}" data-name="${m.Name}" data-account="${m.Account}" data-holder="${m.Holder}"><div style="display:flex; align-items:center; gap:15px;"><i class="${m.Icon||'fas fa-credit-card'}" style="font-size:28px;"></i><div><strong>${m.Name}</strong><br>Account: ${m.Account}<br>Holder: ${m.Holder}</div></div></div>`).join('');
-        let html = `<div class="glass-card"><h3><i class="fas fa-university"></i> Add Funds</h3><div id="paymentList">${methodsHtml||'<p>No payment methods available</p>'}</div><button id="sentBtn" class="btn btn-success" style="width:100%; margin-top:15px;" disabled>I Have Sent Payment</button><div id="proofDiv" style="display:none; margin-top:20px;"><div class="form-row"><input type="number" id="amtFund" placeholder="Amount (PKR)"><input id="transId" placeholder="Transaction ID"></div><input type="file" id="screenshotFile"><div style="display:flex; gap:10px; margin-top:15px;"><button id="submitProofBtn" class="btn">Submit</button><button id="cancelProof" class="btn btn-secondary">Cancel</button></div></div></div>`;
+        let methodsHtml = paymentMethods.map(m => `<div class="payment-card" data-id="${m.Id}" data-name="${m.Name}" data-account="${m.Account}" data-holder="${m.Holder}" style="background:rgba(30,41,59,0.5); border-radius:20px; padding:18px; margin:12px 0; cursor:pointer;"><div style="display:flex; align-items:center; gap:15px;"><i class="${m.Icon||'fas fa-credit-card'}" style="font-size:28px;"></i><div><strong>${m.Name}</strong><br>Account: ${m.Account}<br>Holder: ${m.Holder}</div></div></div>`).join('');
+        let html = `<div class="glass-card"><h3>Add Funds</h3><div id="paymentList">${methodsHtml||'<p>No payment methods</p>'}</div><button id="sentBtn" class="btn btn-success" style="width:100%; margin-top:15px;" disabled>I Have Sent Payment</button><div id="proofDiv" style="display:none; margin-top:20px;"><input type="number" id="amtFund" placeholder="Amount (PKR)"><input id="transId" placeholder="Transaction ID"><input type="file" id="screenshotFile"><button id="submitProofBtn" class="btn" style="margin-top:10px;">Submit</button><button id="cancelProof" class="btn btn-secondary">Cancel</button></div></div>`;
         document.getElementById("pageContent").innerHTML = html;
         
         let selected = null;
         document.querySelectorAll('.payment-card').forEach(c => c.addEventListener('click', () => {
-            document.querySelectorAll('.payment-card').forEach(p => p.style.borderColor = 'transparent');
-            c.style.borderColor = '#10b981';
+            document.querySelectorAll('.payment-card').forEach(p => p.style.border = '2px solid transparent');
+            c.style.border = '2px solid #10b981';
             selected = {id: c.dataset.id, name: c.dataset.name, account: c.dataset.account, holder: c.dataset.holder};
             document.getElementById("sentBtn").disabled = false;
         }));
-        document.getElementById("sentBtn").onclick = () => { if(selected) document.getElementById("proofDiv").style.display = "block"; else showToast("Select a payment method", true); };
+        document.getElementById("sentBtn").onclick = () => { if(selected) document.getElementById("proofDiv").style.display = "block"; else showToast("Select payment method", true); };
         document.getElementById("cancelProof").onclick = () => { document.getElementById("proofDiv").style.display = "none"; document.getElementById("sentBtn").disabled = false; };
         document.getElementById("submitProofBtn").onclick = async () => {
             let amt = document.getElementById("amtFund").value, tid = document.getElementById("transId").value, file = document.getElementById("screenshotFile").files[0];
-            if(!amt || !tid || !file){ showToast("Please fill all fields and upload screenshot", true); return; }
-            if(!selected){ showToast("Select a payment method", true); return; }
+            if(!amt || !tid || !file) { showToast("Fill all fields", true); return; }
+            if(!selected) { showToast("Select payment method", true); return; }
             let reader = new FileReader();
             reader.onload = async () => {
                 let res = await api("addFundsRequest", {amount: amt, transactionId: tid, email: currentUser.gmail, screenshotBase64: reader.result, paymentMethod: selected.name});
@@ -801,20 +834,18 @@
     async function renderJoinUs() {
         await loadJoinStatus();
         let status = joinApp?.status || 'none';
-        let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>`;
+        let html = `<div class="glass-card"><h2>Join Us & Earn</h2>`;
         if(status === 'none'){
-            html += `<div class="category-section"><h3>📝 Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName||''}"><input id="appUser" placeholder="Username" value="${currentUser?.username||''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhats" placeholder="WhatsApp Number"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail||''}"><select id="appType"><option>Commission Based</option><option>Salary Based</option></select></div><div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea><input type="file" id="appPhoto" accept="image/*"><button id="submitApp" class="btn btn-success" style="margin-top:15px;">Submit Application</button></div>`;
+            html += `<div><h3>Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName||''}"><input id="appUser" placeholder="Username" value="${currentUser?.username||''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone"><input id="appWhats" placeholder="WhatsApp"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail||''}"><select id="appType"><option>Commission</option><option>Salary</option></select></div><div class="form-row"><select id="appHours"><option>4h</option><option>5h</option><option>6h</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About you" rows="3"></textarea><input type="file" id="appPhoto"><button id="submitApp" class="btn btn-success">Submit</button></div>`;
         } else if(status === 'pending'){
-            html += `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin. You will be notified once approved.</div>`;
+            html += `<div class="info-note">⏳ Application Pending Review</div>`;
         } else if(status === 'approved'){
-            html += `<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${formatPrice(joinApp.salary||0)} per month<br>Welcome to the team!</div>
-            <div class="join-tabs"><button class="join-tab-btn active" data-tab="att">📋 Daily Attendance</button><button class="join-tab-btn" data-tab="job">💼 Job Details</button><button class="join-tab-btn" data-tab="hist">📜 History</button></div>
-            <div id="attTab" class="join-tab-content active"><div class="category-section"><h3>Mark Attendance</h3><div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser.fullName}"><input id="attEmail" placeholder="Email" value="${currentUser.gmail}"></div><div class="form-row"><input id="attPhone" placeholder="Phone Number"><input type="time" id="attLogin" placeholder="Login Time"></div><div class="form-row"><input type="number" id="attHours" placeholder="Working Hours"><input type="time" id="attLogout" placeholder="Logout Time"></div><textarea id="attWork" placeholder="Work Detail (What did you work on today?)" rows="3"></textarea><button id="submitAtt" class="btn btn-success">✅ Mark Attendance</button></div></div>
-            <div id="jobTab" class="join-tab-content"><div class="category-section"><h3>Submit Job Details</h3><div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrder" placeholder="Order ID (if placed)"></div><div class="form-row"><input id="jobPlatform" placeholder="Platform"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div><textarea id="jobDetail" placeholder="Full Details about the work done" rows="3"></textarea><button id="submitJob" class="btn btn-success">📌 Submit Job</button></div></div>
-            <div id="histTab" class="join-tab-content"><div id="historyData" class="category-section">Loading...</div></div>`;
-        } else if(status === 'rejected'){
-            html += `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest.</div>`;
-        }
+            html += `<div class="success-note">✅ Application Approved! Salary: ${formatPrice(joinApp.salary||0)}/month</div>
+            <div class="join-tabs"><button class="join-tab-btn active" data-tab="att">Attendance</button><button class="join-tab-btn" data-tab="job">Jobs</button><button class="join-tab-btn" data-tab="hist">History</button></div>
+            <div id="attTab" class="join-tab-content active"><h3>Daily Attendance</h3><div class="form-row"><input id="attName" value="${currentUser.fullName}"><input id="attEmail" value="${currentUser.gmail}"></div><div class="form-row"><input id="attPhone" placeholder="Phone"><input type="time" id="attLogin"></div><div class="form-row"><input type="number" id="attHours" placeholder="Hours"><input type="time" id="attLogout"></div><textarea id="attWork" placeholder="Work detail"></textarea><button id="submitAtt" class="btn btn-success">Mark Attendance</button></div>
+            <div id="jobTab" class="join-tab-content"><h3>Job Details</h3><div class="form-row"><input id="jobName" placeholder="Job Name"><input id="jobOrder" placeholder="Order ID"></div><div class="form-row"><input id="jobPlatform" placeholder="Platform"><input id="jobAmount" placeholder="Amount" type="number"></div><textarea id="jobDetail" placeholder="Details"></textarea><button id="submitJob" class="btn btn-success">Submit Job</button></div>
+            <div id="histTab" class="join-tab-content"><div id="historyData">Loading...</div></div>`;
+        } else { html += `<div class="info-note">❌ Application Rejected</div>`; }
         html += `</div>`;
         document.getElementById("pageContent").innerHTML = html;
         
@@ -823,76 +854,42 @@
                 let file = document.getElementById("appPhoto").files[0];
                 let reader = new FileReader();
                 reader.onload = async () => {
-                    let res = await api("submitJoinRequest", {
-                        name: document.getElementById("appName").value,
-                        username: document.getElementById("appUser").value,
-                        phone: document.getElementById("appPhone").value,
-                        whatsapp: document.getElementById("appWhats").value,
-                        email: document.getElementById("appEmail").value,
-                        salaryType: document.getElementById("appType").value,
-                        hours: document.getElementById("appHours").value,
-                        shift: document.getElementById("appShift").value,
-                        about: document.getElementById("appAbout").value,
-                        photo: reader.result
-                    });
+                    let res = await api("submitJoinRequest", {name: document.getElementById("appName").value, username: document.getElementById("appUser").value, phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhats").value, email: document.getElementById("appEmail").value, salaryType: document.getElementById("appType").value, hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value, about: document.getElementById("appAbout").value, photo: reader.result});
                     showToast(res.message);
                     if(res.success) setTimeout(() => renderJoinUs(), 1500);
                 };
                 if(file) reader.readAsDataURL(file);
-                else showToast("Please upload a photo", true);
+                else showToast("Upload photo", true);
             };
         }
         if(document.getElementById("submitAtt")){
             document.getElementById("submitAtt").onclick = async () => {
-                let res = await api("submitAttendance", {
-                    name: document.getElementById("attName").value,
-                    email: document.getElementById("attEmail").value,
-                    phone: document.getElementById("attPhone").value,
-                    loginTime: document.getElementById("attLogin").value,
-                    workingHours: document.getElementById("attHours").value,
-                    logoutTime: document.getElementById("attLogout").value,
-                    workDetail: document.getElementById("attWork").value
-                });
+                let res = await api("submitAttendance", {name: document.getElementById("attName").value, email: document.getElementById("attEmail").value, phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLogin").value, workingHours: document.getElementById("attHours").value, logoutTime: document.getElementById("attLogout").value, workDetail: document.getElementById("attWork").value});
                 showToast(res.message);
             };
         }
         if(document.getElementById("submitJob")){
             document.getElementById("submitJob").onclick = async () => {
-                let res = await api("submitJobDetail", {
-                    jobName: document.getElementById("jobName").value,
-                    orderId: document.getElementById("jobOrder").value,
-                    platform: document.getElementById("jobPlatform").value,
-                    amount: document.getElementById("jobAmount").value,
-                    details: document.getElementById("jobDetail").value
-                });
+                let res = await api("submitJobDetail", {jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrder").value, platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value, details: document.getElementById("jobDetail").value});
                 showToast(res.message);
             };
         }
         if(document.getElementById("historyData") && status === 'approved'){
             let att = await api("getMyAttendance");
             let jobs = await api("getMyJobs");
-            document.getElementById("historyData").innerHTML = `
-                <h4>📊 Attendance Records</h4>
-                ${att.attendance?.length ? `<div class="order-table"><table><thead><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr></thead><tbody>${att.attendance.map(a => `<tr><td>${a.date}</td><td>${a.loginTime}</td><td>${a.logoutTime}</td><td>${a.workingHours}</td></tr>`).join('')}</tbody></table></div>` : '<p>No attendance records</p>'}
-                <h4 style="margin-top:20px;">📌 Job Records</h4>
-                ${jobs.jobs?.length ? `<div class="order-table"><table><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></tr></thead><tbody>${jobs.jobs.map(j => `<tr><td>${j.date}</td><td>${j.jobName}</td><td>${j.orderId || '-'}</td><td>₨ ${j.amount}</td></tr>`).join('')}</tbody></table></div>` : '<p>No job records</p>'}
-            `;
+            document.getElementById("historyData").innerHTML = `<h4>Attendance</h4>${att.attendance?.length ? `<table><tr><th>Date</th><th>Login</th><th>Logout</th><th>Hours</th></tr>${att.attendance.map(a => `<tr><td>${a.date}</td><td>${a.loginTime}</td><td>${a.logoutTime}</td><td>${a.workingHours}</td></tr>`).join('')}</table>` : '<p>No records</p>'}<h4>Jobs</h4>${jobs.jobs?.length ? `<table><tr><th>Date</th><th>Job</th><th>Order</th><th>Amount</th></tr>${jobs.jobs.map(j => `<tr><td>${j.date}</td><td>${j.jobName}</td><td>${j.orderId||'-'}</td><td>${j.amount}</td></tr>`).join('')}</table>` : '<p>No records</p>'}`;
         }
         document.querySelectorAll('.join-tab-btn').forEach(btn => btn.addEventListener('click', () => {
             document.querySelectorAll('.join-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.join-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.join-tab-content').forEach(c => c.style.display = 'none');
             btn.classList.add('active');
-            document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
+            document.getElementById(btn.dataset.tab + 'Tab').style.display = 'block';
         }));
     }
     
     async function renderHelp() {
-        document.getElementById("pageContent").innerHTML = `
-            <div class="glass-card"><h3><i class="fas fa-headset"></i> Help Center</h3><input id="helpEmail" placeholder="Email" value="${currentUser.gmail}"><input id="helpPhone" placeholder="Phone/WhatsApp"><textarea id="helpMsg" placeholder="Your Message" rows="4"></textarea><button id="sendHelp" class="btn">Send Message</button></div>`;
-        document.getElementById("sendHelp").onclick = async () => {
-            let res = await api("submitHelp", {email: document.getElementById("helpEmail").value, phone: document.getElementById("helpPhone").value, message: document.getElementById("helpMsg").value});
-            showToast(res.message);
-        };
+        document.getElementById("pageContent").innerHTML = `<div class="glass-card"><h3>Help Center</h3><input id="helpEmail" placeholder="Email" value="${currentUser.gmail}"><input id="helpPhone" placeholder="Phone"><textarea id="helpMsg" placeholder="Your message" rows="4"></textarea><button id="sendHelp" class="btn">Send</button></div>`;
+        document.getElementById("sendHelp").onclick = async () => { let res = await api("submitHelp", {email: document.getElementById("helpEmail").value, phone: document.getElementById("helpPhone").value, message: document.getElementById("helpMsg").value}); showToast(res.message); };
     }
     
     function navigate(page){
