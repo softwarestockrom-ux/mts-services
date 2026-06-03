@@ -34,29 +34,35 @@
         .currency-btn { background: #1e293b; border: 1px solid #334155; padding: 7px 14px; border-radius: 30px; cursor: pointer; transition: all 0.2s; color: #94a3b8; font-size: 13px; }
         .currency-btn.active { background: #2b6ef0; border-color: #60a5fa; color: white; }
 
+        /* Platform icons */
         .platform-icons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; margin-bottom: 12px; padding: 4px 0; }
         .platform-icon-item { background: rgba(30, 41, 59, 0.7); border-radius: 50px; padding: 8px 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 7px; border: 1px solid transparent; font-size: 13px; }
         .platform-icon-item:hover { background: rgba(43,110,240,0.3); border-color: #3b82f6; }
         .platform-icon-item.active { background: #2b6ef0; border-color: #60a5fa; }
 
+        /* Step system */
         .step-block { margin: 14px 0; animation: fadeSlide 0.25s ease; }
         @keyframes fadeSlide { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .step-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
         .step-num { background: linear-gradient(135deg, #2b6ef0, #1a4fc1); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
         .step-title { font-size: 13px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.6px; }
 
+        /* Category chips */
         .cat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
         .cat-chip { background: rgba(30,41,59,0.9); border: 1px solid #334155; padding: 7px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; color: #cbd5e1; }
         .cat-chip:hover { border-color: #3b82f6; color: white; }
         .cat-chip.active { background: #2b6ef0; border-color: #60a5fa; color: white; }
 
+        /* Service desc box */
         .svc-desc { background: rgba(43,110,240,0.07); border: 1px solid rgba(43,110,240,0.3); border-radius: 18px; padding: 16px 18px; margin: 4px 0 10px; }
         .svc-desc-name { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
         .svc-desc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 10px; }
         .svc-desc-item .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
         .svc-desc-item .val { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-top: 1px; }
+        .svc-desc-text { font-size: 13px; color: #94a3b8; line-height: 1.65; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 10px; margin-top: 4px; }
         .price-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); border-radius: 30px; padding: 4px 12px; font-size: 13px; font-weight: 700; color: #34d399; }
 
+        /* Order summary */
         .order-summary { background: linear-gradient(135deg, rgba(0,200,100,0.07), rgba(43,110,240,0.07)); border: 1px solid rgba(52,211,153,0.3); border-radius: 20px; padding: 18px 20px; margin-top: 14px; }
         .order-summary h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 12px; }
         .sum-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; gap: 10px; }
@@ -65,241 +71,887 @@
         .sum-row .v { color: #e2e8f0; text-align: right; word-break: break-all; }
         .sum-row:last-child .v { color: #34d399; }
 
+        /* Payment methods */
         .pm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 10px 0; }
         .pm-card { background: rgba(30,41,59,0.7); border: 2px solid #2d3a5e; border-radius: 18px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .pm-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
         .pm-card.selected { border-color: #2b6ef0; background: rgba(43,110,240,0.18); }
+        .pm-card .pm-icon { font-size: 28px; margin-bottom: 6px; }
+        .pm-card .pm-name { font-weight: 700; font-size: 14px; }
+        .pm-card .pm-num { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+        .pm-card .pm-holder { font-size: 11px; color: #64748b; }
 
+        /* Modal */
         .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10,18,40,0.97); backdrop-filter: blur(24px); border-radius: 28px; padding: 28px; width: 92%; max-width: 500px; z-index: 1100; display: none; border: 1px solid rgba(52,211,153,0.4); max-height: 88vh; overflow-y: auto; }
-        .success-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+        .success-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; text-align: left; }
         .success-item { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; }
-        .success-item .s-lbl { font-size: 10px; color: #64748b; text-transform: uppercase; }
+        .success-item .s-lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
         .success-item .s-val { font-size: 13px; font-weight: 600; color: #e2e8f0; word-break: break-all; }
+
         .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; padding: 12px 20px; border-radius: 40px; z-index: 9999; border-left: 4px solid #10b981; max-width: 360px; font-size: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
         .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
         .form-row > * { flex: 1; min-width: 140px; }
         .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; margin-top: 16px; }
-        .service-card { cursor: pointer; }
+        .service-card { cursor: pointer; transition: transform 0.2s; }
+        .service-card:hover { transform: translateY(-4px); }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
-        .info-note { background: rgba(245,158,11,0.15); border-left: 4px solid #f59e0b; padding: 14px; border-radius: 12px; margin: 12px 0; }
+        .info-note { background: rgba(245,158,11,0.15); border-left: 4px solid #f59e0b; padding: 14px; border-radius: 12px; margin: 12px 0; font-size: 14px; }
+        .success-note { background: rgba(16,185,129,0.15); border-left: 4px solid #10b981; padding: 14px; border-radius: 12px; margin: 12px 0; font-size: 14px; }
         .join-tabs { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
-        .join-tab-btn { background: #1e293b; padding: 10px 20px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 13px; color: white; }
+        .join-tab-btn { background: #1e293b; padding: 10px 20px; border-radius: 40px; cursor: pointer; transition: all 0.2s; font-weight: 600; font-size: 13px; border: none; color: white; }
         .join-tab-btn.active { background: #2b6ef0; }
-        .join-tab-content { display: none; }
+        .join-tab-content { display: none; padding-top: 8px; }
         .join-tab-content.active { display: block; }
         .history-table { overflow-x: auto; margin-top: 12px; }
         .history-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .history-table th, .history-table td { padding: 9px 12px; text-align: left; border-bottom: 1px solid #2d3a5e; }
+        .history-table th { background: rgba(43,110,240,0.25); }
         .loading-spinner { text-align: center; padding: 60px; }
         .loading-spinner i { font-size: 44px; animation: spin 1s linear infinite; color: #3b82f6; }
         @keyframes spin { to { transform: rotate(360deg); } }
         hr.divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 12px 0; }
-        @media (max-width: 600px) { .platform-icon-item { padding: 6px 11px; } .success-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .platform-icon-item { padding: 6px 11px; font-size: 12px; } .success-grid { grid-template-columns: 1fr; } .form-row { flex-direction: column; } }
     </style>
 </head>
 <body>
 <div id="overlay" class="overlay"></div>
-<div id="sidebar" class="sidebar"><div style="display:flex;justify-content:space-between;margin-bottom:28px;"><h3><i class="fas fa-chart-line"></i> MTS SMM</h3><i class="fas fa-times" id="closeSidebar" style="cursor:pointer;"></i></div><div class="sidebar-menu"><a href="#" data-page="home"><i class="fas fa-home"></i> Home</a><a href="#" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a><a href="#" data-page="services"><i class="fas fa-box"></i> Services</a><a href="#" data-page="addfunds"><i class="fas fa-wallet"></i> Add Funds</a><a href="#" data-page="profile"><i class="fas fa-user-edit"></i> Profile</a><a href="#" data-page="recommendations"><i class="fas fa-star"></i> Recommendations</a><a href="#" data-page="joinus"><i class="fas fa-user-plus"></i> Join Us</a><a href="#" data-page="help"><i class="fas fa-question-circle"></i> Help</a><div style="margin-top:20px;"><label style="color:#64748b;">Currency</label><div class="currency-btn-group" id="currencyGroup"><button class="currency-btn" data-curr="PKR">🇵🇰 PKR</button><button class="currency-btn" data-curr="USD">🇺🇸 USD</button><button class="currency-btn" data-curr="AED">🇦🇪 AED</button><button class="currency-btn" data-curr="SAR">🇸🇦 SAR</button><button class="currency-btn" data-curr="INR">🇮🇳 INR</button><button class="currency-btn" data-curr="EUR">🇪🇺 EUR</button></div></div><button onclick="doLogout()" style="background:#dc2626;margin-top:20px;"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div>
-<div class="main-content"><div class="top-bar"><div id="menuBtn" style="cursor:pointer;"><i class="fas fa-bars"></i></div><div style="font-weight:700;"><i class="fas fa-rocket"></i> MTS SMM</div><div><i class="fas fa-sync-alt" id="refreshBtn" style="cursor:pointer;"></i> <span id="userNameDisplay">Guest</span></div></div><div id="pageContent"><div class="loading-spinner"><i class="fas fa-spinner"></i></div></div></div>
-<div id="successModal" class="modal"><div style="text-align:center;"><div style="width:64px;height:64px;background:rgba(16,185,129,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-check-circle" style="font-size:36px;color:#10b981;"></i></div><h2>Order Placed!</h2><div id="successOrderId" style="background:rgba(43,110,240,0.18);border-radius:14px;padding:10px;margin:14px 0;font-weight:700;"></div><div class="success-grid" id="successGrid"></div><button onclick="closeSuccessModal()" class="btn btn-success">OK</button></div></div>
+<div id="sidebar" class="sidebar">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+        <h3 style="font-size:18px;"><i class="fas fa-chart-line" style="color:#3b82f6;"></i> MTS SMM</h3>
+        <i class="fas fa-times" id="closeSidebar" style="cursor:pointer;font-size:18px;"></i>
+    </div>
+    <div class="sidebar-menu" style="display:flex;flex-direction:column;gap:6px;">
+        <a href="#" data-page="home"><i class="fas fa-home"></i> Home</a>
+        <a href="#" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#" data-page="services"><i class="fas fa-box"></i> Services</a>
+        <a href="#" data-page="addfunds"><i class="fas fa-wallet"></i> Add Funds</a>
+        <a href="#" data-page="profile"><i class="fas fa-user-edit"></i> Profile Settings</a>
+        <a href="#" data-page="recommendations"><i class="fas fa-star"></i> Recommendations</a>
+        <a href="#" data-page="joinus"><i class="fas fa-user-plus"></i> Join Us & Earn</a>
+        <a href="#" data-page="help"><i class="fas fa-question-circle"></i> Help</a>
+        <div style="margin-top:20px;">
+            <label style="color:#64748b;font-size:12px;display:block;margin-bottom:8px;"><i class="fas fa-exchange-alt"></i> Currency</label>
+            <div class="currency-btn-group" id="currencyGroup">
+                <button class="currency-btn" data-curr="PKR">🇵🇰 PKR</button>
+                <button class="currency-btn" data-curr="USD">🇺🇸 USD</button>
+                <button class="currency-btn" data-curr="AED">🇦🇪 AED</button>
+                <button class="currency-btn" data-curr="SAR">🇸🇦 SAR</button>
+                <button class="currency-btn" data-curr="INR">🇮🇳 INR</button>
+                <button class="currency-btn" data-curr="EUR">🇪🇺 EUR</button>
+            </div>
+        </div>
+        <button onclick="doLogout()" style="background:#dc2626;margin-top:20px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="top-bar">
+        <div id="menuBtn" style="cursor:pointer;font-size:18px;"><i class="fas fa-bars"></i></div>
+        <div style="font-weight:700;font-size:1.15rem;"><i class="fas fa-rocket" style="color:#3b82f6;"></i> MTS SMM Services</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-sync-alt" id="refreshBtn" style="cursor:pointer;color:#64748b;"></i>
+            <span id="userNameDisplay" style="font-weight:600;font-size:14px;">Guest</span>
+        </div>
+    </div>
+    <div id="pageContent"><div class="loading-spinner"><i class="fas fa-spinner"></i><p style="margin-top:16px;color:#64748b;">Loading...</p></div></div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div style="text-align:center;">
+        <div style="width:64px;height:64px;background:rgba(16,185,129,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+            <i class="fas fa-check-circle" style="font-size:36px;color:#10b981;"></i>
+        </div>
+        <h2 style="margin-bottom:4px;">Order Placed!</h2>
+        <p style="color:#64748b;font-size:13px;margin-bottom:14px;">Your order has been submitted successfully.</p>
+        <div id="successOrderId" style="background:rgba(43,110,240,0.18);border:1px solid rgba(43,110,240,0.4);border-radius:14px;padding:10px 16px;margin-bottom:14px;font-size:17px;font-weight:700;color:#60a5fa;"></div>
+        <div class="success-grid" id="successGrid"></div>
+        <button onclick="closeSuccessModal()" class="btn btn-success" style="width:100%;margin-top:10px;"><i class="fas fa-check"></i> OK</button>
+    </div>
+</div>
 
 <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwd4Sh48j--YZYD4ErvlVDS9n5iy2dFdE_bUvIZhNf4vCyy4t2zWtQksX4PKVaQc_bZAA/exec";
-let currentUser = null, activeCurrency = "PKR", allServices = [], selectedService = null, selectedCategory = "all", selectedPaymentMethod = null;
+
+let currentUser = null;
+let activeCurrency = "PKR";
 const exchangeRates = { PKR:1, USD:0.0036, AED:0.0132, SAR:0.0135, INR:0.30, EUR:0.0033 };
 const currencySymbols = { PKR:"Rs", USD:"$", AED:"د.إ", SAR:"﷼", INR:"₹", EUR:"€" };
-const PLATFORMS = [{ name:"Instagram",icon:"fab fa-instagram",color:"#E4405F",cats:["Likes","Views","Followers","Comments"]},{ name:"TikTok",icon:"fab fa-tiktok",color:"#fff",cats:["Likes","Views","Followers"]},{ name:"Facebook",icon:"fab fa-facebook",color:"#1877F2",cats:["Likes","Views","Followers"]},{ name:"YouTube",icon:"fab fa-youtube",color:"#FF0000",cats:["Likes","Views","Subscribers"]},{ name:"Twitter",icon:"fab fa-twitter",color:"#1DA1F2",cats:["Likes","Retweets","Followers"]},{ name:"WhatsApp",icon:"fab fa-whatsapp",color:"#25D366",cats:["Traffic"]},{ name:"Telegram",icon:"fab fa-telegram",color:"#26A5E4",cats:["Members"]}];
-const COUNTRIES = ["Worldwide","Pakistan","India","USA","UK","UAE"];
+let allServices = [];
+let selectedService = null;
+let joinApplication = null;
+let selectedCategory = "all";
+let selectedPaymentMethod = null;
 
+const PLATFORMS = [
+    { name:"Instagram",   icon:"fab fa-instagram",    color:"#E4405F", cats:["Likes","Views","Followers","Comments","Saves","Shares"] },
+    { name:"TikTok",      icon:"fab fa-tiktok",        color:"#ffffff", cats:["Likes","Views","Followers","Comments","Shares"] },
+    { name:"Facebook",    icon:"fab fa-facebook",      color:"#1877F2", cats:["Likes","Views","Followers","Comments","Shares"] },
+    { name:"YouTube",     icon:"fab fa-youtube",       color:"#FF0000", cats:["Likes","Views","Subscribers","Watchtime","Comments"] },
+    { name:"Twitter",     icon:"fab fa-twitter",       color:"#1DA1F2", cats:["Likes","Retweets","Followers","Views"] },
+    { name:"WhatsApp",    icon:"fab fa-whatsapp",      color:"#25D366", cats:["Traffic","Views","Members"] },
+    { name:"Snapchat",    icon:"fab fa-snapchat",      color:"#FFFC00", cats:["Views","Followers"] },
+    { name:"Telegram",    icon:"fab fa-telegram",      color:"#26A5E4", cats:["Members","Views"] },
+    { name:"LinkedIn",    icon:"fab fa-linkedin",      color:"#0A66C2", cats:["Likes","Followers","Views"] },
+    { name:"Pinterest",   icon:"fab fa-pinterest",     color:"#BD081C", cats:["Repins","Likes","Followers"] },
+    { name:"Discord",     icon:"fab fa-discord",       color:"#5865F2", cats:["Members"] },
+    { name:"Twitch",      icon:"fab fa-twitch",        color:"#9146FF", cats:["Followers","Views"] },
+    { name:"Spotify",     icon:"fab fa-spotify",       color:"#1DB954", cats:["Followers","Plays"] },
+    { name:"Google",      icon:"fab fa-google",        color:"#4285F4", cats:["Traffic","Views"] },
+    { name:"Threads",     icon:"fas fa-at",            color:"#ffffff", cats:["Likes","Followers","Views"] },
+    { name:"Netflix",     icon:"fas fa-film",          color:"#E50914", cats:["Views"] },
+    { name:"Canva",       icon:"fas fa-palette",       color:"#00C4CC", cats:["Designs","Templates"] },
+    { name:"CapCut",      icon:"fas fa-cut",           color:"#00D4FF", cats:["Edits","Templates"] },
+    { name:"ChatGPT",     icon:"fas fa-comment-dots",  color:"#10A37F", cats:["Prompts"] },
+    { name:"Gemini",      icon:"fas fa-brain",         color:"#4285F4", cats:["Prompts"] },
+    { name:"Website Traffic", icon:"fas fa-globe",     color:"#3b82f6", cats:["Traffic","Views"] },
+    { name:"PUBG UC",     icon:"fas fa-gamepad",       color:"#FFA500", cats:["UC","Points"] }
+];
+
+const COUNTRIES = ["Worldwide","Pakistan","India","USA","UK","UAE","Saudi Arabia","Bangladesh","Turkey","Egypt","Indonesia","Brazil","Germany","France","Canada","Australia","Italy","Spain","Netherlands","Russia","Japan","South Korea","Philippines","Malaysia","Nigeria","Kenya","Mexico","Argentina","South Africa","Iraq","Jordan"];
+
+// ── Helpers ──────────────────────────────────────
 function isTrue(v) { return v === true || v === "TRUE" || v === "true" || v === 1 || v === "1"; }
-function showToast(msg, err=false) { let t=document.createElement('div'); t.className='toast'; t.style.borderLeftColor=err?'#dc2626':'#10b981'; t.innerHTML=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3500); }
-function fmtCur(pkr) { let v=pkr*exchangeRates[activeCurrency]; return `${currencySymbols[activeCurrency]} ${v.toFixed(2)}${activeCurrency==='PKR'?' PKR':''}`; }
-function rateLabel(s) { return isTrue(s.Per1k)? `${fmtCur(s.Rate)} = 1000` : `${fmtCur(s.Rate)} / unit`; }
-function show(id){ let e=document.getElementById(id); if(e) e.style.display='block'; }
-function hide(id){ let e=document.getElementById(id); if(e) e.style.display='none'; }
-function el(id){ return document.getElementById(id); }
-function val(id){ let e=el(id); return e?e.value:''; }
-
-async function apiCall(action,data={}) {
-    let payload={action,...data,sessionToken:localStorage.getItem("mts_token")};
-    let fd=new FormData(); fd.append("payload",JSON.stringify(payload));
-    try { let res=await fetch(APPS_SCRIPT_URL,{method:"POST",body:fd}); return JSON.parse(await res.text()); } catch(e){ return {success:false,error:e.message}; }
+function showToast(msg, err=false) {
+    const t = document.createElement('div'); t.className='toast';
+    t.style.borderLeftColor = err ? '#dc2626' : '#10b981';
+    t.innerHTML = msg; document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 3500);
 }
-async function loadServices() { if(!allServices.length){ let r=await apiCall("getServices"); if(r.success) allServices=r.services||[]; } }
+function fmtCur(pkr) {
+    const v = pkr * exchangeRates[activeCurrency];
+    const s = currencySymbols[activeCurrency];
+    return activeCurrency==='PKR' ? `${s} ${v.toFixed(2)} PKR` : `${s} ${v.toFixed(2)}`;
+}
+function rateLabel(svc) {
+    return isTrue(svc.Per1k)
+        ? `${fmtCur(svc.Rate)} = 1000`
+        : `${fmtCur(svc.Rate)} / unit`;
+}
+function show(id){ const el=document.getElementById(id); if(el) el.style.display='block'; }
+function hide(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
+function el(id){ return document.getElementById(id); }
+function val(id){ const e=el(id); return e ? e.value : ''; }
+
+// ── API ───────────────────────────────────────────
+async function apiCall(action, data={}) {
+    const payload = { action, ...data, sessionToken: localStorage.getItem("mts_token") };
+    const fd = new FormData(); fd.append("payload", JSON.stringify(payload));
+    try {
+        const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+        return JSON.parse(await res.text());
+    } catch(e) { return { success:false, error:e.message }; }
+}
+async function loadServices() {
+    if (allServices.length) return;
+    const r = await apiCall("getServices");
+    if (r.success) allServices = r.services || [];
+}
 async function checkAuth() {
-    let token=localStorage.getItem("mts_token");
-    if(!token){ showAuthScreen(); return false; }
-    let r=await apiCall("verifySession",{token});
-    if(r.success && r.user){ currentUser=r.user; el("userNameDisplay").innerText=currentUser.fullName?.split(" ")[0]||currentUser.username; return true; }
+    const token = localStorage.getItem("mts_token");
+    if (!token) { showAuthScreen(); return false; }
+    const r = await apiCall("verifySession", { token });
+    if (r.success && r.user) {
+        currentUser = r.user;
+        el("userNameDisplay").innerText = currentUser.fullName?.split(" ")[0] || currentUser.username;
+        try { const j=await apiCall("getMyJoinStatus"); joinApplication = j.success ? j.application : null; } catch(e){}
+        return true;
+    }
     localStorage.removeItem("mts_token"); showAuthScreen(); return false;
 }
 function doLogout() { localStorage.removeItem("mts_token"); location.reload(); }
-window.doLogout=doLogout;
+window.doLogout = doLogout;
 function closeSuccessModal() { el('successModal').style.display='none'; if(currentUser) navigate("home"); }
-window.closeSuccessModal=closeSuccessModal;
+window.closeSuccessModal = closeSuccessModal;
 
+// ── AUTH ──────────────────────────────────────────
 function showAuthScreen() {
-    el("pageContent").innerHTML=`<div class="glass-card" style="max-width:440px;margin:50px auto;"><h2>MTS SMM</h2><div id="loginForm"><label>Email</label><input id="loginEmail"><label>Password</label><input id="loginPass" type="password"><button id="doLogin" class="btn" style="width:100%;margin-top:14px;">Login</button><button id="showSignupBtn" style="background:transparent;border:1px solid #2b6ef0;width:100%;margin-top:10px;">Sign Up</button></div><div id="signupForm" style="display:none;"><div class="form-row"><div><label>Full Name</label><input id="sFullName"></div><div><label>Username</label><input id="sUsername"></div></div><div class="form-row"><div><label>Gmail</label><input id="sGmail"></div><div><label>Phone</label><input id="sPhone"></div></div><label>Account Type</label><select id="sType"><option>Commission Based</option><option>Salary Based</option></select><div class="form-row"><div><label>Password</label><input id="sPass" type="password"></div><div><label>Confirm</label><input id="sConfirm" type="password"></div></div><button id="doSignup" class="btn">Register</button><button id="backLogin" style="background:transparent;">Back</button></div></div>`;
-    el("doLogin")?.addEventListener("click",async()=>{ let r=await apiCall("login",{email:val("loginEmail"),pass:val("loginPass")}); if(r.success){ localStorage.setItem("mts_token",r.token); location.reload(); } else showToast(r.error||"Login failed",true); });
-    el("showSignupBtn")?.addEventListener("click",()=>{ el("loginForm").style.display="none"; el("signupForm").style.display="block"; });
-    el("backLogin")?.addEventListener("click",()=>{ el("loginForm").style.display="block"; el("signupForm").style.display="none"; });
-    el("doSignup")?.addEventListener("click",async()=>{ if(val("sPass")!==val("sConfirm")){ showToast("Passwords mismatch",true); return; } let r=await apiCall("signup",{fullName:val("sFullName"),username:val("sUsername"),gmail:val("sGmail"),phone:val("sPhone"),userType:val("sType"),password:val("sPass")}); if(r.success){ showToast("Account created! Please login."); el("loginForm").style.display="block"; el("signupForm").style.display="none"; } else showToast(r.error,true); });
+    el("pageContent").innerHTML = `
+        <div class="glass-card" style="max-width:440px;margin:50px auto;">
+            <h2 style="margin-bottom:20px;"><i class="fas fa-rocket" style="color:#3b82f6;"></i> Welcome to MTS SMM</h2>
+            <div id="loginForm">
+                <label>Email or Username</label><input type="text" id="loginEmail" placeholder="Enter email or username">
+                <label style="margin-top:10px;">Password</label><input type="password" id="loginPass" placeholder="Enter password">
+                <button id="doLogin" class="btn" style="width:100%;margin-top:14px;">Login</button>
+                <button id="showSignupBtn" style="background:transparent;border:1px solid #2b6ef0;width:100%;margin-top:10px;color:#60a5fa;">Create Account</button>
+            </div>
+            <div id="signupForm" style="display:none;">
+                <div class="form-row"><div><label>Full Name</label><input id="sFullName" placeholder="Full name"></div><div><label>Username</label><input id="sUsername" placeholder="Username"></div></div>
+                <div class="form-row"><div><label>Gmail</label><input id="sGmail" placeholder="Gmail"></div><div><label>Phone</label><input id="sPhone" placeholder="Phone"></div></div>
+                <label>Account Type</label><select id="sType"><option>Commission Based</option><option>Salary Based</option></select>
+                <div class="form-row"><div><label>Password</label><input id="sPass" type="password" placeholder="Password"></div><div><label>Confirm</label><input id="sConfirm" type="password" placeholder="Confirm"></div></div>
+                <button id="doSignup" class="btn" style="width:100%;margin-top:14px;">Register</button>
+                <button id="backLogin" style="background:transparent;border:1px solid #475569;width:100%;margin-top:10px;color:#94a3b8;">Back to Login</button>
+            </div>
+        </div>`;
+    el("doLogin")?.addEventListener("click", async ()=>{
+        const email=val("loginEmail"), pass=val("loginPass");
+        if(!email||!pass){showToast("Fill all fields",true);return;}
+        showToast("Logging in...");
+        const r=await apiCall("login",{email,pass});
+        if(r.success){localStorage.setItem("mts_token",r.token);location.reload();}
+        else showToast(r.error||"Login failed",true);
+    });
+    el("showSignupBtn")?.addEventListener("click",()=>{el("loginForm").style.display="none";el("signupForm").style.display="block";});
+    el("backLogin")?.addEventListener("click",()=>{el("loginForm").style.display="block";el("signupForm").style.display="none";});
+    el("doSignup")?.addEventListener("click", async()=>{
+        if(val("sPass")!==val("sConfirm")){showToast("Passwords don't match",true);return;}
+        const r=await apiCall("signup",{fullName:val("sFullName"),username:val("sUsername"),gmail:val("sGmail"),phone:val("sPhone"),userType:val("sType"),password:val("sPass")});
+        if(r.success){showToast("Account created! Please login.");el("loginForm").style.display="block";el("signupForm").style.display="none";}
+        else showToast(r.error,true);
+    });
 }
 
-// ---------- ORDER FORM (Fixed) ----------
+// ═══════════════════════════════════════════════════
+// HOME — ORDER FORM (event-delegation based)
+// ═══════════════════════════════════════════════════
 async function renderHome() {
     await loadServices();
-    if(!allServices.length){ showToast("No services loaded. Please refresh.",true); }
-    let balance=currentUser?.wallet||0;
-    el("pageContent").innerHTML=`<div class="glass-card" style="display:flex;justify-content:space-between;flex-wrap:wrap;"><div><div style="font-size:11px;color:#64748b;">Wallet</div><div style="font-size:22px;font-weight:700;color:#34d399;">${fmtCur(balance)}</div></div><button onclick="navigate('addfunds')" class="btn btn-success">Add Funds</button></div>
-    <div class="glass-card"><h3><i class="fas fa-cart-plus"></i> New Order</h3>
-    <div class="step-block"><div class="step-header"><div class="step-num">1</div><div class="step-title">Platform</div></div><div class="platform-icons" id="platformIcons">${PLATFORMS.map(p=>`<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color};"></i><span>${p.name}</span></div>`).join('')}</div><select id="platformSelect" onchange="onPlatformChangeFixed()"><option value="">— Choose —</option>${PLATFORMS.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select></div>
-    <div id="catBlock" class="step-block" style="display:none;"><div class="step-header"><div class="step-num">2</div><div class="step-title">Category</div></div><div id="catChips" class="cat-chips"></div></div>
-    <div id="svcBlock" class="step-block" style="display:none;"><div class="step-header"><div class="step-num">3</div><div class="step-title">Service</div></div><select id="serviceSelect" onchange="onServiceChangeFixed()"><option value="">— Select service —</option></select></div>
-    <div id="svcDesc" style="display:none;"></div>
-    <div id="countryBlock" class="step-block" style="display:none;"><div class="step-header"><div class="step-num">4</div><div class="step-title">Country</div></div><select id="countrySelect">${COUNTRIES.map(c=>`<option>${c}</option>`).join('')}</select></div>
-    <div id="dynFields"></div>
-    <div id="qtyBlock" class="step-block" style="display:none;"><div class="step-header"><div class="step-num" id="qtyStepNum">5</div><div class="step-title">Quantity</div></div><input type="number" id="qtyInput" min="1" oninput="calcTotalFixed()" placeholder="Enter quantity"><div id="qtyHint" style="font-size:12px;color:#64748b;"></div></div>
-    <div id="summaryBlock" class="order-summary" style="display:none;"><h4>Order Summary</h4><div class="sum-row"><span class="k">Service</span><span class="v" id="sName">—</span></div><div class="sum-row"><span class="k">Quantity</span><span class="v" id="sQty">—</span></div><div class="sum-row"><span class="k">Rate</span><span class="v" id="sPrice">—</span></div><div class="sum-row"><span class="k">Total</span><span class="v" id="sTotal">—</span></div></div>
-    <div style="display:flex;gap:12px;margin-top:16px;"><button onclick="placeOrderFixed()" class="btn btn-success">Place Order</button><button onclick="clearOrderFormFixed()" class="btn btn-secondary">Clear</button></div></div>`;
-    document.getElementById("platformIcons")?.addEventListener("click",(e)=>{ let item=e.target.closest(".platform-icon-item"); if(item){ el("platformSelect").value=item.dataset.platform; onPlatformChangeFixed(); } });
+    const balance = currentUser?.wallet || 0;
+    el("pageContent").innerHTML = `
+        <div class="glass-card" style="padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:44px;height:44px;background:rgba(52,211,153,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-wallet" style="color:#34d399;font-size:18px;"></i>
+                </div>
+                <div>
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;">Wallet Balance</div>
+                    <div style="font-size:22px;font-weight:700;color:#34d399;">${fmtCur(balance)}</div>
+                </div>
+            </div>
+            <button onclick="navigate('addfunds')" class="btn btn-success" style="padding:10px 18px;font-size:13px;"><i class="fas fa-plus"></i> Add Funds</button>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="margin-bottom:18px;"><i class="fas fa-shopping-cart" style="color:#3b82f6;"></i> Place New Order</h3>
+
+            <!-- STEP 1: Platform -->
+            <div class="step-block">
+                <div class="step-header"><div class="step-num">1</div><div class="step-title">Select Platform</div></div>
+                <div class="platform-icons" id="platformIcons">
+                    ${PLATFORMS.map(p=>`<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color};font-size:15px;"></i><span>${p.name}</span></div>`).join('')}
+                </div>
+                <select id="platformSelect" onchange="onPlatformChange()">
+                    <option value="">— Choose a platform —</option>
+                    ${PLATFORMS.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}
+                </select>
+            </div>
+
+            <!-- STEP 2: Category -->
+            <div id="catBlock" class="step-block" style="display:none;">
+                <div class="step-header"><div class="step-num">2</div><div class="step-title">Select Category</div></div>
+                <div class="cat-chips" id="catChips"></div>
+            </div>
+
+            <!-- STEP 3: Service -->
+            <div id="svcBlock" class="step-block" style="display:none;">
+                <div class="step-header"><div class="step-num">3</div><div class="step-title">Select Service</div></div>
+                <select id="serviceSelect" onchange="onServiceChange()">
+                    <option value="">— Choose a service —</option>
+                </select>
+            </div>
+
+            <!-- Service description (shown after service picked) -->
+            <div id="svcDesc" style="display:none;"></div>
+
+            <!-- Target country (conditional) -->
+            <div id="countryBlock" class="step-block" style="display:none;">
+                <div class="step-header"><div class="step-num" id="countryStepNum">4</div><div class="step-title">Target Country</div></div>
+                <select id="countrySelect">${COUNTRIES.map(c=>`<option>${c}</option>`).join('')}</select>
+            </div>
+
+            <!-- Dynamic fields (link / email / comments) -->
+            <div id="dynFields"></div>
+
+            <!-- Quantity -->
+            <div id="qtyBlock" class="step-block" style="display:none;">
+                <div class="step-header"><div class="step-num" id="qtyStepNum">5</div><div class="step-title">Enter Quantity</div></div>
+                <input type="number" id="qtyInput" placeholder="Enter quantity" min="1" oninput="calcTotal()">
+                <div id="qtyHint" style="font-size:12px;color:#64748b;padding-left:6px;margin-top:2px;"></div>
+            </div>
+
+            <!-- Summary -->
+            <div id="summaryBlock" style="display:none;" class="order-summary">
+                <h4><i class="fas fa-receipt"></i>&nbsp; Order Summary</h4>
+                <div class="sum-row"><span class="k">Platform</span><span class="v" id="sPlatform">—</span></div>
+                <div class="sum-row"><span class="k">Service ID</span><span class="v" id="sId">—</span></div>
+                <div class="sum-row"><span class="k">Service Name</span><span class="v" id="sName">—</span></div>
+                <div class="sum-row"><span class="k">Quantity</span><span class="v" id="sQty">—</span></div>
+                <div class="sum-row"><span class="k">Price</span><span class="v" id="sPrice">—</span></div>
+                <div class="sum-row"><span class="k">Total Amount</span><span class="v" id="sTotal">—</span></div>
+            </div>
+
+            <!-- Buttons -->
+            <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                <button onclick="placeOrder()" class="btn btn-success" style="flex:1;min-width:120px;"><i class="fas fa-check-circle"></i> Place Order</button>
+                <button onclick="clearOrderForm()" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</button>
+            </div>
+        </div>
+    `;
+
+    // Platform icon clicks
+    el("platformIcons").addEventListener("click", e => {
+        const item = e.target.closest(".platform-icon-item");
+        if (!item) return;
+        el("platformSelect").value = item.dataset.platform;
+        onPlatformChange();
+    });
 }
-window.onPlatformChangeFixed = function() {
-    let platform=val("platformSelect");
-    document.querySelectorAll("#platformIcons .platform-icon-item").forEach(i=>i.classList.toggle("active",i.dataset.platform===platform));
-    selectedService=null; selectedCategory="all";
-    if(!platform){ ["catBlock","svcBlock","svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide); el("dynFields").innerHTML=""; return; }
-    let svcForPlat=allServices.filter(s=>s.Platform===platform);
-    let availCats=["all"];
-    let platObj=PLATFORMS.find(p=>p.name===platform);
-    if(platObj) platObj.cats.forEach(cat=>{ if(svcForPlat.some(s=>s.Name?.toLowerCase().includes(cat.toLowerCase()))) availCats.push(cat); });
-    el("catChips").innerHTML=availCats.map(c=>`<div class="cat-chip ${c==='all'?'active':''}" onclick="selectCatFixed('${c}')">${c==='all'?'⚡ All':c}</div>`).join('');
+
+window.onPlatformChange = function() {
+    const platform = val("platformSelect");
+    // sync icon highlight
+    document.querySelectorAll("#platformIcons .platform-icon-item").forEach(i => {
+        i.classList.toggle("active", i.dataset.platform === platform);
+    });
+
+    selectedService = null;
+    selectedCategory = "all";
+
+    if (!platform) {
+        ["catBlock","svcBlock","svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
+        el("dynFields").innerHTML = "";
+        return;
+    }
+
+    // Build category chips — only cats that have real services
+    const pd = PLATFORMS.find(p => p.name === platform);
+    const svcForPlat = allServices.filter(s => s.Platform === platform);
+    let availCats = ["all"];
+    if (pd) {
+        pd.cats.forEach(cat => {
+            if (svcForPlat.some(s => s.Name && s.Name.toLowerCase().includes(cat.toLowerCase())))
+                availCats.push(cat);
+        });
+    }
+    el("catChips").innerHTML = availCats.map(c =>
+        `<div class="cat-chip ${c==='all'?'active':''}" onclick="selectCat('${c}')">${c==='all'?'⚡ All':c}</div>`
+    ).join('');
     show("catBlock");
-    buildServiceDropdownFixed(platform,"all");
+
+    buildServiceDropdown(platform, "all");
     show("svcBlock");
-    hide("svcDesc"); hide("countryBlock"); hide("qtyBlock"); hide("summaryBlock"); el("dynFields").innerHTML="";
+    ["svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
+    el("dynFields").innerHTML = "";
 };
-window.selectCatFixed = function(cat) {
-    selectedCategory=cat;
-    document.querySelectorAll(".cat-chip").forEach(c=>c.classList.toggle("active",c.textContent.replace("⚡ ","")===cat||(cat==="all"&&c.textContent==="⚡ All")));
-    buildServiceDropdownFixed(val("platformSelect"),cat);
-    selectedService=null; hide("svcDesc"); hide("countryBlock"); hide("qtyBlock"); hide("summaryBlock"); el("dynFields").innerHTML="";
-};
-function buildServiceDropdownFixed(platform,cat){
-    let svcs=allServices.filter(s=>s.Platform===platform);
-    if(cat!=="all") svcs=svcs.filter(s=>s.Name?.toLowerCase().includes(cat.toLowerCase()));
-    let sel=el("serviceSelect");
-    if(sel) sel.innerHTML='<option value="">— Choose service —</option>'+svcs.map(s=>`<option value="${s.ServiceId}">[${s.ServiceId}] ${s.Name} — ${rateLabel(s)}</option>`).join('');
-}
-window.onServiceChangeFixed = function() {
-    let sid=val("serviceSelect");
-    if(!sid){ selectedService=null; hide("svcDesc"); hide("qtyBlock"); hide("summaryBlock"); el("dynFields").innerHTML=""; return; }
-    selectedService=allServices.find(s=>s.ServiceId==sid);
-    if(!selectedService) return;
-    // show description
-    let per1k=isTrue(selectedService.Per1k);
-    let priceChip=per1k?`<span class="price-chip">${fmtCur(selectedService.Rate)} = 1000</span>`:`<span class="price-chip">${fmtCur(selectedService.Rate)} / unit</span>`;
-    el("svcDesc").innerHTML=`<div class="svc-desc"><div style="display:flex;justify-content:space-between;"><div class="svc-desc-name">${selectedService.Name}</div>${priceChip}</div><div class="svc-desc-grid"><div class="svc-desc-item"><div class="lbl">ID</div><div class="val">${selectedService.ServiceId}</div></div><div class="svc-desc-item"><div class="lbl">Min/Max</div><div class="val">${selectedService.MinQty} - ${selectedService.MaxQty}</div></div><div class="svc-desc-item"><div class="lbl">Delivery</div><div class="val">${selectedService.DeliveryTime||"Fast"}</div></div></div><div class="svc-desc-text">${selectedService.Description||"High quality service"}</div></div>`;
-    show("svcDesc");
-    // conditional fields
-    let showCountry=isTrue(selectedService.TargetCountry);
-    let isAccount=isTrue(selectedService.IsAccount);
-    let needEmail=isTrue(selectedService.RequireEmail);
-    let needLink=isTrue(selectedService.RequireLink);
-    let needComments=isTrue(selectedService.CustomComments);
-    let step=4;
-    if(showCountry){ el("countryStepNum")?.setAttribute("class","step-num"); show("countryBlock"); step++; } else hide("countryBlock");
-    let dynHtml="";
-    if(isAccount && needEmail){ dynHtml+=`<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Account Email</div></div><input id="emailField" type="email" placeholder="Email address"></div>`; }
-    else if(needLink || (!isAccount && !needEmail)){ dynHtml+=`<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Profile / Post Link</div></div><input id="linkField" placeholder="https://..."></div>`; }
-    if(needComments){ dynHtml+=`<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Custom Comments</div></div><textarea id="commentsField" rows="2" placeholder="One per line or comma separated"></textarea></div>`; }
-    el("dynFields").innerHTML=dynHtml;
-    // quantity block
-    let qStep=el("qtyStepNum"); if(qStep) qStep.textContent=step;
-    let hint=el("qtyHint"); if(hint) hint.innerText=`Min: ${selectedService.MinQty}  Max: ${selectedService.MaxQty}`;
-    let qtyInp=el("qtyInput"); if(qtyInp) qtyInp.value="";
-    show("qtyBlock");
-    hide("summaryBlock");
-    if(selectedService._qty) delete selectedService._qty;
-    if(selectedService._total) delete selectedService._total;
-};
-window.calcTotalFixed = function() {
-    if(!selectedService) return;
-    let qty=parseInt(el("qtyInput")?.value)||0;
-    let minQ=parseInt(selectedService.MinQty)||1, maxQ=parseInt(selectedService.MaxQty)||999999;
-    if(qty<minQ || qty>maxQ || !qty){ hide("summaryBlock"); return; }
-    let per1k=isTrue(selectedService.Per1k);
-    let totalPKR=per1k ? (selectedService.Rate/1000)*qty : selectedService.Rate*qty;
-    selectedService._total=totalPKR; selectedService._qty=qty;
-    el("sName").innerText=selectedService.Name;
-    el("sQty").innerText=qty.toLocaleString();
-    el("sPrice").innerText=per1k?`${fmtCur(selectedService.Rate)} per 1000`:fmtCur(selectedService.Rate);
-    el("sTotal").innerText=fmtCur(totalPKR);
-    show("summaryBlock");
-};
-window.placeOrderFixed = async function() {
-    if(!selectedService || !selectedService._qty){ showToast("Select service and valid quantity first",true); return; }
-    let total=selectedService._total;
-    if((currentUser?.wallet||0)<total){ showToast(`Insufficient balance! Need ${fmtCur(total)}`,true); return; }
-    let extra={};
-    let link=val("linkField"), emailF=val("emailField"), comments=val("commentsField"), country=(el("countryBlock")?.style.display!=="none"?val("countrySelect"):"");
-    if(link) extra.link=link;
-    if(emailF) extra.email=emailF;
-    if(comments) extra.comments=comments;
-    if(country) extra.targetCountry=country;
-    let r=await apiCall("createOrder",{ serviceId:selectedService.ServiceId, quantity:selectedService._qty, totalAmount:total, extraFields:extra });
-    if(r.success){
-        el("successOrderId").innerHTML=`Order ID: <strong>${r.orderId}</strong>`;
-        let details=[{l:"Service",v:selectedService.Name},{l:"Quantity",v:selectedService._qty},{l:"Amount",v:fmtCur(total)}];
-        if(link) details.push({l:"Link",v:link});
-        if(emailF) details.push({l:"Email",v:emailF});
-        if(country) details.push({l:"Country",v:country});
-        el("successGrid").innerHTML=details.map(d=>`<div class="success-item"><div class="s-lbl">${d.l}</div><div class="s-val">${d.v}</div></div>`).join('');
-        el("successModal").style.display="block";
-        if(currentUser) currentUser.wallet-=total;
-        clearOrderFormFixed();
-    } else showToast(r.error||"Order failed",true);
-};
-window.clearOrderFormFixed = function() {
-    selectedService=null; selectedCategory="all";
-    let ps=el("platformSelect"); if(ps) ps.value="";
-    document.querySelectorAll("#platformIcons .platform-icon-item").forEach(i=>i.classList.remove("active"));
-    ["catBlock","svcBlock","svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
-    if(el("dynFields")) el("dynFields").innerHTML="";
+window.onPlatformChange = window.onPlatformChange; // ensure global
+
+window.selectCat = function(cat) {
+    selectedCategory = cat;
+    document.querySelectorAll(".cat-chip").forEach(c => c.classList.toggle("active", c.textContent.replace("⚡ ","")===cat||(cat==="all"&&c.textContent==="⚡ All")));
+    buildServiceDropdown(val("platformSelect"), cat);
+    selectedService = null;
+    ["svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
+    el("dynFields").innerHTML = "";
 };
 
-// ---------- Other pages (shortened but functional) ----------
-async function renderDashboard() {
-    let [stats,orders]=await Promise.all([apiCall("userStats"), apiCall("getUserOrders")]);
-    el("pageContent").innerHTML=`<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet fa-2x"></i><h3>${fmtCur(currentUser?.wallet||0)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-chart-line"></i><h3>${stats.totalOrders||0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock"></i><h3>${stats.pendingOrders||0}</h3><p>Pending</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length?`<div class="history-table"><table><tr><th>ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>${orders.orders.map(o=>`<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${fmtCur(o.amount)}</td><td>${o.status}</td></tr>`).join('')}</table></div>`:'<p>No orders</p>'}</div>`;
+function buildServiceDropdown(platform, cat) {
+    let svcs = allServices.filter(s => s.Platform === platform);
+    if (cat !== "all") svcs = svcs.filter(s => s.Name && s.Name.toLowerCase().includes(cat.toLowerCase()));
+    const sel = el("serviceSelect");
+    if (!sel) return;
+    sel.innerHTML = '<option value="">— Choose a service —</option>' +
+        svcs.map(s => `<option value="${s.ServiceId}">[${s.ServiceId}] ${s.Name} — ${rateLabel(s)}</option>`).join('');
 }
+
+window.onServiceChange = function() {
+    const sid = val("serviceSelect");
+    if (!sid) {
+        selectedService = null;
+        ["svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
+        el("dynFields").innerHTML = "";
+        return;
+    }
+    selectedService = allServices.find(s => s.ServiceId === sid);
+    if (!selectedService) return;
+
+    // ── Service description ──
+    const per1k = isTrue(selectedService.Per1k);
+    const priceChip = per1k
+        ? `<span class="price-chip"><i class="fas fa-tags"></i>${fmtCur(selectedService.Rate)} = 1000</span>`
+        : `<span class="price-chip"><i class="fas fa-tag"></i>${fmtCur(selectedService.Rate)} / unit</span>`;
+
+    el("svcDesc").innerHTML = `
+        <div class="svc-desc step-block">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                <div class="svc-desc-name">${selectedService.Name}</div>
+                ${priceChip}
+            </div>
+            <div class="svc-desc-grid">
+                <div class="svc-desc-item"><div class="lbl">Service ID</div><div class="val">${selectedService.ServiceId}</div></div>
+                <div class="svc-desc-item"><div class="lbl">Platform</div><div class="val">${selectedService.Platform}</div></div>
+                <div class="svc-desc-item"><div class="lbl">Min Order</div><div class="val">${selectedService.MinQty}</div></div>
+                <div class="svc-desc-item"><div class="lbl">Max Order</div><div class="val">${selectedService.MaxQty}</div></div>
+                <div class="svc-desc-item"><div class="lbl">Delivery</div><div class="val">${selectedService.DeliveryTime||'1–2 hours'}</div></div>
+            </div>
+            <div class="svc-desc-text">${selectedService.Description||'High quality service with guaranteed delivery.'}</div>
+        </div>`;
+    show("svcDesc");
+
+    // ── Conditional fields ──
+    const showCountry = isTrue(selectedService.TargetCountry);
+    const isAccount   = isTrue(selectedService.IsAccount);
+    const needEmail   = isTrue(selectedService.RequireEmail);
+    const needLink    = isTrue(selectedService.RequireLink);
+    const needComments= isTrue(selectedService.CustomComments);
+
+    // Step numbering
+    let step = 4;
+    if (showCountry) { el("countryStepNum").textContent = step++; show("countryBlock"); }
+    else hide("countryBlock");
+
+    let dynHtml = "";
+    if (isAccount && needEmail) {
+        dynHtml += `<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Account Email</div></div><input type="email" id="emailField" placeholder="Enter email address for the account"></div>`;
+    } else if (needLink || (!isAccount && !needEmail)) {
+        dynHtml += `<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Profile / Post Link</div></div><input type="url" id="linkField" placeholder="https://... paste your profile or post URL"></div>`;
+    }
+    if (needComments) {
+        dynHtml += `<div class="step-block"><div class="step-header"><div class="step-num">${step++}</div><div class="step-title">Custom Comments</div></div><textarea id="commentsField" placeholder="Enter comments separated by commas" rows="3"></textarea></div>`;
+    }
+    el("dynFields").innerHTML = dynHtml;
+
+    // Quantity block
+    el("qtyStepNum").textContent = step;
+    el("qtyHint").textContent = `Min: ${selectedService.MinQty}  •  Max: ${selectedService.MaxQty}`;
+    el("qtyInput").value = "";
+    show("qtyBlock");
+    hide("summaryBlock");
+};
+
+window.calcTotal = function() {
+    if (!selectedService) return;
+    const qty = parseInt(el("qtyInput")?.value) || 0;
+    const minQ = parseInt(selectedService.MinQty) || 1;
+    const maxQ = parseInt(selectedService.MaxQty) || 999999;
+
+    if (!qty || qty < minQ || qty > maxQ) { hide("summaryBlock"); return; }
+
+    const per1k = isTrue(selectedService.Per1k);
+    let unitPKR, totalPKR;
+    if (per1k) { unitPKR = selectedService.Rate / 1000; totalPKR = unitPKR * qty; }
+    else        { unitPKR = selectedService.Rate;        totalPKR = unitPKR * qty; }
+
+    selectedService._total = totalPKR;
+    selectedService._qty   = qty;
+
+    el("sPlatform").textContent = selectedService.Platform;
+    el("sId").textContent       = selectedService.ServiceId;
+    el("sName").textContent     = selectedService.Name;
+    el("sQty").textContent      = qty.toLocaleString();
+    el("sPrice").textContent    = per1k ? `${fmtCur(selectedService.Rate)} = 1000` : fmtCur(unitPKR);
+    el("sTotal").textContent    = fmtCur(totalPKR);
+    show("summaryBlock");
+};
+
+window.placeOrder = async function() {
+    if (!selectedService) { showToast("Select a service first",true); return; }
+    const qty = selectedService._qty;
+    if (!qty) { showToast("Enter a valid quantity first",true); return; }
+    const total = selectedService._total;
+    if ((currentUser?.wallet||0) < total) { showToast(`Insufficient balance! Need ${fmtCur(total)}`,true); return; }
+
+    const extra = {};
+    const link = val("linkField");
+    const emailF = val("emailField");
+    const comments = val("commentsField");
+    const country = el("countryBlock")?.style.display!=="none" ? val("countrySelect") : "";
+    if (link) extra.link = link;
+    if (emailF) extra.email = emailF;
+    if (comments) extra.comments = comments;
+    if (country) extra.targetCountry = country;
+
+    showToast("Placing order...");
+    const r = await apiCall("createOrder", { serviceId:selectedService.ServiceId, quantity:qty, totalAmount:total, extraFields:extra });
+    if (r.success) {
+        el("successOrderId").innerHTML = `<i class="fas fa-hashtag"></i> Order ID: <strong>${r.orderId}</strong>`;
+        const details = [
+            { l:"Platform",      v:selectedService.Platform },
+            { l:"Service ID",    v:selectedService.ServiceId },
+            { l:"Service Name",  v:selectedService.Name },
+            { l:"Quantity",      v:qty.toLocaleString() },
+            { l:"Amount Spent",  v:fmtCur(total) },
+        ];
+        if (link)    details.push({ l:"Link",           v:link });
+        if (emailF)  details.push({ l:"Email",          v:emailF });
+        if (country) details.push({ l:"Target Country", v:country });
+        el("successGrid").innerHTML = details.map(d=>`
+            <div class="success-item"><div class="s-lbl">${d.l}</div><div class="s-val">${d.v}</div></div>`).join('');
+        el("successModal").style.display = "block";
+        if (currentUser) currentUser.wallet = (currentUser.wallet||0) - total;
+    } else {
+        showToast(r.error||"Order failed",true);
+    }
+};
+
+window.clearOrderForm = function() {
+    selectedService = null; selectedCategory = "all";
+    el("platformSelect").value = "";
+    document.querySelectorAll("#platformIcons .platform-icon-item").forEach(i=>i.classList.remove("active"));
+    ["catBlock","svcBlock","svcDesc","countryBlock","qtyBlock","summaryBlock"].forEach(hide);
+    el("dynFields").innerHTML = "";
+};
+
+// ═══════════════════════════════════════════════════
+// SERVICES PAGE
+// ═══════════════════════════════════════════════════
 async function renderServices() {
     await loadServices();
-    el("pageContent").innerHTML=`<div class="glass-card"><div class="platform-icons" id="svcPlatIcons"><div class="platform-icon-item active" data-platform="all">All</div>${PLATFORMS.map(p=>`<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}"></i>${p.name}</div>`).join('')}</div><input id="searchInput" placeholder="Search..."></div><div id="servicesGrid" class="service-grid"></div>`;
-    function filter(){ let platform=document.querySelector("#svcPlatIcons .platform-icon-item.active")?.dataset.platform||"all"; let search=el("searchInput")?.value.toLowerCase()||""; let filtered=allServices.filter(s=>(platform==="all"||s.Platform===platform)&&(s.Name.toLowerCase().includes(search)||s.ServiceId.toString().includes(search))); el("servicesGrid").innerHTML=filtered.map(s=>{ let p=PLATFORMS.find(p=>p.name===s.Platform)||{icon:"fas fa-globe",color:"#fff"}; return `<div class="glass-card service-card"><i class="${p.icon}"></i><strong>${s.Name}</strong><hr><p>${rateLabel(s)}</p><p>Min ${s.MinQty} Max ${s.MaxQty}</p><button class="btn" onclick="navigate('home');setTimeout(()=>autoSelect('${s.Platform}','${s.ServiceId}'),200)">Order</button></div>`; }).join('')||'<p>No services</p>'; }
-    el("svcPlatIcons").addEventListener("click",e=>{ let item=e.target.closest(".platform-icon-item"); if(item){ document.querySelectorAll("#svcPlatIcons .platform-icon-item").forEach(i=>i.classList.remove("active")); item.classList.add("active"); filter(); } });
-    el("searchInput")?.addEventListener("input",filter); filter();
+    el("pageContent").innerHTML = `
+        <div class="glass-card">
+            <div class="platform-icons" id="svcPlatIcons">
+                <div class="platform-icon-item active" data-platform="all"><i class="fas fa-th-large"></i><span>All</span></div>
+                ${PLATFORMS.map(p=>`<div class="platform-icon-item" data-platform="${p.name}"><i class="${p.icon}" style="color:${p.color};"></i><span>${p.name}</span></div>`).join('')}
+            </div>
+            <input id="searchInput" placeholder="🔍 Search services..." oninput="filterServices()">
+        </div>
+        <div id="servicesGrid" class="service-grid"></div>`;
+    el("svcPlatIcons").addEventListener("click", e=>{
+        const item = e.target.closest(".platform-icon-item");
+        if (!item) return;
+        document.querySelectorAll("#svcPlatIcons .platform-icon-item").forEach(i=>i.classList.remove("active"));
+        item.classList.add("active");
+        filterServices();
+    });
+    filterServices();
 }
-window.autoSelect=function(platform,svcId){ let ps=el("platformSelect"); if(ps){ ps.value=platform; onPlatformChangeFixed(); setTimeout(()=>{ let ss=el("serviceSelect"); if(ss){ ss.value=svcId; onServiceChangeFixed(); }},250); }};
-async function renderAddFunds(){ el("pageContent").innerHTML=`<div class="glass-card"><h3>Add Funds</h3><div class="pm-grid"><div class="pm-card" onclick="pickMethod('easypaisa')"><div>📱 Easypaisa</div><div>0319-8595421</div><div>Muhammad Ramzan</div></div><div class="pm-card" onclick="pickMethod('sadapay')"><div>💳 SadaPay</div><div>0319-8595421</div></div><div class="pm-card" onclick="pickMethod('jazzcash')"><div>🟠 JazzCash</div><div>0319-8595421</div></div></div><div id="proofSec" style="display:none;"><label>Amount (PKR)</label><input id="fundAmount" type="number"><label>Transaction ID</label><input id="fundTxn"><label>Email</label><input id="fundEmail"><input type="file" id="fundScreenshot"><button onclick="submitFund()" class="btn btn-success">Submit</button></div></div>`; }
-window.pickMethod=function(m){ selectedPaymentMethod=m; show("proofSec"); };
-window.submitFund=async function(){ let file=el("fundScreenshot")?.files[0]; if(!file){ showToast("Screenshot required",true); return; } let reader=new FileReader(); reader.onload=async()=>{ let r=await apiCall("addFundsRequest",{amount:val("fundAmount"),transactionId:val("fundTxn"),email:val("fundEmail"),paymentMethod:selectedPaymentMethod,screenshotBase64:reader.result}); showToast(r.message||"Submitted"); }; reader.readAsDataURL(file); };
-async function renderProfile(){ el("pageContent").innerHTML=`<div class="glass-card"><h3>Profile</h3><div class="form-row"><div><label>Name</label><input id="pName" value="${currentUser?.fullName||''}"></div><div><label>Username</label><input id="pUser" value="${currentUser?.username||''}"></div></div><div class="form-row"><div><label>Email</label><input id="pEmail" value="${currentUser?.gmail||''}"></div><div><label>Phone</label><input id="pPhone" value="${currentUser?.phone||''}"></div></div><label>New Password</label><input id="pPass" type="password"><button onclick="updateProf()" class="btn">Save</button></div>`; }
-window.updateProf=async function(){ let r=await apiCall("updateProfile",{fullName:val("pName"),username:val("pUser"),gmail:val("pEmail"),phone:val("pPhone"),newPassword:val("pPass")}); showToast(r.message); };
-async function renderRecommendations(){ el("pageContent").innerHTML=`<div class="glass-card"><h3>Recommendation</h3><input id="recEmail" placeholder="Email"><input id="recWa" placeholder="WhatsApp"><textarea id="recText" placeholder="Your review"></textarea><button onclick="submitRec()" class="btn">Send</button></div>`; }
-window.submitRec=async function(){ let r=await apiCall("submitRecommendation",{email:val("recEmail"),whatsapp:val("recWa"),text:val("recText")}); showToast(r.message); };
-async function renderJoinUs(){ el("pageContent").innerHTML=`<div class="glass-card"><h3>Join Us</h3><p>Application system active - contact admin for details.</p></div>`; }
-async function renderHelp(){ el("pageContent").innerHTML=`<div class="glass-card"><h3>Help</h3><input id="helpEmail" placeholder="Email"><textarea id="helpMsg" placeholder="Message"></textarea><button onclick="submitHelp()" class="btn">Send</button></div>`; }
-window.submitHelp=async function(){ let r=await apiCall("submitHelp",{email:val("helpEmail"),message:val("helpMsg")}); showToast(r.message); };
-function navigate(page){ if(page==="home") renderHome(); else if(page==="dashboard") renderDashboard(); else if(page==="services") renderServices(); else if(page==="addfunds") renderAddFunds(); else if(page==="profile") renderProfile(); else if(page==="recommendations") renderRecommendations(); else if(page==="joinus") renderJoinUs(); else if(page==="help") renderHelp(); }
-window.navigate=navigate;
-// Sidebar & currency
-document.querySelectorAll("[data-page]").forEach(a=>a.addEventListener("click",e=>{ e.preventDefault(); navigate(a.getAttribute("data-page")); el("sidebar").classList.remove("open"); el("overlay").style.display="none"; }));
-el("menuBtn").onclick=()=>{ el("sidebar").classList.add("open"); el("overlay").style.display="block"; };
-el("closeSidebar").onclick=()=>{ el("sidebar").classList.remove("open"); el("overlay").style.display="none"; };
-el("overlay").onclick=()=>{ el("sidebar").classList.remove("open"); el("overlay").style.display="none"; };
-el("refreshBtn").onclick=()=>{ if(currentUser) navigate("home"); else showAuthScreen(); };
-el("currencyGroup").addEventListener("click",e=>{ if(e.target.dataset.curr){ activeCurrency=e.target.dataset.curr; document.querySelectorAll(".currency-btn").forEach(b=>b.classList.toggle("active",b.dataset.curr===activeCurrency)); navigate("home"); } });
-(async function(){ if(await checkAuth()){ await loadServices(); navigate("home"); } })();
+window.filterServices = function() {
+    const platform = document.querySelector("#svcPlatIcons .platform-icon-item.active")?.dataset.platform||"all";
+    const search = (el("searchInput")?.value||"").toLowerCase();
+    const filtered = allServices.filter(s =>
+        (platform==="all"||s.Platform===platform) &&
+        (s.Name.toLowerCase().includes(search)||s.ServiceId.toString().includes(search))
+    );
+    const pi = PLATFORMS.find(p=>p.name===filtered[0]?.Platform)||{icon:"fas fa-globe",color:"#fff"};
+    el("servicesGrid").innerHTML = filtered.map(s=>{
+        const pInfo = PLATFORMS.find(p=>p.name===s.Platform)||{icon:"fas fa-globe",color:"#fff"};
+        return `<div class="glass-card service-card" onclick="navigateTo('home');setTimeout(()=>autoSelectService('${s.Platform}','${s.ServiceId}'),120)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <i class="${pInfo.icon}" style="font-size:22px;color:${pInfo.color};"></i>
+                <strong style="font-size:14px;">${s.Name}</strong>
+            </div>
+            <hr class="divider">
+            <p style="font-size:13px;color:#94a3b8;margin:6px 0;">Rate: ${rateLabel(s)}</p>
+            <p style="font-size:13px;color:#64748b;">Min: ${s.MinQty} &nbsp;|&nbsp; Max: ${s.MaxQty}</p>
+            <button class="btn" style="margin-top:12px;width:100%;font-size:13px;" onclick="event.stopPropagation();navigateTo('home');setTimeout(()=>autoSelectService('${s.Platform}','${s.ServiceId}'),120)">Order Now</button>
+        </div>`;
+    }).join('') || '<p style="color:#64748b;padding:20px;">No services found.</p>';
+};
+window.autoSelectService = function(platform, serviceId) {
+    const ps = el("platformSelect");
+    if (!ps) return;
+    ps.value = platform;
+    onPlatformChange();
+    setTimeout(()=>{
+        const ss = el("serviceSelect");
+        if (ss) { ss.value = serviceId; onServiceChange(); }
+    }, 200);
+};
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+async function renderDashboard() {
+    el("pageContent").innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner"></i></div>';
+    const [stats, orders] = await Promise.all([apiCall("userStats"), apiCall("getUserOrders")]);
+    el("pageContent").innerHTML = `
+        <div class="grid-cards">
+            <div class="glass-card" style="text-align:center;">
+                <i class="fas fa-wallet fa-2x" style="color:#34d399;"></i>
+                <h3 style="margin:8px 0;">${fmtCur(currentUser?.wallet||0)}</h3><p style="color:#64748b;">Balance</p>
+            </div>
+            <div class="glass-card" style="text-align:center;">
+                <i class="fas fa-shopping-cart fa-2x" style="color:#60a5fa;"></i>
+                <h3 style="margin:8px 0;">${stats.totalOrders||0}</h3><p style="color:#64748b;">Total Orders</p>
+            </div>
+            <div class="glass-card" style="text-align:center;">
+                <i class="fas fa-clock fa-2x" style="color:#f59e0b;"></i>
+                <h3 style="margin:8px 0;">${stats.pendingOrders||0}</h3><p style="color:#64748b;">Pending</p>
+            </div>
+        </div>
+        <div class="glass-card">
+            <h3 style="margin-bottom:14px;">Order History</h3>
+            ${orders.orders?.length
+                ? `<div style="overflow-x:auto;"><table style="width:100%;font-size:13px;border-collapse:collapse;">
+                    <tr style="background:rgba(43,110,240,0.2);"><th style="padding:10px;">ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>
+                    ${orders.orders.map(o=>`<tr style="border-bottom:1px solid #2d3a5e;"><td style="padding:9px;">${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${fmtCur(o.amount)}</td><td>${o.status}</td></tr>`).join('')}
+                  </table></div>`
+                : '<p style="color:#64748b;">No orders yet.</p>'}
+        </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// ADD FUNDS — Payment method selection first
+// ═══════════════════════════════════════════════════
+async function renderAddFunds() {
+    el("pageContent").innerHTML = `
+        <div class="glass-card">
+            <h3 style="margin-bottom:6px;"><i class="fas fa-wallet" style="color:#34d399;"></i> Add Funds</h3>
+            <p style="color:#64748b;font-size:13px;margin-bottom:20px;">Step 1: Choose your payment method. Step 2: Send the amount. Step 3: Submit proof below.</p>
+
+            <div class="step-block">
+                <div class="step-header"><div class="step-num">1</div><div class="step-title">Select Payment Method</div></div>
+                <div class="pm-grid">
+                    <div class="pm-card" id="pm-easypaisa" onclick="pickPayMethod('easypaisa')">
+                        <div class="pm-icon">📱</div>
+                        <div class="pm-name" style="color:#00c853;">Easypaisa</div>
+                        <div class="pm-num">0319-8595421</div>
+                        <div class="pm-holder">Muhammad Ramzan Al Sami</div>
+                    </div>
+                    <div class="pm-card" id="pm-sadapay" onclick="pickPayMethod('sadapay')">
+                        <div class="pm-icon">💳</div>
+                        <div class="pm-name" style="color:#ff4081;">SadaPay</div>
+                        <div class="pm-num">0319-8595421</div>
+                        <div class="pm-holder">Muhammad Ramzan Ul Sami</div>
+                    </div>
+                    <div class="pm-card" id="pm-jazzcash" onclick="pickPayMethod('jazzcash')">
+                        <div class="pm-icon">🟠</div>
+                        <div class="pm-name" style="color:#ff6f00;">JazzCash</div>
+                        <div class="pm-num">0319-8595421</div>
+                        <div class="pm-holder">Muhammad Ramzan Ul Sami</div>
+                    </div>
+                    <div class="pm-card" id="pm-bank" onclick="pickPayMethod('bank')">
+                        <div class="pm-icon">🏦</div>
+                        <div class="pm-name" style="color:#60a5fa;">Bank Transfer</div>
+                        <div class="pm-num">Contact Admin</div>
+                        <div class="pm-holder">For large amounts</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proof form — hidden until method selected -->
+            <div id="proofSection" style="display:none;" class="step-block">
+                <div id="pmBanner" style="background:rgba(43,110,240,0.12);border:1px solid rgba(43,110,240,0.3);border-radius:14px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#60a5fa;"></div>
+                <div class="step-header"><div class="step-num">2</div><div class="step-title">Submit Payment Proof</div></div>
+                <div class="form-row">
+                    <div><label>Amount Sent (PKR)</label><input id="fundAmount" type="number" placeholder="e.g. 500"></div>
+                    <div><label>Transaction ID</label><input id="fundTxn" placeholder="e.g. TXN12345678"></div>
+                </div>
+                <label style="margin-top:8px;">Your Email</label>
+                <input id="fundEmail" type="email" placeholder="your@email.com" value="${currentUser?.gmail||''}">
+                <label style="margin-top:8px;">Payment Screenshot</label>
+                <input type="file" id="fundScreenshot" accept="image/*">
+                <button onclick="submitFundProof()" class="btn btn-success" style="width:100%;margin-top:14px;"><i class="fas fa-paper-plane"></i> Submit Proof</button>
+            </div>
+        </div>`;
+}
+window.pickPayMethod = function(method) {
+    selectedPaymentMethod = method;
+    document.querySelectorAll(".pm-card").forEach(c => c.classList.toggle("selected", c.id===`pm-${method}`));
+    const names = { easypaisa:"Easypaisa — 0319-8595421 (Muhammad Ramzan Al Sami)", sadapay:"SadaPay — 0319-8595421 (Muhammad Ramzan Ul Sami)", jazzcash:"JazzCash — 0319-8595421 (Muhammad Ramzan Ul Sami)", bank:"Bank Transfer — Contact admin for details" };
+    el("pmBanner").innerHTML = `<i class="fas fa-check-circle" style="color:#10b981;"></i> <strong>Selected:</strong> ${names[method]}<br><span style="color:#94a3b8;font-size:12px;">Send the amount to the account above, then fill in the proof form below.</span>`;
+    show("proofSection");
+    el("proofSection").scrollIntoView({ behavior:"smooth", block:"nearest" });
+};
+window.submitFundProof = async function() {
+    const file = el("fundScreenshot")?.files[0];
+    if (!file) { showToast("Please upload a screenshot",true); return; }
+    if (!selectedPaymentMethod) { showToast("Select payment method first",true); return; }
+    const reader = new FileReader();
+    reader.onload = async ()=>{
+        const r = await apiCall("addFundsRequest",{ amount:val("fundAmount"), transactionId:val("fundTxn"), email:val("fundEmail"), paymentMethod:selectedPaymentMethod, screenshotBase64:reader.result });
+        showToast(r.message||"Proof submitted!");
+        if (r.success) hide("proofSection");
+    };
+    reader.readAsDataURL(file);
+};
+
+// ═══════════════════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════════════════
+async function renderProfile() {
+    el("pageContent").innerHTML = `
+        <div class="glass-card">
+            <h3 style="margin-bottom:16px;"><i class="fas fa-user-edit" style="color:#3b82f6;"></i> Profile Settings</h3>
+            <div class="form-row"><div><label>Full Name</label><input id="pName" value="${currentUser?.fullName||''}"></div><div><label>Username</label><input id="pUser" value="${currentUser?.username||''}"></div></div>
+            <div class="form-row"><div><label>Email</label><input id="pEmail" value="${currentUser?.gmail||''}"></div><div><label>Phone</label><input id="pPhone" value="${currentUser?.phone||''}"></div></div>
+            <label style="margin-top:8px;">New Password</label><input type="password" id="pPass" placeholder="Leave blank to keep unchanged">
+            <button onclick="doUpdateProfile()" class="btn btn-success" style="margin-top:14px;"><i class="fas fa-save"></i> Save Changes</button>
+        </div>`;
+}
+window.doUpdateProfile = async function() {
+    const r = await apiCall("updateProfile",{ fullName:val("pName"), username:val("pUser"), gmail:val("pEmail"), phone:val("pPhone"), newPassword:val("pPass") });
+    showToast(r.message);
+    if (r.success) { currentUser={...currentUser,fullName:val("pName"),username:val("pUser"),gmail:val("pEmail"),phone:val("pPhone")}; el("userNameDisplay").innerText=currentUser.fullName?.split(" ")[0]||currentUser.username; }
+};
+
+// ═══════════════════════════════════════════════════
+// RECOMMENDATIONS
+// ═══════════════════════════════════════════════════
+async function renderRecommendations() {
+    el("pageContent").innerHTML = `
+        <div class="glass-card">
+            <h3 style="margin-bottom:16px;"><i class="fas fa-star" style="color:#f59e0b;"></i> Share Your Experience</h3>
+            <div class="form-row"><div><label>Email</label><input id="recEmail"></div><div><label>WhatsApp</label><input id="recWa"></div></div>
+            <label>Phone</label><input id="recPhone">
+            <label style="margin-top:8px;">Your Recommendation</label>
+            <textarea id="recText" rows="4" placeholder="Write your experience..."></textarea>
+            <button onclick="submitRec()" class="btn" style="margin-top:12px;"><i class="fas fa-paper-plane"></i> Submit</button>
+        </div>`;
+}
+window.submitRec = async function() {
+    const r = await apiCall("submitRecommendation",{ email:val("recEmail"), whatsapp:val("recWa"), phone:val("recPhone"), text:val("recText") });
+    showToast(r.message);
+};
+
+// ═══════════════════════════════════════════════════
+// JOIN US
+// ═══════════════════════════════════════════════════
+async function renderJoinUs() {
+    const j = await apiCall("getMyJoinStatus");
+    joinApplication = j.success ? j.application : null;
+    const hasApplied = !!(joinApplication?.requestId);
+    const status = (joinApplication?.status||"none").toLowerCase();
+
+    let statusHtml="", appHtml="", attHtml="", jobHtml="", histHtml="";
+    if (!hasApplied||status==="none") {
+        appHtml=`<h3 style="margin-bottom:14px;">📝 Application Form</h3>
+            <div class="form-row"><div><label>Full Name</label><input id="appName" value="${currentUser?.fullName||''}"></div><div><label>Username</label><input id="appUser" value="${currentUser?.username||''}"></div></div>
+            <div class="form-row"><div><label>Phone</label><input id="appPhone"></div><div><label>WhatsApp</label><input id="appWa"></div></div>
+            <div class="form-row"><div><label>Email</label><input id="appEmail" value="${currentUser?.gmail||''}"></div><div><label>Salary Type</label><select id="appSalary"><option>Commission Based</option><option>Salary Based</option></select></div></div>
+            <div class="form-row"><div><label>Working Hours</label><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select></div><div><label>Shift</label><select id="appShift"><option>Day</option><option>Night</option></select></div></div>
+            <label>About Yourself</label><textarea id="appAbout" rows="4" placeholder="Experience, skills, why you want to join..."></textarea>
+            <label style="margin-top:8px;">Photo</label><input type="file" id="appPhoto" accept="image/*">
+            <button onclick="submitApplication()" class="btn btn-success" style="margin-top:14px;">Submit Application</button>`;
+    } else if (status==="pending") {
+        statusHtml=`<div class="info-note"><i class="fas fa-clock"></i> <strong>Pending Review</strong> — Your application is being reviewed by admin.</div>`;
+    } else if (status==="approved") {
+        statusHtml=`<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Approved!</strong> Salary: ${joinApplication.salary?fmtCur(parseFloat(joinApplication.salary)):'TBD'}/month</div>`;
+        attHtml=`<h3 style="margin-bottom:14px;">📋 Daily Attendance</h3>
+            <div class="form-row"><div><label>Name</label><input id="attName" value="${currentUser?.fullName||''}"></div><div><label>Email</label><input id="attEmail" value="${currentUser?.gmail||''}"></div></div>
+            <div class="form-row"><div><label>Phone</label><input id="attPhone"></div><div><label>Login Time</label><input type="time" id="attLogin"></div></div>
+            <div class="form-row"><div><label>Working Hours</label><input type="number" id="attHours"></div><div><label>Logout Time</label><input type="time" id="attLogout"></div></div>
+            <div class="form-row"><div><label>Work Type</label><select id="attWork"><option>Sharing Posts</option><option>Designed Posts</option><option>Platform Management</option><option>Client Support</option></select></div><div><label>Client Contacts</label><input type="number" id="attClients"></div></div>
+            <div class="form-row"><div><label>Boosted</label><select id="attBoosted"><option>No</option><option>Yes</option></select></div><div><label>Platforms Shared</label><select id="attPlats"><option>Instagram</option><option>Facebook</option><option>Twitter</option><option>All Platforms</option></select></div></div>
+            <label>Work Detail</label><textarea id="attDetail" rows="3"></textarea>
+            <button onclick="submitAttendance()" class="btn btn-success" style="margin-top:12px;">✅ Mark Attendance</button>`;
+        jobHtml=`<h3 style="margin-bottom:14px;">💼 Job Details</h3>
+            <div class="form-row"><div><label>Job Name</label><input id="jobName"></div><div><label>Order ID</label><input id="jobOid"></div></div>
+            <div class="form-row"><div><label>Platform</label><input id="jobPlat"></div><div><label>Amount (PKR)</label><input type="number" id="jobAmt"></div></div>
+            <label>Link</label><input id="jobLink">
+            <label style="margin-top:8px;">Full Details</label><textarea id="jobDetail" rows="3"></textarea>
+            <button onclick="submitJob()" class="btn btn-success" style="margin-top:12px;">📌 Submit Job</button>`;
+        histHtml=`<h3>📜 History</h3><div id="histData" class="glass-card" style="margin-top:12px;">Loading...</div>`;
+    } else if (status==="rejected") {
+        statusHtml=`<div class="info-note" style="background:rgba(220,38,38,0.15);border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Not Selected</strong> — Thank you for your interest.</div>`;
+    }
+
+    const defTab = status==="approved" ? "att" : "app";
+    el("pageContent").innerHTML=`<div class="glass-card">
+        <h2 style="margin-bottom:14px;"><i class="fas fa-user-plus" style="color:#3b82f6;"></i> Join Us & Earn</h2>
+        ${statusHtml}
+        <div class="join-tabs">
+            <button class="join-tab-btn ${defTab==='app'?'active':''}" onclick="switchJoinTab('app',this)">📝 Application</button>
+            <button class="join-tab-btn ${defTab==='att'?'active':''}" onclick="switchJoinTab('att',this)">📋 Attendance</button>
+            <button class="join-tab-btn" onclick="switchJoinTab('job',this)">💼 Jobs</button>
+            <button class="join-tab-btn" onclick="switchJoinTab('hist',this)">📜 History</button>
+        </div>
+        <div id="tab-app" class="join-tab-content ${defTab==='app'?'active':''}">${appHtml||'<p class="info-note">Status: '+status+'</p>'}</div>
+        <div id="tab-att" class="join-tab-content ${defTab==='att'?'active':''}">${attHtml||'<p class="info-note">Available after approval.</p>'}</div>
+        <div id="tab-job" class="join-tab-content">${jobHtml||'<p class="info-note">Available after approval.</p>'}</div>
+        <div id="tab-hist" class="join-tab-content">${histHtml||'<p class="info-note">Available after approval.</p>'}</div>
+    </div>`;
+
+    if (status==="approved" && el("histData")) {
+        apiCall("getMyAttendance").then(a=>{
+            apiCall("getMyJobs").then(jb=>{
+                el("histData").innerHTML=`
+                    <div class="history-table"><h4>Attendance</h4>${a.attendance?.length?'<table><tr><th>Date</th><th>Login</th><th>Logout</th><th>Hours</th></tr>'+a.attendance.map(r=>`<tr><td>${r.date||r.Date}</td><td>${r.loginTime||r.LoginTime}</td><td>${r.logoutTime||r.LogoutTime}</td><td>${r.workingHours||r.WorkingHours}</td></tr>`).join('')+'</table>':'<p style="color:#64748b;">No records.</p>'}</div>
+                    <div class="history-table" style="margin-top:20px;"><h4>Jobs</h4>${jb.jobs?.length?'<table><tr><th>Date</th><th>Job</th><th>Order ID</th><th>Amount</th></tr>'+jb.jobs.map(r=>`<tr><td>${r.date||r.Date}</td><td>${r.jobName||r.JobName}</td><td>${r.orderId||r.OrderId||'-'}</td><td>${r.amount||r.Amount}</td></tr>`).join('')+'</table>':'<p style="color:#64748b;">No records.</p>'}</div>`;
+            });
+        });
+    }
+}
+window.switchJoinTab = function(tab, btn) {
+    document.querySelectorAll(".join-tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".join-tab-content").forEach(c=>c.classList.remove("active"));
+    btn.classList.add("active");
+    el(`tab-${tab}`)?.classList.add("active");
+};
+window.submitApplication = async function() {
+    const file = el("appPhoto")?.files[0];
+    if (!file) { showToast("Please upload your photo",true); return; }
+    const reader=new FileReader();
+    reader.onload = async ()=>{
+        const r=await apiCall("submitJoinRequest",{name:val("appName"),username:val("appUser"),phone:val("appPhone"),whatsapp:val("appWa"),email:val("appEmail"),salaryType:val("appSalary"),hours:val("appHours"),shift:val("appShift"),about:val("appAbout"),photo:reader.result});
+        showToast(r.message);
+        if(r.success) setTimeout(()=>renderJoinUs(),1500);
+    };
+    reader.readAsDataURL(file);
+};
+window.submitAttendance = async function() {
+    const r=await apiCall("submitAttendance",{name:val("attName"),email:val("attEmail"),phone:val("attPhone"),loginTime:val("attLogin"),workingHours:val("attHours"),logoutTime:val("attLogout"),workType:val("attWork"),clientCount:val("attClients"),boosted:val("attBoosted"),sharedPlatforms:val("attPlats"),workDetail:val("attDetail")});
+    showToast(r.message);
+};
+window.submitJob = async function() {
+    const r=await apiCall("submitJobDetail",{jobName:val("jobName"),orderId:val("jobOid"),platform:val("jobPlat"),amount:val("jobAmt"),link:val("jobLink"),details:val("jobDetail")});
+    showToast(r.message);
+};
+
+// ═══════════════════════════════════════════════════
+// HELP
+// ═══════════════════════════════════════════════════
+async function renderHelp() {
+    el("pageContent").innerHTML=`
+        <div class="glass-card">
+            <h3 style="margin-bottom:16px;"><i class="fas fa-question-circle" style="color:#3b82f6;"></i> Need Help?</h3>
+            <label>Email</label><input id="helpEmail">
+            <label style="margin-top:8px;">Phone / WhatsApp</label><input id="helpPhone">
+            <label style="margin-top:8px;">Your Message</label><textarea id="helpMsg" rows="4" placeholder="Describe your issue..."></textarea>
+            <button onclick="submitHelp()" class="btn" style="margin-top:12px;"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </div>`;
+}
+window.submitHelp = async function() {
+    const r=await apiCall("submitHelp",{email:val("helpEmail"),phone:val("helpPhone"),message:val("helpMsg")});
+    showToast(r.message);
+};
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function navigate(page) {
+    if(page==="home")            renderHome();
+    else if(page==="dashboard")  renderDashboard();
+    else if(page==="services")   renderServices();
+    else if(page==="addfunds")   renderAddFunds();
+    else if(page==="profile")    renderProfile();
+    else if(page==="recommendations") renderRecommendations();
+    else if(page==="joinus")     renderJoinUs();
+    else if(page==="help")       renderHelp();
+}
+window.navigate = navigate;
+window.navigateTo = navigate;
+
+// Sidebar links
+document.querySelectorAll("[data-page]").forEach(el2 => {
+    el2.addEventListener("click", e=>{
+        e.preventDefault();
+        navigate(el2.getAttribute("data-page"));
+        el("sidebar").classList.remove("open");
+        el("overlay").style.display="none";
+    });
+});
+el("menuBtn").onclick = ()=>{ el("sidebar").classList.add("open"); el("overlay").style.display="block"; };
+el("closeSidebar").onclick = ()=>{ el("sidebar").classList.remove("open"); el("overlay").style.display="none"; };
+el("overlay").onclick = ()=>{ el("sidebar").classList.remove("open"); el("overlay").style.display="none"; };
+el("refreshBtn").onclick = ()=>{ if(currentUser) navigate("home"); else showAuthScreen(); };
+el("currencyGroup").addEventListener("click", e=>{
+    if (e.target.dataset.curr) {
+        activeCurrency = e.target.dataset.curr;
+        document.querySelectorAll(".currency-btn").forEach(b=>b.classList.toggle("active",b.dataset.curr===activeCurrency));
+        navigate("home");
+    }
+});
+
+// Init
+(async function(){
+    try {
+        if (await checkAuth()) {
+            await loadServices();
+            navigate("home");
+        }
+    } catch(e) { console.error(e); showAuthScreen(); }
+})();
 </script>
 </body>
-</html>
+</html>  
