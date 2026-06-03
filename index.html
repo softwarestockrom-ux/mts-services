@@ -415,91 +415,205 @@
     }
     
     function showServiceDetails() {
-        let serviceId = document.getElementById("serviceSelect").value;
-        if(!serviceId) return;
-        selectedService = allServices.find(s => s.ServiceId === serviceId);
-        if(!selectedService) return;
-        
-        let rateDisplay = selectedService.Per1k ? 
-            `${formatPrice(selectedService.Rate)} per 1000 (${formatPrice(selectedService.Rate/1000)} per unit)` : 
-            `${formatPrice(selectedService.Rate)} per unit`;
-        
-        document.getElementById("serviceDescriptionBox").innerHTML = `
-            <div class="service-detail-box">
-                <h4>${selectedService.Name}</h4>
-                <p><i class="fas fa-tag"></i> <strong>Rate:</strong> ${rateDisplay}</p>
-                <p><i class="fas fa-chart-line"></i> <strong>Min Order:</strong> ${selectedService.MinQty} | <strong>Max Order:</strong> ${selectedService.MaxQty}</p>
-                <p><i class="fas fa-clock"></i> <strong>Delivery Time:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
-                <p><i class="fas fa-info-circle"></i> ${selectedService.Description || 'High quality service'}</p>
-            </div>
+    let serviceId = document.getElementById("serviceSelect").value;
+
+    if (!serviceId) return;
+
+    selectedService = allServices.find(s => s.ServiceId === serviceId);
+
+    if (!selectedService) return;
+
+    let rateText = '';
+
+    if (selectedService.Per1k === true || selectedService.Per1k === "TRUE") {
+
+        let unitPrice = Number(selectedService.Rate) / 1000;
+
+        rateText = `
+            <strong>Rate:</strong>
+            ${formatPrice(selectedService.Rate)} / 1000
+            <br>
+            <strong>Per Unit:</strong>
+            ${formatPrice(unitPrice)}
         `;
-        document.getElementById("serviceDescriptionBox").style.display = "block";
-        document.getElementById("deliveryTime").innerHTML = selectedService.DeliveryTime || '1-2 hours';
-        
-        // Build conditional fields based on service flags
-        let conditionalHtml = "";
-        
-        if(selectedService.IsAccount === true || selectedService.IsAccount === "TRUE") {
-            conditionalHtml += `<div class="form-row"><div><label class="required">Email Address</label><input type="email" id="emailField" placeholder="Enter email for account"></div></div>`;
-        }
-        
-        if(selectedService.RequireLink === true || selectedService.RequireLink === "TRUE") {
-            conditionalHtml += `<div class="form-row"><div><label class="required">Profile/Post Link</label><input type="url" id="linkField" placeholder="Enter your profile/post link"></div></div>`;
-        }
-        
-        if(selectedService.TargetCountry === true || selectedService.TargetCountry === "TRUE") {
-            conditionalHtml += `<div class="form-row"><div><label class="required">Target Country</label><select id="countrySelect">${countries.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div></div>`;
-        }
-        
-        if(selectedService.CustomComments === true || selectedService.CustomComments === "TRUE") {
-            conditionalHtml += `<div class="form-row"><div><label class="required">Custom Comments</label><textarea id="commentsField" placeholder="Enter comments separated by commas (e.g., Great!, Awesome, Love it)" rows="3"></textarea></div></div>`;
-        }
-        
-        document.getElementById("conditionalFields").innerHTML = conditionalHtml;
-        calculateTotal();
+
+    } else {
+
+        rateText = `
+            <strong>Per Unit:</strong>
+            ${formatPrice(selectedService.Rate)}
+        `;
+
     }
-    
+
+    document.getElementById("serviceInfo").innerHTML = `
+        <div class="service-detail-box">
+            <h3>${selectedService.Name}</h3>
+
+            <p>${selectedService.Description || 'No description available'}</p>
+
+            <hr style="margin:10px 0">
+
+            <p>${rateText}</p>
+
+            <p>
+                Min Qty:
+                ${selectedService.MinQty}
+                |
+                Max Qty:
+                ${selectedService.MaxQty}
+            </p>
+
+            <p>
+                Delivery:
+                ${selectedService.DeliveryTime || 'Instant'}
+            </p>
+        </div>
+    `;
+
+    document.getElementById("serviceInfo").style.display = "block";
+
+    let extraHtml = '';
+
+    if (selectedService.EmailRequired) {
+
+        extraHtml += `
+            <label>Email Address *</label>
+            <input
+                type="email"
+                id="emailField"
+                placeholder="Enter Email">
+        `;
+    }
+
+    if (selectedService.RequireLink) {
+
+        extraHtml += `
+            <label>Profile/Page Link *</label>
+            <input
+                type="url"
+                id="linkField"
+                placeholder="https://">
+        `;
+    }
+
+    if (selectedService.TargetCountry) {
+
+        extraHtml += `
+            <label>Target Country *</label>
+
+            <select id="countryField">
+                <option value="">Select Country</option>
+                <option>Pakistan</option>
+                <option>India</option>
+                <option>Bangladesh</option>
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>Canada</option>
+                <option>Germany</option>
+                <option>France</option>
+                <option>Saudi Arabia</option>
+                <option>UAE</option>
+            </select>
+        `;
+    }
+
+    if (selectedService.CustomComments) {
+
+        extraHtml += `
+            <label>Custom Comments *</label>
+
+            <textarea
+                id="commentsField"
+                rows="4"
+                placeholder="Enter comments separated by comma"></textarea>
+        `;
+    }
+
+    document.getElementById("extraFields").innerHTML = extraHtml;
+
+    calculateTotal();
+}    
     function calculateTotal() {
-        if(!selectedService) return;
-        let qty = parseInt(document.getElementById("quantity").value) || 0;
-        let minQty = parseInt(selectedService.MinQty) || 1;
-        let maxQty = parseInt(selectedService.MaxQty) || 10000;
-        let warningDiv = document.getElementById("quantityWarning");
-        
-        if(qty > 0 && qty < minQty) {
-            warningDiv.innerHTML = `⚠️ Minimum quantity is ${minQty}`;
-            warningDiv.style.display = "block";
-            document.getElementById("orderSummary").style.display = "none";
-            return;
-        } else if(qty > maxQty) {
-            warningDiv.innerHTML = `⚠️ Maximum quantity is ${maxQty}`;
-            warningDiv.style.display = "block";
-            document.getElementById("orderSummary").style.display = "none";
-            return;
-        } else {
-            warningDiv.style.display = "none";
-        }
-        
-        if(qty === 0) {
-            document.getElementById("orderSummary").style.display = "none";
-            return;
-        }
-        
-        let totalPKR, pricePerUnitPKR;
-        if(selectedService.Per1k === true || selectedService.Per1k === "TRUE") {
-            pricePerUnitPKR = selectedService.Rate / 1000;
-            totalPKR = pricePerUnitPKR * qty;
-        } else {
-            pricePerUnitPKR = selectedService.Rate;
-            totalPKR = selectedService.Rate * qty;
-        }
-        
-        document.getElementById("pricePerUnit").innerHTML = formatPrice(pricePerUnitPKR);
-        document.getElementById("totalAmount").innerHTML = formatPrice(totalPKR);
-        document.getElementById("orderSummary").style.display = "block";
-        selectedService.calculatedTotal = totalPKR;
+
+    if (!selectedService) return;
+
+    let qty =
+        parseInt(
+            document.getElementById("quantity").value
+        ) || 0;
+
+    let min =
+        Number(selectedService.MinQty);
+
+    let max =
+        Number(selectedService.MaxQty);
+
+    if (qty < min) {
+
+        document.getElementById("qtyWarning").innerHTML =
+            `Minimum quantity is ${min}`;
+
+        document.getElementById("qtyWarning").style.display =
+            "block";
+
+        document.getElementById("orderSummary").style.display =
+            "none";
+
+        return;
     }
-    
+
+    if (qty > max) {
+
+        document.getElementById("qtyWarning").innerHTML =
+            `Maximum quantity is ${max}`;
+
+        document.getElementById("qtyWarning").style.display =
+            "block";
+
+        document.getElementById("orderSummary").style.display =
+            "none";
+
+        return;
+    }
+
+    document.getElementById("qtyWarning").style.display =
+        "none";
+
+    let total = 0;
+    let unitPrice = 0;
+
+    if (selectedService.Per1k) {
+
+        unitPrice =
+            Number(selectedService.Rate) / 1000;
+
+        total =
+            unitPrice * qty;
+
+    } else {
+
+        unitPrice =
+            Number(selectedService.Rate);
+
+        total =
+            unitPrice * qty;
+    }
+
+    selectedService.calcTotal = total;
+
+    document.getElementById("unitPrice").innerHTML =
+        formatPrice(unitPrice);
+
+    document.getElementById("totalPrice").innerHTML =
+        formatPrice(total);
+
+    document.getElementById("deliveryTime").innerHTML =
+        selectedService.DeliveryTime || "Instant";
+
+    document.getElementById("orderSummary").style.display =
+        "block";
+}    
     async function placeOrder() {
         if(!selectedService) { showToast("Please select a service first", true); return; }
         
@@ -511,16 +625,33 @@
         if(qty > maxQty) { showToast(`Maximum quantity is ${maxQty}`, true); return; }
         
         // Validate conditional fields
-        if((selectedService.IsAccount === true || selectedService.IsAccount === "TRUE") && !document.getElementById("emailField")?.value) {
-            showToast("Please enter email address", true); return;
-        }
-        if((selectedService.RequireLink === true || selectedService.RequireLink === "TRUE") && !document.getElementById("linkField")?.value) {
-            showToast("Please enter profile/post link", true); return;
-        }
-        if((selectedService.CustomComments === true || selectedService.CustomComments === "TRUE") && !document.getElementById("commentsField")?.value) {
-            showToast("Please enter custom comments", true); return;
-        }
-        
+        if (selectedService.EmailRequired &&
+    !document.getElementById("emailField")?.value.trim()) {
+
+    showToast("Email required", true);
+    return;
+}
+
+if (selectedService.RequireLink &&
+    !document.getElementById("linkField")?.value.trim()) {
+
+    showToast("Profile/Page link required", true);
+    return;
+}
+
+if (selectedService.TargetCountry &&
+    !document.getElementById("countryField")?.value) {
+
+    showToast("Select country", true);
+    return;
+}
+
+if (selectedService.CustomComments &&
+    !document.getElementById("commentsField")?.value.trim()) {
+
+    showToast("Custom comments required", true);
+    return;
+}        
         if(currentUser.wallet < selectedService.calculatedTotal) {
             showToast(`Insufficient balance! Need ${formatPrice(selectedService.calculatedTotal)}`, true);
             return;
@@ -543,19 +674,46 @@
         if(res.success) {
             let orderDate = new Date().toLocaleString();
             document.getElementById("orderDetails").innerHTML = `
-                <p><strong>🆔 Order ID:</strong> ${res.orderId}</p>
-                <p><strong>📱 Platform:</strong> ${selectedService.Platform}</p>
-                <p><strong>🔢 Service ID:</strong> ${selectedService.ServiceId}</p>
-                <p><strong>📌 Service Name:</strong> ${selectedService.Name}</p>
-                <p><strong>📝 Description:</strong> ${selectedService.Description || 'N/A'}</p>
-                <p><strong>📦 Quantity:</strong> ${qty}</p>
-                <p><strong>💰 Amount:</strong> ${formatPrice(selectedService.calculatedTotal)}</p>
-                <p><strong>📧 Email/Link:</strong> ${extraFields.email || extraFields.link || 'N/A'}</p>
-                <p><strong>📅 Date & Time:</strong> ${orderDate}</p>
-                <p><strong>⏱️ Delivery Time:</strong> ${selectedService.DeliveryTime || '1-2 hours'}</p>
-                <p><strong>📊 Status:</strong> Pending</p>
-            `;
-            document.getElementById("orderSuccessModal").style.display = "block";
+    <p><b>Order ID:</b> ${res.orderId}</p>
+
+    <p><b>Platform:</b> ${selectedService.Platform}</p>
+
+    <p><b>Service ID:</b> ${selectedService.ServiceId}</p>
+
+    <p><b>Service Name:</b> ${selectedService.Name}</p>
+
+    <p><b>Description:</b> ${selectedService.Description}</p>
+
+    <p><b>Quantity:</b> ${qty}</p>
+
+    <p><b>Amount:</b> ${formatPrice(selectedService.calcTotal)}</p>
+
+    <p><b>Delivery:</b>
+        ${selectedService.DeliveryTime}
+    </p>
+
+    <p><b>Date:</b>
+        ${new Date().toLocaleString()}
+    </p>
+
+    ${
+        extra.email
+            ? `<p><b>Email:</b> ${extra.email}</p>`
+            : ''
+    }
+
+    ${
+        extra.link
+            ? `<p><b>Link:</b> ${extra.link}</p>`
+            : ''
+    }
+
+    ${
+        extra.country
+            ? `<p><b>Country:</b> ${extra.country}</p>`
+            : ''
+    }
+`;            document.getElementById("orderSuccessModal").style.display = "block";
         } else {
             showToast(res.error || "Order failed", true);
         }
