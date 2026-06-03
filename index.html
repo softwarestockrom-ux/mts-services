@@ -23,7 +23,7 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; display: none; }
         .main-content { padding: 20px; max-width: 1400px; margin: 0 auto; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: rgba(0,0,0,0.3); border-radius: 60px; margin-bottom: 25px; }
-        .platform-icons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 30px; max-height: 200px; overflow-y: auto; padding: 10px; }
+        .platform-icons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 30px; }
         .platform-icon-item { background: rgba(30, 41, 59, 0.6); border-radius: 50px; padding: 10px 18px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; border: 1px solid transparent; }
         .platform-icon-item:hover, .platform-icon-item.active { background: #2b6ef0; transform: translateY(-3px); }
         .currency-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -41,23 +41,16 @@
         .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
         .status-approved { background: #10b981; color: white; }
         .status-pending { background: #f59e0b; color: black; }
-        .status-rejected { background: #dc2626; color: white; }
-        .join-main-tabs { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .join-main-tab-btn { background: #1e293b; padding: 12px 24px; border-radius: 40px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
-        .join-main-tab-btn.active { background: #2b6ef0; }
-        .join-main-tab-btn:hover { background: #3b82f6; }
+        .join-tabs { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; border-bottom: 1px solid #2d3a5e; padding-bottom: 10px; }
+        .join-tab-btn { background: #1e293b; padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: all 0.2s; }
+        .join-tab-btn.active { background: #2b6ef0; }
         .join-tab-content { display: none; }
         .join-tab-content.active { display: block; }
         .info-note { background: rgba(245, 158, 11, 0.2); border-left: 4px solid #f59e0b; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        .success-note { background: rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981; padding: 15px; border-radius: 12px; margin: 15px 0; }
         .category-selector { background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 15px; margin: 15px 0; }
         .category-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
         .category-btn { background: #1e293b; padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
         .category-btn:hover, .category-btn.active { background: #2b6ef0; }
-        .history-table { overflow-x: auto; margin-top: 15px; }
-        .history-table table { width: 100%; border-collapse: collapse; }
-        .history-table th, .history-table td { padding: 10px; text-align: left; border-bottom: 1px solid #2d3a5e; }
-        .history-table th { background: rgba(43, 110, 240, 0.3); }
         @media (max-width: 768px) { .form-row { flex-direction: column; } .platform-icon-item { padding: 6px 12px; font-size: 12px; } }
     </style>
 </head>
@@ -123,10 +116,14 @@
     let currencySymbols = { PKR: "Rs", USD: "$", AED: "د.إ", SAR: "﷼", INR: "₹", EUR: "€" };
     let allServices = [];
     let selectedService = null;
-    let joinApplication = null;
+    let joinStatus = null;
     let selectedCategory = "all";
     
-    const serviceCategories = ["Likes", "Views", "Followers", "Comments", "Saves", "Shares", "Subscribers", "Watchtime", "Repins", "Retweets", "Traffic", "Members"];
+    // Service Categories
+    const serviceCategories = [
+        "Likes", "Views", "Followers", "Comments", "Saves", 
+        "Shares", "Subscribers", "Watchtime", "Repins", "Retweets", "Traffic"
+    ];
     
     const platforms = [
         { name: "Instagram", icon: "fab fa-instagram", color: "#E4405F", categories: ["Likes", "Views", "Followers", "Comments", "Saves", "Shares"] },
@@ -134,7 +131,7 @@
         { name: "Facebook", icon: "fab fa-facebook", color: "#1877F2", categories: ["Likes", "Views", "Followers", "Comments", "Shares"] },
         { name: "YouTube", icon: "fab fa-youtube", color: "#FF0000", categories: ["Likes", "Views", "Subscribers", "Watchtime", "Comments"] },
         { name: "Twitter", icon: "fab fa-twitter", color: "#1DA1F2", categories: ["Likes", "Retweets", "Followers", "Views"] },
-        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366", categories: ["Traffic", "Views", "Members"] },
+        { name: "WhatsApp", icon: "fab fa-whatsapp", color: "#25D366", categories: ["Traffic", "Views"] },
         { name: "Snapchat", icon: "fab fa-snapchat", color: "#FFFC00", categories: ["Views", "Followers"] },
         { name: "Telegram", icon: "fab fa-telegram", color: "#26A5E4", categories: ["Members", "Views"] },
         { name: "LinkedIn", icon: "fab fa-linkedin", color: "#0A66C2", categories: ["Likes", "Followers", "Views"] },
@@ -142,15 +139,7 @@
         { name: "Discord", icon: "fab fa-discord", color: "#5865F2", categories: ["Members"] },
         { name: "Twitch", icon: "fab fa-twitch", color: "#9146FF", categories: ["Followers", "Views"] },
         { name: "Spotify", icon: "fab fa-spotify", color: "#1DB954", categories: ["Followers", "Plays"] },
-        { name: "Google", icon: "fab fa-google", color: "#4285F4", categories: ["Traffic", "Views"] },
-        { name: "Threads", icon: "fab fa-threads", color: "#000000", categories: ["Likes", "Followers", "Views"] },
-        { name: "Netflix", icon: "fas fa-film", color: "#E50914", categories: ["Views"] },
-        { name: "Canva", icon: "fas fa-palette", color: "#00C4CC", categories: ["Designs", "Templates"] },
-        { name: "CapCut", icon: "fas fa-cut", color: "#00D4FF", categories: ["Edits", "Templates"] },
-        { name: "ChatGPT", icon: "fas fa-comment-dots", color: "#10A37F", categories: ["Prompts"] },
-        { name: "Gemini", icon: "fas fa-brain", color: "#4285F4", categories: ["Prompts"] },
-        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6", categories: ["Traffic", "Views"] },
-        { name: "PUBG UC", icon: "fas fa-gamepad", color: "#FFA500", categories: ["UC", "Points"] }
+        { name: "Website Traffic", icon: "fas fa-globe", color: "#3b82f6", categories: ["Traffic", "Views"] }
     ];
     
     function showToast(message, isError = false) {
@@ -220,7 +209,7 @@
         if(res.success) { 
             currentUser = res.user; 
             document.getElementById("userNameDisplay").innerText = currentUser.fullName?.split(" ")[0] || currentUser.username; 
-            await loadJoinApplication();
+            await loadJoinApplicationStatus();
             return true; 
         } else { 
             localStorage.removeItem("mts_token"); 
@@ -229,21 +218,10 @@
         } 
     }
     
-    async function loadJoinApplication() {
-        try {
-            let res = await apiCall("getMyJoinStatus");
-            console.log("Join Status Response:", res);
-            if(res.success && res.application) {
-                joinApplication = res.application;
-                console.log("Application loaded:", joinApplication);
-            } else {
-                joinApplication = null;
-                console.log("No application found");
-            }
-        } catch(e) {
-            console.error("Error loading join status:", e);
-            joinApplication = null;
-        }
+    async function loadJoinApplicationStatus() {
+        let res = await apiCall("getMyJoinStatus");
+        if(res.success && res.application) joinStatus = res.application;
+        else joinStatus = null;
     }
     
     function showAuthScreen() { 
@@ -315,6 +293,7 @@
         };
     }
     
+    // HOME PAGE WITH CATEGORY SELECTION
     async function renderHome() { 
         await loadServices();
         let html = `
@@ -381,9 +360,12 @@
     function updateServiceDropdown() {
         let platform = document.getElementById("platformSelect").value;
         let filtered = platform ? allServices.filter(s => s.Platform === platform) : [];
+        
+        // Filter by category if selected
         if (selectedCategory !== "all") {
             filtered = filtered.filter(s => s.Name && s.Name.toLowerCase().includes(selectedCategory.toLowerCase()));
         }
+        
         let select = document.getElementById("serviceSelect");
         select.innerHTML = '<option value="">Select a service</option>';
         filtered.forEach(s => { 
@@ -517,7 +499,7 @@
     async function renderDashboard() { 
         let stats = await apiCall("userStats"); 
         let orders = await apiCall("getUserOrders"); 
-        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet fa-2x"></i><br><h3>${formatCurrency(currentUser.wallet)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-shopping-cart fa-2x"></i><br><h3>${stats.totalOrders || 0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock fa-2x"></i><br><h3>${stats.pendingOrders || 0}</h3><p>Pending Orders</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td>${o.status}</td></tr>`).join('') + '</table></div>' : '<p>No orders yet</p>'}</div>`;
+        document.getElementById("pageContent").innerHTML = `<div class="grid-cards"><div class="glass-card"><i class="fas fa-wallet fa-2x"></i><br><h3>${formatCurrency(currentUser.wallet)}</h3><p>Balance</p></div><div class="glass-card"><i class="fas fa-shopping-cart fa-2x"></i><br><h3>${stats.totalOrders || 0}</h3><p>Total Orders</p></div><div class="glass-card"><i class="fas fa-clock fa-2x"></i><br><h3>${stats.pendingOrders || 0}</h3><p>Pending Orders</p></div></div><div class="glass-card"><h3>Order History</h3>${orders.orders?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>' + orders.orders.map(o => `<tr><td>${o.id}</td><td>${o.serviceName}</td><td>${o.qty}</td><td>${formatCurrency(o.amount)}</td><td><span class="status-badge status-pending">${o.status}</span></td></tr>`).join('') + '</table></div>' : '<p>No orders yet</p>'}</div>`;
     }
     
     async function renderAddFunds() { 
@@ -541,186 +523,72 @@
         document.getElementById("submitRec").onclick = async () => { let res = await apiCall("submitRecommendation", { email: document.getElementById("recEmail").value, whatsapp: document.getElementById("recWhatsapp").value, phone: document.getElementById("recPhone").value, text: document.getElementById("recText").value }); showToast(res.message); };
     }
     
-    // JOIN US & EARN PAGE - Fixed to properly check application status from Google Sheet
     async function renderJoinUs() {
-        showToast("Loading application status...");
-        await loadJoinApplication();
+        await loadJoinApplicationStatus();
+        let statusHtml = '', applicationFormHtml = '', attendanceHtml = '', jobsHtml = '', historyHtml = '';
         
-        let statusHtml = '';
-        let applicationFormHtml = '';
-        let attendanceFormHtml = '';
-        let jobsFormHtml = '';
-        let historyHtml = '';
-        
-        // Get status from loaded application
-        const hasApplied = joinApplication && joinApplication.requestId;
-        const applicationStatus = joinApplication?.status || 'none';
-        
-        console.log("Application Status:", applicationStatus);
-        console.log("Has Applied:", hasApplied);
-        console.log("Join Application Object:", joinApplication);
-        
-        if (!hasApplied || applicationStatus === 'none') {
-            // Show application form for new users
-            applicationFormHtml = `
-                <h3>📝 Application Form</h3>
-                <div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}"></div>
-                <div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhatsapp" placeholder="WhatsApp Number"></div>
-                <div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}"><select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select></div>
-                <div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div>
-                <textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea>
-                <input type="file" id="appPhoto" accept="image/*">
-                <button id="submitApplication" class="btn btn-success">Submit Application</button>
-            `;
-        } else if (applicationStatus === 'Pending' || applicationStatus === 'pending') {
-            statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application has been submitted and is being reviewed by admin. You will be notified once approved. If you have any questions, please contact our help center.<br><br><strong>✅ Already Applied:</strong> You cannot submit another application.</div>`;
-        } else if (applicationStatus === 'Approved' || applicationStatus === 'approved') {
-            statusHtml = `<div class="success-note"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinApplication.salary ? formatCurrency(parseFloat(joinApplication.salary)) : 'To be set by admin'} per month<br>Welcome to the team! Please fill your daily attendance and job details below.<br><br><strong>✅ Your application has been approved. You can now submit daily attendance and job details.</strong></div>`;
-            
-            attendanceFormHtml = `
-                <h3>📋 Daily Attendance</h3>
-                <div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}"></div>
-                <div class="form-row"><input id="attPhone" placeholder="Contact Number"><input type="time" id="attLoginTime" placeholder="Login Time"></div>
-                <div class="form-row"><input type="number" id="attWorkingHours" placeholder="Working Hours"><input type="time" id="attLogoutTime" placeholder="Logout Time"></div>
-                <div class="form-row"><select id="attWorkType"><option>Sharing Posts</option><option>Designed Posts</option><option>Platform Management</option><option>Client Support</option></select><input id="attClientCount" placeholder="Client Contacts Count" type="number"></div>
-                <div class="form-row"><select id="attBoosted"><option>No</option><option>Yes</option></select><select id="attSharedPlatforms"><option>Instagram</option><option>Facebook</option><option>Twitter</option><option>All Platforms</option></select></div>
-                <textarea id="attWorkDetail" placeholder="Work Detail (What did you work on today?)" rows="3"></textarea>
-                <button id="submitAttendance" class="btn btn-success">✅ Mark Attendance</button>
-            `;
-            
-            jobsFormHtml = `
-                <h3>💼 Job Details</h3>
-                <div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrderId" placeholder="Order ID (if placed)"></div>
-                <div class="form-row"><input id="jobPlatform" placeholder="Platform (Instagram/TikTok/etc)"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div>
-                <div class="form-row"><input id="jobLink" placeholder="Platform Link / Order Link"></div>
-                <textarea id="jobFullDetails" placeholder="Full Details about the work done" rows="3"></textarea>
-                <button id="submitJob" class="btn btn-success">📌 Submit Job</button>
-            `;
-            
+        if (!joinStatus || joinStatus.status === 'none') {
+            applicationFormHtml = `<h3>📝 Application Form</h3><div class="form-row"><input id="appName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="appUsername" placeholder="Username" value="${currentUser?.username || ''}"></div><div class="form-row"><input id="appPhone" placeholder="Phone Number"><input id="appWhatsapp" placeholder="WhatsApp Number"></div><div class="form-row"><input id="appEmail" placeholder="Email" value="${currentUser?.gmail || ''}"><select id="appSalaryType"><option>Commission Based</option><option>Salary Based</option></select></div><div class="form-row"><select id="appHours"><option>4 hours</option><option>5 hours</option><option>6 hours</option><option>Custom</option></select><select id="appShift"><option>Day</option><option>Night</option></select></div><textarea id="appAbout" placeholder="About Yourself (Experience, Skills, Why you want to join?)" rows="4"></textarea><input type="file" id="appPhoto" accept="image/*"><button id="submitApplication" class="btn">Submit Application</button>`;
+        } else if (joinStatus.status === 'pending') {
+            statusHtml = `<div class="info-note"><i class="fas fa-clock"></i> <strong>Application Status: Pending Review</strong><br>Your application is being reviewed by admin.</div>`;
+        } else if (joinStatus.status === 'approved') {
+            statusHtml = `<div class="info-note" style="background:rgba(16,185,129,0.2); border-left-color:#10b981;"><i class="fas fa-check-circle"></i> <strong>Application Approved!</strong><br>Salary: ${joinStatus.salary ? formatCurrency(joinStatus.salary) : 'To be set by admin'} per month<br>Welcome to the team!</div>`;
+            attendanceHtml = `<h3>📋 Daily Attendance</h3><div class="form-row"><input id="attName" placeholder="Full Name" value="${currentUser?.fullName || ''}"><input id="attEmail" placeholder="Email" value="${currentUser?.gmail || ''}"></div><div class="form-row"><input id="attPhone" placeholder="Contact Number"><input type="time" id="attLoginTime" placeholder="Login Time"></div><div class="form-row"><input type="number" id="attWorkingHours" placeholder="Working Hours"><input type="time" id="attLogoutTime" placeholder="Logout Time"></div><textarea id="attWorkDetail" placeholder="Work Detail" rows="3"></textarea><button id="submitAttendance" class="btn btn-success">✅ Mark Attendance</button>`;
+            jobsHtml = `<h3>💼 Job Details</h3><div class="form-row"><input id="jobName" placeholder="Job/Service Name"><input id="jobOrderId" placeholder="Order ID"></div><div class="form-row"><input id="jobPlatform" placeholder="Platform"><input id="jobAmount" placeholder="Amount Spent (PKR)" type="number"></div><textarea id="jobFullDetails" placeholder="Full Details" rows="3"></textarea><button id="submitJob" class="btn btn-success">📌 Submit Job</button>`;
             historyHtml = `<h3>📜 My History</h3><div id="historyData" class="glass-card">Loading...</div>`;
-        } else if (applicationStatus === 'Rejected' || applicationStatus === 'rejected') {
-            statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest. We have reviewed your application and cannot proceed at this time. If you have any questions, please contact our help center.</div>`;
+        } else if (joinStatus.status === 'rejected') {
+            statusHtml = `<div class="info-note" style="background:rgba(220,38,38,0.2); border-left-color:#dc2626;"><i class="fas fa-times-circle"></i> <strong>Application Status: Not Selected</strong><br>Thank you for your interest.</div>`;
         }
         
-        // Determine which tab should be active
-        let defaultTab = 'application';
-        if (applicationStatus === 'Approved' || applicationStatus === 'approved') {
-            defaultTab = 'attendance';
+        let tabsHtml = '';
+        if (joinStatus && joinStatus.status === 'approved') {
+            tabsHtml = `<div class="join-tabs"><div class="join-tab-btn active" data-tab="attendance">📋 Attendance</div><div class="join-tab-btn" data-tab="jobs">💼 Jobs</div><div class="join-tab-btn" data-tab="history">📜 History</div></div><div id="attendanceTab" class="join-tab-content active">${attendanceHtml}</div><div id="jobsTab" class="join-tab-content">${jobsHtml}</div><div id="historyTab" class="join-tab-content">${historyHtml}</div>`;
         }
         
-        // 4 Main Buttons for Join Us & Earn page
-        let mainTabsHtml = `
-            <div class="join-main-tabs">
-                <button class="join-main-tab-btn ${defaultTab === 'application' ? 'active' : ''}" data-join-tab="application">📝 Application Form</button>
-                <button class="join-main-tab-btn ${defaultTab === 'attendance' ? 'active' : ''}" data-join-tab="attendance">📋 Daily Attendance</button>
-                <button class="join-main-tab-btn" data-join-tab="jobs">💼 Daily Job Detail</button>
-                <button class="join-main-tab-btn" data-join-tab="history">📜 History</button>
-            </div>
-            <div id="applicationTab" class="join-tab-content ${defaultTab === 'application' ? 'active' : ''}">
-                ${applicationFormHtml || '<p class="info-note">You have already submitted an application. Your status: ' + (applicationStatus || 'Unknown') + '</p>'}
-            </div>
-            <div id="attendanceTab" class="join-tab-content ${defaultTab === 'attendance' ? 'active' : ''}">
-                ${attendanceFormHtml || '<p class="info-note">Attendance section is only available after your application is approved. Current status: ' + applicationStatus + '</p>'}
-            </div>
-            <div id="jobsTab" class="join-tab-content">
-                ${jobsFormHtml || '<p class="info-note">Job details section is only available after your application is approved. Current status: ' + applicationStatus + '</p>'}
-            </div>
-            <div id="historyTab" class="join-tab-content">
-                ${historyHtml || '<p class="info-note">History section is only available after your application is approved. Current status: ' + applicationStatus + '</p>'}
-            </div>
-        `;
-        
-        let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>${statusHtml}${mainTabsHtml}</div>`;
+        let html = `<div class="glass-card"><h2><i class="fas fa-user-plus"></i> Join Us & Earn</h2>${statusHtml}${applicationFormHtml ? `<div class="glass-card" style="margin-top:20px;">${applicationFormHtml}</div>` : ''}${tabsHtml}</div>`;
         document.getElementById("pageContent").innerHTML = html;
         
-        // Tab switching for main tabs
-        document.querySelectorAll('.join-main-tab-btn').forEach(btn => {
+        document.querySelectorAll('.join-tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.join-main-tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.join-tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.join-tab-content').forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                const tabId = btn.getAttribute('data-join-tab') + 'Tab';
-                document.getElementById(tabId).classList.add('active');
+                document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
             });
         });
         
-        // Application form submission - only if not already applied
-        if (document.getElementById("submitApplication") && !hasApplied) {
+        if (document.getElementById("submitApplication")) {
             document.getElementById("submitApplication").onclick = async () => {
                 let file = document.getElementById("appPhoto").files[0];
                 let reader = new FileReader();
                 reader.onload = async () => {
-                    let res = await apiCall("submitJoinRequest", {
-                        name: document.getElementById("appName").value, username: document.getElementById("appUsername").value,
-                        phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhatsapp").value,
-                        email: document.getElementById("appEmail").value, salaryType: document.getElementById("appSalaryType").value,
-                        hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value,
-                        about: document.getElementById("appAbout").value, photo: reader.result
-                    });
+                    let res = await apiCall("submitJoinRequest", { name: document.getElementById("appName").value, username: document.getElementById("appUsername").value, phone: document.getElementById("appPhone").value, whatsapp: document.getElementById("appWhatsapp").value, email: document.getElementById("appEmail").value, salaryType: document.getElementById("appSalaryType").value, hours: document.getElementById("appHours").value, shift: document.getElementById("appShift").value, about: document.getElementById("appAbout").value, photo: reader.result });
                     showToast(res.message);
-                    if(res.success) {
-                        await loadJoinApplication();
-                        setTimeout(() => renderJoinUs(), 1500);
-                    }
+                    if(res.success) setTimeout(() => renderJoinUs(), 1500);
                 };
                 if(file) reader.readAsDataURL(file);
-                else showToast("Please upload photo", true);
+                else showToast("Upload photo", true);
             };
         }
         
-        // Attendance submission
         if (document.getElementById("submitAttendance")) {
             document.getElementById("submitAttendance").onclick = async () => {
-                let res = await apiCall("submitAttendance", {
-                    name: document.getElementById("attName").value, email: document.getElementById("attEmail").value,
-                    phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLoginTime").value,
-                    workingHours: document.getElementById("attWorkingHours").value, logoutTime: document.getElementById("attLogoutTime").value,
-                    workType: document.getElementById("attWorkType").value, clientCount: document.getElementById("attClientCount").value,
-                    boosted: document.getElementById("attBoosted").value, sharedPlatforms: document.getElementById("attSharedPlatforms").value,
-                    workDetail: document.getElementById("attWorkDetail").value
-                });
+                let res = await apiCall("submitAttendance", { name: document.getElementById("attName").value, email: document.getElementById("attEmail").value, phone: document.getElementById("attPhone").value, loginTime: document.getElementById("attLoginTime").value, workingHours: document.getElementById("attWorkingHours").value, logoutTime: document.getElementById("attLogoutTime").value, workDetail: document.getElementById("attWorkDetail").value });
                 showToast(res.message);
-                if(res.success) {
-                    document.getElementById("attLoginTime").value = "";
-                    document.getElementById("attLogoutTime").value = "";
-                    document.getElementById("attWorkDetail").value = "";
-                }
             };
         }
         
-        // Job submission
         if (document.getElementById("submitJob")) {
             document.getElementById("submitJob").onclick = async () => {
-                let res = await apiCall("submitJobDetail", {
-                    jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrderId").value,
-                    platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value,
-                    link: document.getElementById("jobLink").value, details: document.getElementById("jobFullDetails").value
-                });
+                let res = await apiCall("submitJobDetail", { jobName: document.getElementById("jobName").value, orderId: document.getElementById("jobOrderId").value, platform: document.getElementById("jobPlatform").value, amount: document.getElementById("jobAmount").value, details: document.getElementById("jobFullDetails").value });
                 showToast(res.message);
-                if(res.success) {
-                    document.getElementById("jobName").value = "";
-                    document.getElementById("jobOrderId").value = "";
-                    document.getElementById("jobAmount").value = "";
-                    document.getElementById("jobLink").value = "";
-                    document.getElementById("jobFullDetails").value = "";
-                }
             };
         }
         
-        // Load history data for approved users
-        if (document.getElementById("historyData") && (applicationStatus === 'Approved' || applicationStatus === 'approved')) {
+        if (document.getElementById("historyData")) {
             let attendanceHistory = await apiCall("getMyAttendance");
             let jobsHistory = await apiCall("getMyJobs");
-            document.getElementById("historyData").innerHTML = `
-                <div class="history-table">
-                    <h4>📊 Attendance Records</h4>
-                    ${attendanceHistory.attendance?.length ? '<table><thead><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th><th>Work Type</th><th>Work Detail</th></tr></thead><tbody>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td><td>${a.workType || a.WorkType || '-'}</td><td>${(a.workDetail || '').substring(0, 50)}</td></tr>`).join('') + '</tbody></table>' : '<p>No attendance records found</p>'}
-                </div>
-                <div class="history-table" style="margin-top: 25px;">
-                    <h4>📌 Job Records</h4>
-                    ${jobsHistory.jobs?.length ? '<table><thead><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Platform</th><th>Amount</th><th>Details</th></tr></thead><tbody>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.platform || j.Platform || '-'}</td><td>${j.amount || j.Amount} PKR</td><td>${(j.details || '').substring(0, 40)}</td></tr>`).join('') + '</tbody></table>' : '<p>No job records found</p>'}
-                </div>
-            `;
+            document.getElementById("historyData").innerHTML = `<h4>Attendance Records</h4>${attendanceHistory.attendance?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Login Time</th><th>Logout Time</th><th>Hours</th></tr>' + attendanceHistory.attendance.map(a => `<tr><td>${a.date || a.Date}</td><td>${a.loginTime || a.LoginTime}</td><td>${a.logoutTime || a.LogoutTime}</td><td>${a.workingHours || a.WorkingHours}</td></tr>`).join('') + '</table></div>' : '<p>No attendance records</p>'}<h4 style="margin-top:20px;">Job History</h4>${jobsHistory.jobs?.length ? '<div style="overflow-x:auto;"><table style="width:100%"><tr><th>Date</th><th>Job Name</th><th>Order ID</th><th>Amount</th></table>' + jobsHistory.jobs.map(j => `<tr><td>${j.date || j.Date}</td><td>${j.jobName || j.JobName}</td><td>${j.orderId || j.OrderId || '-'}</td><td>${j.amount || j.Amount}</td></tr>`).join('') + '</table></div>' : '<p>No job records</p>'}`;
         }
     }
     
